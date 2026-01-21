@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #18181b;
+    --color-accent: #f59e0b;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #09090b;
+    color: #fafafa;
+}
+
+/* Constrain all SVG icons to prevent massive rendering */
+svg {
+    flex-shrink: 0;
+}
+
+/* Ensure SVGs inside buttons and icon containers have proper sizing */
+button svg,
+a svg,
+span svg,
+div svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Specific icon size utilities */
+.icon-sm { width: 1rem; height: 1rem; }
+.icon-md { width: 1.25rem; height: 1.25rem; }
+.icon-lg { width: 1.5rem; height: 1.5rem; }

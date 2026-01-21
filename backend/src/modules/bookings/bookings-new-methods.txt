@@ -1,0 +1,140 @@
+
+    /**
+     * Get shop's pending holds (awaiting pickup)
+     */
+    async getShopPendingHolds(shopId: string) {
+        return this.prisma.booking.findMany({
+            where: {
+                item: { shopId },
+                status: {
+                    in: [BookingStatus.HOLD, BookingStatus.CONFIRMED],
+                },
+            },
+            include: {
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        images: true,
+                        category: true,
+                    },
+                },
+                user: {
+                    select: { id: true, name: true, phone: true },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+
+    /**
+     * Get shop's active rentals (currently rented out)
+     */
+    async getShopActiveRentals(shopId: string) {
+        return this.prisma.booking.findMany({
+            where: {
+                item: { shopId },
+                status: BookingStatus.ACTIVE,
+            },
+            include: {
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        images: true,
+                        category: true,
+                    },
+                },
+                user: {
+                    select: { id: true, name: true, phone: true },
+                },
+            },
+            orderBy: { startDate: 'asc' },
+        });
+    }
+
+    /**
+     * Get shop's booking history
+     */
+    async getShopBookingHistory(shopId: string, page = 1, limit = 20) {
+        const skip = (page - 1) * limit;
+
+        const [bookings, total] = await Promise.all([
+            this.prisma.booking.findMany({
+                where: {
+                    item: { shopId },
+                    status: {
+                        in: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
+                    },
+                },
+                include: {
+                    item: {
+                        select: {
+                            id: true,
+                            name: true,
+                            images: true,
+                            category: true,
+                        },
+                    },
+                    user: {
+                        select: { id: true, name: true, phone: true },
+                    },
+                },
+                orderBy: { updatedAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            this.prisma.booking.count({
+                where: {
+                    item: { shopId },
+                    status: {
+                        in: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
+                    },
+                },
+            }),
+        ]);
+
+        return {
+            bookings,
+            pagination: {
+                page,
+                limit,
+                total,
+                pages: Math.ceil(total / limit),
+            },
+        };
+    }
+
+    /**
+     * Scan QR code and return booking details
+     */
+    async scanQR(qrCodeHash: string, shopId: string) {
+        const booking = await this.prisma.booking.findFirst({
+            where: { qrCodeHash },
+            include: {
+                item: {
+                    include: {
+                        shop: { select: { id: true, name: true } },
+                    },
+                },
+                user: {
+                    select: { id: true, name: true, phone: true, email: true },
+                },
+            },
+        });
+
+        if (!booking) {
+            throw new NotFoundException('Invalid QR code');
+        }
+
+        // Verify this QR belongs to shop's inventory
+        if (booking.item.shop.id !== shopId) {
+            throw new BadRequestException('This booking does not belong to your shop');
+        }
+
+        return {
+            booking,
+            canPickup: booking.status === BookingStatus.CONFIRMED || booking.status === BookingStatus.HOLD,
+            canReturn: booking.status === BookingStatus.ACTIVE,
+        };
+    }

@@ -1,0 +1,167 @@
+# ============================================
+# DEPENDENCIES
+# ============================================
+node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================
+# ENVIRONMENT VARIABLES (CRITICAL!)
+# ============================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+*.env
+
+# Keep example files
+!.env.example
+!*.env.example
+
+# ============================================
+# BUILD OUTPUT
+# ============================================
+dist/
+build/
+.next/
+out/
+.cache/
+.turbo/
+
+# ============================================
+# TESTING
+# ============================================
+coverage/
+*.lcov
+.nyc_output
+
+# ============================================
+# LOGS
+# ============================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log.*
+proxy.log
+socat.log
+
+# ============================================
+# OS FILES
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+.directory
+
+# ============================================
+# IDE / EDITOR
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# NEXT.JS
+# ============================================
+.next/
+out/
+next-env.d.ts
+.vercel
+
+# ============================================
+# REACT NATIVE / EXPO
+# ============================================
+.expo/
+.expo-shared/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+android/app/build/
+android/.gradle/
+android/app/release/
+ios/Pods/
+ios/build/
+
+# ============================================
+# PRISMA
+# ============================================
+# Keep schema and migrations
+!prisma/schema.prisma
+!prisma/migrations/
+
+# ============================================
+# TYPESCRIPT
+# ============================================
+*.tsbuildinfo
+
+# ============================================
+# MISC
+# ============================================
+.turbo
+.eslintcache
+.stylelintcache
+
+# ============================================
+# TEMPORARY FILES
+# ============================================
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============================================
+# DATABASE
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================
+# SECRETS & KEYS
+# ============================================
+*.pem
+*.key
+*.cert
+secrets/
+credentials/
+
+# ============================================
+# DOCKER
+# ============================================
+docker-compose.override.yml
+
+# ============================================
+# REPORTS (keep in repo for documentation)
+# ============================================
+# Uncomment if you don't want reports in git
+# *_REPORT.md
+# *_STATUS.md
