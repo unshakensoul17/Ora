@@ -5,7 +5,8 @@ Use this checklist to track your deployment progress.
 ## Pre-Deployment Setup
 
 - [ ] **Supabase Project Created**
-  - [ ] Database URL copied
+  - [ ] Database URL copied (Transaction Pooler - Port 6543)
+  - [ ] Direct URL copied (Session Pooler - Port 5432)
   - [ ] Anon key copied
   - [ ] Service role key copied
   - [ ] Storage bucket created
@@ -35,18 +36,16 @@ Use this checklist to track your deployment progress.
 
 **GitHub Repository URL**: _______________________________
 
-## Phase 2: Backend (Railway)
+## Phase 2: Backend (Render)
 
-- [ ] Railway account created
-- [ ] New project created
-- [ ] GitHub repository connected
-- [ ] Backend service configured
-  - [ ] Root directory set to `backend`
-  - [ ] Build command configured
-  - [ ] Start command configured
+- [ ] Render account created
+- [ ] New Blueprint created from GitHub repo
+- [ ] Service `fashcycle-backend` detected via `render.yaml`
 
-- [ ] Environment variables added:
-  - [ ] NODE_ENV
+- [ ] Environment variables configured in Render:
+  - [ ] NODE_ENV (`production`)
+  - [ ] PORT (`10000`)
+  - [ ] API_VERSION (`v1`)
   - [ ] DATABASE_URL
   - [ ] DIRECT_URL
   - [ ] SUPABASE_URL
@@ -60,9 +59,8 @@ Use this checklist to track your deployment progress.
   - [ ] GOOGLE_MAPS_API_KEY
   - [ ] CORS_ORIGINS (placeholder)
 
-- [ ] MeiliSearch service added (optional)
 - [ ] Backend deployed successfully
-- [ ] API documentation accessible
+- [ ] Health check passed
 
 **Backend URL**: _______________________________
 
@@ -75,7 +73,7 @@ Use this checklist to track your deployment progress.
   - [ ] Framework preset: Next.js
 
 - [ ] Environment variables added:
-  - [ ] NEXT_PUBLIC_API_URL
+  - [ ] NEXT_PUBLIC_API_URL (points to Render URL)
   - [ ] NEXT_PUBLIC_SUPABASE_URL
   - [ ] NEXT_PUBLIC_SUPABASE_ANON_KEY
   - [ ] NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
@@ -96,7 +94,7 @@ Use this checklist to track your deployment progress.
   - [ ] Framework preset: Next.js
 
 - [ ] Environment variables added:
-  - [ ] NEXT_PUBLIC_API_URL
+  - [ ] NEXT_PUBLIC_API_URL (points to Render URL)
   - [ ] NEXT_PUBLIC_SUPABASE_URL
   - [ ] NEXT_PUBLIC_SUPABASE_ANON_KEY
   - [ ] NEXT_PUBLIC_ADMIN_MODE
@@ -108,52 +106,38 @@ Use this checklist to track your deployment progress.
 
 ## Phase 5: CORS Update
 
-- [ ] Backend CORS_ORIGINS updated with actual Vercel URLs
-- [ ] Backend redeployed
+- [ ] Backend `CORS_ORIGINS` updated in Render Dashboard
+- [ ] Service redeployed automatically
 
 ## Phase 6: Testing
 
-- [ ] Backend API docs accessible
+- [ ] Backend API docs (Swagger) accessible
 - [ ] User Web loads correctly
 - [ ] User Web can fetch data from backend
 - [ ] Admin Panel loads correctly
-- [ ] Admin Panel can fetch data from backend
 - [ ] Image uploads work (Supabase Storage)
-- [ ] Search functionality works (MeiliSearch)
 - [ ] Booking flow works end-to-end
 
 ## Phase 7: Custom Domains (Optional)
 
 - [ ] User Web custom domain added
 - [ ] Admin custom domain added
-- [ ] Backend custom domain added
+- [ ] Backend custom domain added (Render Settings)
 - [ ] DNS records configured
 - [ ] SSL certificates provisioned
-- [ ] CORS updated with custom domains
 
 ## Security Review
 
 - [ ] No .env files in git repository
-- [ ] All secrets in Railway/Vercel environment variables
+- [ ] All secrets in Render/Vercel environment variables
 - [ ] JWT_SECRET is strong and unique
 - [ ] Production Razorpay keys configured
 - [ ] CORS properly configured
-- [ ] Supabase RLS policies enabled
-- [ ] Database backups enabled
 
 ## Monitoring Setup
 
-- [ ] Railway logs accessible
+- [ ] Render logs accessible
 - [ ] Vercel logs accessible
-- [ ] Error tracking configured (optional)
-- [ ] Analytics configured (optional)
-
-## Documentation
-
-- [ ] Deployment URLs documented
-- [ ] Environment variables documented
-- [ ] Team members have access
-- [ ] Rollback procedure understood
 
 ---
 
@@ -166,31 +150,15 @@ Use this checklist to track your deployment progress.
 | Backend API | _________________________ |
 | User Web | _________________________ |
 | Admin Panel | _________________________ |
-| API Docs | _________________________ |
 
 ### Important Links
 
 - GitHub Repo: _________________________
-- Railway Dashboard: https://railway.app/dashboard
+- Render Dashboard: https://dashboard.render.com
 - Vercel Dashboard: https://vercel.com/dashboard
 - Supabase Dashboard: https://supabase.com/dashboard
-- Upstash Console: https://console.upstash.com
-
----
-
-## Next Steps After Deployment
-
-1. [ ] Monitor error logs for first 24 hours
-2. [ ] Test all critical user flows
-3. [ ] Set up automated backups
-4. [ ] Configure monitoring alerts
-5. [ ] Deploy Shop App (mobile)
-6. [ ] Plan marketing launch
 
 ---
 
 **Deployment Date**: _________________________
-
-**Deployed By**: _________________________
-
 **Status**: ⬜ In Progress | ⬜ Completed | ⬜ Issues Found
