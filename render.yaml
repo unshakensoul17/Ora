@@ -3,7 +3,7 @@ services:
     name: fashcycle-backend
     env: node
     rootDir: backend
-    buildCommand: npm install --include=dev && npx prisma generate && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build && ls -al
     startCommand: ls -R && npx prisma migrate deploy && npm run start:prod
     plan: free
     envVars:
