@@ -41,4 +41,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 
 # Start command (migrations + start)
-CMD npx prisma migrate deploy && node dist/main
+CMD npx prisma migrate deploy && node dist/main.js
