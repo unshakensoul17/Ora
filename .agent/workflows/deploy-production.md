@@ -115,12 +115,12 @@ Go to https://vercel.com and sign in with GitHub.
 
 ### 3. Configure User Web Deployment
 
-1. **Project Name**: `fashcycle-user-web`
-2. **Framework Preset**: Next.js
-3. **Root Directory**: `user-web`
-4. **Build Command**: `npm run build`
-5. **Output Directory**: `.next`
-6. **Install Command**: `npm install`
+1. You will see "Build and Output Settings" (or similar).
+2. Look for **Root Directory**.
+3. It might show `./` by default. Click **Edit** next to it.
+4. Select `user-web` from the file browser, or manually type `user-web`.
+5. Click **Continue**.
+6. Vercel should now detect the **Next.js** framework automatically.
 
 ### 4. Add Environment Variables
 
@@ -153,11 +153,11 @@ Vercel will provide a URL like: `https://fashcycle-user-web.vercel.app`
 ### 2. Configure Admin Deployment
 
 1. **Project Name**: `fashcycle-admin`
-2. **Framework Preset**: Next.js
-3. **Root Directory**: `admin`
-4. **Build Command**: `npm run build`
-5. **Output Directory**: `.next`
-6. **Install Command**: `npm install`
+2. Look for **Root Directory**.
+3. Click **Edit**.
+4. Select `admin` or manually type `admin`.
+5. Click **Continue**.
+6. Framework Preset should auto-switch to **Next.js**.
 
 ### 3. Add Environment Variables
 
