@@ -7,7 +7,7 @@ import { getAllShops, approveShop, suspendShop, type Shop } from '@/lib/api';
 export default function ShopsPage() {
     const [shops, setShops] = useState<Shop[]>([]);
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState<'ALL' | 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED'>('ALL');
+    const [filter, setFilter] = useState<'ALL' | 'APPROVED' | 'PENDING' | 'SUSPENDED'>('ALL');
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     useEffect(() => {
@@ -59,11 +59,11 @@ export default function ShopsPage() {
 
     const getStatusBadge = (status: string) => {
         const styles = {
-            ACTIVE: 'bg-green-500/20 text-green-400 border-green-500/30',
-            PENDING_APPROVAL: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+            APPROVED: 'bg-green-500/20 text-green-400 border-green-500/30',
+            PENDING: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
             SUSPENDED: 'bg-red-500/20 text-red-400 border-red-500/30',
         };
-        return styles[status as keyof typeof styles] || styles.ACTIVE;
+        return styles[status as keyof typeof styles] || styles.APPROVED;
     };
 
     return (
@@ -87,7 +87,7 @@ export default function ShopsPage() {
             <main className="p-6 max-w-7xl mx-auto">
                 {/* Filters */}
                 <div className="mb-6 flex gap-2">
-                    {['ALL', 'ACTIVE', 'PENDING_APPROVAL', 'SUSPENDED'].map((f) => (
+                    {['ALL', 'APPROVED', 'PENDING', 'SUSPENDED'].map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f as any)}
@@ -135,7 +135,7 @@ export default function ShopsPage() {
                                 )}
 
                                 <div className="flex gap-2">
-                                    {shop.status === 'PENDING_APPROVAL' && (
+                                    {shop.status === 'PENDING' && (
                                         <button
                                             onClick={() => handleApprove(shop.id)}
                                             disabled={actionLoading === shop.id}
@@ -144,7 +144,7 @@ export default function ShopsPage() {
                                             Approve
                                         </button>
                                     )}
-                                    {shop.status === 'ACTIVE' && (
+                                    {shop.status === 'APPROVED' && (
                                         <button
                                             onClick={() => handleSuspend(shop.id)}
                                             disabled={actionLoading === shop.id}
