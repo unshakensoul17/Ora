@@ -5,17 +5,20 @@ import Sidebar from './Sidebar';
 interface AdminLayoutProps {
     children: React.ReactNode;
     showFilter?: boolean;
+    title?: string;
+    subtitle?: string;
 }
 
-export default function AdminLayout({ children, showFilter = false }: AdminLayoutProps) {
+export default function AdminLayout({ children, showFilter = false, title, subtitle }: AdminLayoutProps) {
     return (
         <div className="min-h-screen bg-[#0a0e14]">
             <Sidebar />
 
             {/* Top Bar */}
             <header className="fixed top-0 left-56 right-0 h-14 bg-[#0d1117] border-b border-gray-800 flex items-center justify-between px-6 z-30">
-                <div className="flex items-center gap-4">
-                    <span className="text-white text-sm font-medium">Fashcycle Admin - Control Tower</span>
+                <div className="flex flex-col justify-center">
+                    <span className="text-white text-sm font-medium">{title || 'Fashcycle Admin - Control Tower'}</span>
+                    {subtitle && <span className="text-gray-500 text-xs">{subtitle}</span>}
                 </div>
                 <div className="flex items-center gap-4">
                     {/* System Status */}
