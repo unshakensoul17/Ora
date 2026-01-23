@@ -1,5 +1,6 @@
 'use client';
 
+// Force rebuild
 import Sidebar from './Sidebar';
 
 interface AdminLayoutProps {
