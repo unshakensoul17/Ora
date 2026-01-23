@@ -37,8 +37,8 @@ RUN npx prisma generate
 # Copy built application from builder
 COPY --from=builder /app/dist ./dist
 
-# Expose port
-EXPOSE 3000
+# Expose port (Render uses PORT env var, defaults to 10000)
+EXPOSE ${PORT:-10000}
 
 # Start command (migrations + start)
-CMD npx prisma migrate deploy && node dist/src/main.js
+CMD sh -c "ls -la dist && ls -la dist/src && npx prisma migrate deploy && node dist/src/main.js"
