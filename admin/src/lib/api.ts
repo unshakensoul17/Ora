@@ -104,6 +104,16 @@ export interface Booking {
     };
 }
 
+export interface BillingData {
+    shopId: string;
+    shopName: string;
+    totalLeads: number;
+    totalRevenue: number;
+    pendingAmount: number;
+    lastPaymentDate?: string;
+}
+
+
 // ============================================
 // Shops API
 // ============================================
@@ -327,6 +337,48 @@ export async function getHolds(page?: number, limit?: number) {
     const response = await apiClient.get('/bookings/admin/holds', { params });
     return response.data;
 }
+
+// ============================================
+// Billing API
+// ============================================
+
+export async function getBillingData(): Promise<BillingData[]> {
+    try {
+        // Fetch all shops
+        const shops = await getAllShops();
+
+        // For each shop, fetch attribution stats
+        const billingPromises = shops.map(async (shop) => {
+            try {
+                const stats = await getShopAttributionStats(shop.id);
+                return {
+                    shopId: shop.id,
+                    shopName: shop.name,
+                    totalLeads: stats.totalLeads || 0,
+                    totalRevenue: (stats.totalRevenue || 0) / 100, // Convert paise to rupees
+                    pendingAmount: (stats.pendingBilling || 0) / 100,
+                    lastPaymentDate: stats.lastBilledAt || undefined,
+                };
+            } catch (error) {
+                // If stats fetch fails, return zero values
+                return {
+                    shopId: shop.id,
+                    shopName: shop.name,
+                    totalLeads: 0,
+                    totalRevenue: 0,
+                    pendingAmount: 0,
+                };
+            }
+        });
+
+        const billingData = await Promise.all(billingPromises);
+        return billingData;
+    } catch (error) {
+        console.error('Failed to fetch billing data:', error);
+        return [];
+    }
+}
+
 
 // ============================================
 // Export default client for direct use
