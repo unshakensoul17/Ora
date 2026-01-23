@@ -41,10 +41,12 @@ export default function ShopsPage() {
     }
 
     async function handleSuspend(shopId: string) {
-        if (!confirm('Are you sure you want to suspend this shop?')) return;
+        const reason = prompt('Enter reason for suspension:');
+        if (!reason) return;
+
         try {
             setActionLoading(shopId);
-            await suspendShop(shopId);
+            await suspendShop(shopId, reason);
             await loadShops();
         } catch (error: any) {
             alert(error.response?.data?.message || 'Failed to suspend shop');
@@ -90,8 +92,8 @@ export default function ShopsPage() {
                             key={f}
                             onClick={() => setFilter(f as any)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${filter === f
-                                    ? 'bg-amber-500 text-white'
-                                    : 'bg-gray-800 text-gray-400 hover:text-white border border-gray-700'
+                                ? 'bg-amber-500 text-white'
+                                : 'bg-gray-800 text-gray-400 hover:text-white border border-gray-700'
                                 }`}
                         >
                             {f.replace('_', ' ')}
