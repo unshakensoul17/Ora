@@ -125,7 +125,7 @@ export default function DashboardPage() {
                 name: s.name,
                 status: s.status,
                 invAccuracy: 75 + Math.floor(Math.random() * 20), // Would come from inventory stats
-                qrScans: `${s._count?.bookings || 0}/18`,
+                qrScans: `${s._count?.attributions || 0}/18`,
                 lastActive: getRelativeTime(s.updatedAt),
                 disputes: 0,
                 revenue: platformStats?.billedRevenue || Math.floor(Math.random() * 50000 + 20000),

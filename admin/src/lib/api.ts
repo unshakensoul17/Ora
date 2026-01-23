@@ -34,6 +34,8 @@ export interface Shop {
     pincode: string;
     status: 'PENDING' | 'APPROVED' | 'SUSPENDED';  // Backend uses these statuses
     email?: string;
+    suspendedAt?: string;
+    suspendReason?: string;
     createdAt: string;
     updatedAt: string;
     _count?: {

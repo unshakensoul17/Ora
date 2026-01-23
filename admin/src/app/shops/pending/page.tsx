@@ -104,13 +104,6 @@ export default function PendingApprovalsPage() {
                                             <p className="text-xs text-gray-300">{new Date(shop.createdAt).toLocaleDateString()}</p>
                                         </div>
                                     </div>
-
-                                    {shop.gstNumber && (
-                                        <div className="mt-3 p-2 bg-gray-800 rounded inline-block">
-                                            <span className="text-[10px] text-gray-500">GST: </span>
-                                            <span className="text-[10px] text-gray-300 font-mono">{shop.gstNumber}</span>
-                                        </div>
-                                    )}
                                 </div>
 
                                 <div className="flex gap-2 ml-6">

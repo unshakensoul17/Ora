@@ -55,8 +55,8 @@ export default function AllLeadsPage() {
 
             // Generate leads based on shops (in real app, this would come from attribution events)
             const generatedLeads: Lead[] = shops.flatMap((shop: Shop, i: number) => [
-                { id: `${shop.id}-1`, customerName: `Customer ${i * 2 + 1}`, shop: shop.shopName, product: 'Bridal Lehenga', amount: 4500, time: new Date().toISOString(), status: 'verified' },
-                { id: `${shop.id}-2`, customerName: `Customer ${i * 2 + 2}`, shop: shop.shopName, product: 'Designer Saree', amount: 3200, time: new Date(Date.now() - 3600000).toISOString(), status: 'pending' },
+                { id: `${shop.id}-1`, customerName: `Customer ${i * 2 + 1}`, shop: shop.name, product: 'Bridal Lehenga', amount: 4500, time: new Date().toISOString(), status: 'verified' },
+                { id: `${shop.id}-2`, customerName: `Customer ${i * 2 + 2}`, shop: shop.name, product: 'Designer Saree', amount: 3200, time: new Date(Date.now() - 3600000).toISOString(), status: 'pending' },
             ]);
 
             setLeads(generatedLeads);
