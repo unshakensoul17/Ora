@@ -125,11 +125,11 @@ export default function ShopsPage() {
                                     <div className="flex gap-6 mb-4 text-sm">
                                         <div>
                                             <span className="text-gray-400">Inventory:</span>
-                                            <span className="text-white font-medium ml-2">{shop._count.inventory}</span>
+                                            <span className="text-white font-medium ml-2">{shop._count.inventoryItems}</span>
                                         </div>
                                         <div>
-                                            <span className="text-gray-400">Bookings:</span>
-                                            <span className="text-white font-medium ml-2">{shop._count.bookings}</span>
+                                            <span className="text-gray-400">Leads:</span>
+                                            <span className="text-white font-medium ml-2">{shop._count.attributions}</span>
                                         </div>
                                     </div>
                                 )}
