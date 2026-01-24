@@ -93,10 +93,16 @@ Environment Variables: Copy from admin/.env.example
 
 ## Step 5: Configure CORS
 
-Update backend CORS_ORIGINS in Railway:
+Update backend CORS_ORIGINS in Render:
 ```
-CORS_ORIGINS=https://fashcycle.vercel.app,https://admin-fashcycle.vercel.app
+CORS_ORIGINS=https://fashcycle-admin.vercel.app,https://fashcycle.vercel.app,http://localhost:3001,http://localhost:3002
 ```
+
+**Important:** Make sure to:
+1. Use commas (no spaces) between URLs
+2. Include both Vercel deployments
+3. Save and wait for Render to redeploy (2-5 minutes)
+
 
 ## Step 6: Verify Deployment
 

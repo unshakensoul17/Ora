@@ -9,14 +9,20 @@ async function bootstrap() {
     // Global prefix
     app.setGlobalPrefix('api/v1');
 
-    // CORS
-    app.enableCors({
-        origin: [
+    // CORS - Load from environment variable
+    const corsOrigins = process.env.CORS_ORIGINS
+        ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+        : [
             'http://localhost:3001', // User web
             'http://localhost:3002', // Admin
             'http://10.204.162.252:3000', // Local Network Access
             'http://10.204.162.252:8081', // Expo Bundler
-        ],
+        ];
+
+    console.log('🌐 CORS enabled for origins:', corsOrigins);
+
+    app.enableCors({
+        origin: corsOrigins,
         credentials: true,
     });
 
