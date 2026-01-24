@@ -1,0 +1,17 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    # Run every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend
+        run: |
+          echo "Pinging Fashcycle backend..."
+          curl -f https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list || true
+          echo "Ping completed at $(date)"
