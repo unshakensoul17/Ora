@@ -58,13 +58,13 @@ export function CategorySection() {
                     </div>
                 </div>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Grid - Desktop / Horizontal Scroll - Mobile */}
+                <div className="flex overflow-x-auto pb-6 -mx-6 px-6 sm:mx-0 sm:px-0 sm:pb-0 gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 snap-x snap-mandatory hide-scrollbar">
                     {categories.map((category) => (
                         <Link
                             key={category.id}
                             href={category.href}
-                            className="group relative h-80 rounded-2xl overflow-hidden shadow-luxury transition-all duration-500 hover:-translate-y-2 hover:shadow-luxury-lg"
+                            className="group relative h-80 min-w-[280px] sm:min-w-0 rounded-2xl overflow-hidden shadow-luxury transition-all duration-500 hover:-translate-y-2 hover:shadow-luxury-lg snap-center"
                         >
                             {/* Background Gradient */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} opacity-90 transition-transform duration-700 group-hover:scale-110`} />

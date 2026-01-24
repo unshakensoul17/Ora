@@ -92,7 +92,7 @@ export default function MyHoldsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-charcoal pt-20">
+        <div className="min-h-screen bg-charcoal pt-20 pb-safe pb-20 md:pb-0">
             {/* Breadcrumb Navigation */}
             <div className="bg-charcoal-light border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6 py-4">
@@ -147,9 +147,9 @@ export default function MyHoldsPage() {
                                     key={hold.id}
                                     className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-amber-500/30 transition"
                                 >
-                                    <div className="flex gap-6">
+                                    <div className="flex flex-col sm:flex-row gap-6">
                                         {/* Item Image */}
-                                        <div className="w-48 h-64 rounded-lg flex-shrink-0 overflow-hidden">
+                                        <div className="w-full sm:w-48 h-64 rounded-lg flex-shrink-0 overflow-hidden">
                                             {imageUrl ? (
                                                 <img
                                                     src={imageUrl}

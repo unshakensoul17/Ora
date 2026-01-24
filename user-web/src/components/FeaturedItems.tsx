@@ -57,7 +57,7 @@ export function FeaturedItems() {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex overflow-x-auto pb-6 -mx-6 px-6 sm:mx-0 sm:px-0 sm:pb-0 gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 snap-x snap-mandatory hide-scrollbar">
             {items.map((item) => {
                 const imageUrl = item.images && item.images.length > 0
                     ? getImageUrl(item.images[0])
@@ -69,7 +69,7 @@ export function FeaturedItems() {
                 return (
                     <div
                         key={item.id}
-                        className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden group hover:border-accent/30 transition-all duration-300 flex flex-col shadow-luxury"
+                        className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden group hover:border-accent/30 transition-all duration-300 flex flex-col shadow-luxury min-w-[260px] sm:min-w-0 snap-center"
                     >
                         {/* Image Container */}
                         <div className="aspect-[3/4] bg-gray-800 relative overflow-hidden">

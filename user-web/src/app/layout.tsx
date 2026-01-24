@@ -4,7 +4,8 @@ import './globals.css';
 import { Providers } from './providers';
 import Navbar from '@/components/Navbar';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { StickyBottomBar } from '@/components/StickyBottomBar';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
+import { MobileHeader } from '@/components/MobileHeader';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
@@ -31,10 +32,11 @@ export default function RootLayout({
             <body className={`${inter.variable} ${playfair.variable} font-body bg-charcoal text-white`}>
                 <Providers>
                     <Navbar />
+                    <MobileHeader />
                     {children}
                     {/* Global Conversion Elements */}
                     <WhatsAppButton />
-                    <StickyBottomBar />
+                    <MobileBottomNav />
                 </Providers>
             </body>
         </html>

@@ -66,7 +66,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-charcoal py-12 px-4">
+        <div className="min-h-screen bg-charcoal py-12 px-4 pb-safe pb-20 md:pb-0">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">

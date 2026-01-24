@@ -191,7 +191,7 @@ export default function ItemDetailPage() {
         : '';
 
     return (
-        <main className="min-h-screen bg-charcoal pt-20">
+        <main className="min-h-screen bg-charcoal pt-20 pb-safe pb-20 md:pb-0">
             {/* Breadcrumb Navigation */}
             <div className="bg-charcoal-light border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6 py-4">

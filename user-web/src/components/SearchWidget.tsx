@@ -90,13 +90,13 @@ export function SearchWidget() {
             {/* Duration Quick Chips */}
             <div className="mb-6">
                 <label className="form-label">How long do you need it?</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex overflow-x-auto pb-2 gap-2 hide-scrollbar snap-x">
                     {durationOptions.map((opt) => (
                         <button
                             key={opt.days}
                             type="button"
                             onClick={() => handleDurationChange(opt.days)}
-                            className={`chip ${duration === opt.days ? 'chip-active' : ''}`}
+                            className={`chip whitespace-nowrap snap-start ${duration === opt.days ? 'chip-active' : ''}`}
                         >
                             {opt.label}
                         </button>
@@ -107,11 +107,11 @@ export function SearchWidget() {
             {/* Category Filter Pills */}
             <div className="mb-6">
                 <label className="form-label">Category</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex overflow-x-auto pb-2 gap-2 hide-scrollbar snap-x">
                     <button
                         type="button"
                         onClick={() => setCategory('')}
-                        className={`chip ${category === '' ? 'chip-active' : ''}`}
+                        className={`chip whitespace-nowrap snap-start ${category === '' ? 'chip-active' : ''}`}
                     >
                         All
                     </button>
@@ -120,7 +120,7 @@ export function SearchWidget() {
                             key={cat.value}
                             type="button"
                             onClick={() => setCategory(cat.value)}
-                            className={`chip ${category === cat.value ? 'chip-active' : ''}`}
+                            className={`chip whitespace-nowrap snap-start ${category === cat.value ? 'chip-active' : ''}`}
                         >
                             {cat.label}
                         </button>

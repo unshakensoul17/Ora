@@ -97,7 +97,7 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-md glass-panel rounded-2xl p-6 md:p-8 animate-slide-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="relative w-full max-w-md glass-panel rounded-2xl p-6 md:p-8 animate-slide-up max-h-[85vh] overflow-y-auto hide-scrollbar sm:custom-scrollbar">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"

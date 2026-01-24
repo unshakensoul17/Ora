@@ -59,7 +59,7 @@ export default function MyOrdersPage() {
     }
 
     return (
-        <main className="min-h-screen bg-charcoal">
+        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
             <Navbar />
 
             <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">

@@ -45,7 +45,7 @@ export default function GalleryPage() {
     );
 
     return (
-        <main className="min-h-screen bg-charcoal">
+        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
             {/* Header */}
             <header className="bg-primary/90 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-accent/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">

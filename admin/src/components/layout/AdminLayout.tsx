@@ -16,19 +16,19 @@ export default function AdminLayout({ children, showFilter = false, title, subti
             <Sidebar />
 
             {/* Top Bar */}
-            <header className="fixed top-0 left-56 right-0 h-14 bg-[#0d1117] border-b border-gray-800 flex items-center justify-between px-6 z-30">
+            <header className="fixed top-0 left-0 md:left-56 right-0 h-14 bg-[#0d1117] border-b border-gray-800 flex items-center justify-between px-6 z-30 transition-all duration-300">
                 <div className="flex flex-col justify-center">
                     <span className="text-white text-sm font-medium">{title || 'Fashcycle Admin - Control Tower'}</span>
                     {subtitle && <span className="text-gray-500 text-xs">{subtitle}</span>}
                 </div>
                 <div className="flex items-center gap-4">
                     {/* System Status */}
-                    <div className="flex items-center gap-2">
+                    <div className="hidden sm:flex items-center gap-2">
                         <span className="text-gray-400 text-xs">System Status:</span>
                         <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-medium rounded">HEALTHY</span>
                     </div>
                     {/* Search */}
-                    <div className="relative">
+                    <div className="relative hidden sm:block">
                         <input
                             type="text"
                             placeholder="Search..."
@@ -43,21 +43,21 @@ export default function AdminLayout({ children, showFilter = false, title, subti
                         <div className="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center">
                             <span className="text-xs font-medium text-black">A</span>
                         </div>
-                        <span className="text-xs text-gray-300">Admin Profile</span>
+                        <span className="text-xs text-gray-300 hidden sm:inline">Admin Profile</span>
                     </div>
                 </div>
             </header>
 
             {/* Main Content */}
-            <main className="ml-56 pt-14 min-h-screen">
-                <div className={`p-6 ${showFilter ? 'mr-64' : ''}`}>
+            <main className="ml-0 md:ml-56 pt-14 min-h-screen transition-all duration-300">
+                <div className={`p-4 md:p-6 ${showFilter ? 'lg:mr-64' : ''}`}>
                     {children}
                 </div>
             </main>
 
             {/* Right Filter Panel - optional */}
             {showFilter && (
-                <aside className="fixed right-0 top-14 w-64 h-[calc(100vh-56px)] bg-[#0d1117] border-l border-gray-800 p-4">
+                <aside className="fixed right-0 top-14 w-64 h-[calc(100vh-56px)] bg-[#0d1117] border-l border-gray-800 p-4 hidden lg:block">
                     <h3 className="text-white text-sm font-medium mb-4 flex items-center gap-2">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />

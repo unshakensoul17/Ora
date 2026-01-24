@@ -45,7 +45,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass-panel border-b-0' : 'bg-transparent'
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 hidden md:block ${scrolled ? 'glass-panel border-b-0' : 'bg-transparent'
             }`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
@@ -56,6 +56,24 @@ export default function Navbar() {
                         </div>
                         <span className="font-heading font-bold text-xl text-white">Fashcycle</span>
                     </Link>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden flex items-center">
+                        <button
+                            onClick={() => setDropdownOpen(!dropdownOpen)} // Reusing dropdown state for mobile menu toggle simplicity
+                            className="text-gray-300 hover:text-white p-2"
+                        >
+                            {dropdownOpen ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-6">
@@ -89,8 +107,8 @@ export default function Navbar() {
                         </Link>
                     </div>
 
-                    {/* User Menu */}
-                    <div className="flex items-center space-x-4">
+                    {/* User Menu (Desktop) */}
+                    <div className="hidden md:flex items-center space-x-4">
                         {loading ? (
                             <div className="w-8 h-8 rounded-full bg-gray-700 animate-pulse" />
                         ) : user ? (
@@ -117,7 +135,7 @@ export default function Navbar() {
                                     </svg>
                                 </button>
 
-                                {/* Dropdown Menu */}
+                                {/* Desktop Dropdown Menu */}
                                 {dropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-64 glass-panel rounded-xl overflow-hidden animate-slide-down border border-white/5">
                                         <div className="p-4 border-b border-white/5 bg-white/5">
@@ -188,6 +206,94 @@ export default function Navbar() {
                         )}
                     </div>
                 </div>
+
+                {/* Mobile Menu Overlay */}
+                {dropdownOpen && (
+                    <div className="md:hidden glass-panel border-t border-white/5 animate-slide-down">
+                        <div className="px-4 pt-2 pb-4 space-y-1">
+                            <Link
+                                href="/"
+                                onClick={() => setDropdownOpen(false)}
+                                className={`block px-3 py-2 rounded-md text-base font-medium ${pathname === '/' ? 'text-accent bg-white/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                href="/search"
+                                onClick={() => setDropdownOpen(false)}
+                                className={`block px-3 py-2 rounded-md text-base font-medium ${pathname?.startsWith('/search') ? 'text-accent bg-white/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                Browse
+                            </Link>
+                            <Link
+                                href="/#how-it-works"
+                                onClick={() => setDropdownOpen(false)}
+                                className={`block px-3 py-2 rounded-md text-base font-medium ${pathname === '/how-it-works' ? 'text-accent bg-white/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                How It Works
+                            </Link>
+
+                            {/* User Section in Mobile Menu */}
+                            <div className="mt-4 pt-4 border-t border-white/5">
+                                {loading ? (
+                                    <div className="animate-pulse h-10 bg-gray-700 rounded w-full" />
+                                ) : user ? (
+                                    <>
+                                        <div className="flex items-center px-3 mb-3">
+                                            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent mr-3">
+                                                {user.name?.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <div className="text-base font-medium text-white">{user.name}</div>
+                                                <div className="text-sm font-medium text-gray-400">{user.email}</div>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href="/profile"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        >
+                                            My Profile
+                                        </Link>
+                                        <Link
+                                            href="/my-holds"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        >
+                                            My Holds
+                                        </Link>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-400 hover:text-red-300 hover:bg-white/5"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="space-y-2 mt-2">
+                                        <Link
+                                            href="/login"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block w-full text-center px-4 py-2 border border-white/10 rounded-lg text-white font-medium hover:bg-white/5"
+                                        >
+                                            Log In
+                                        </Link>
+                                        <Link
+                                            href="/register"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block w-full text-center px-4 py-2 bg-gradient-to-r from-accent to-accent-hover text-primary rounded-lg font-bold shadow-lg"
+                                        >
+                                            Sign Up
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Add dropdown animation */}

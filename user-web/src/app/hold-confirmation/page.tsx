@@ -141,7 +141,7 @@ function HoldDetails() {
 
 export default function HoldConfirmationPage() {
     return (
-        <main className="min-h-screen bg-charcoal">
+        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
             {/* Header */}
             <header className="bg-primary py-4 px-6 border-b border-accent/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -8,7 +8,7 @@ import { Search, MapPin, Sparkles, Clock, CheckCircle } from '@/components/ui/Ic
 
 export default function HomePage() {
     return (
-        <main className="min-h-screen">
+        <main className="min-h-screen pb-safe pb-20 md:pb-0">
             {/* Hero Section */}
             <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
                 {/* Background gradient with subtle pattern */}
@@ -21,7 +21,7 @@ export default function HomePage() {
                 {/* Content */}
                 <div className="relative z-10 text-center max-w-5xl px-6 animate-slide-up">
                     {/* Main Heading */}
-                    <h1 className="font-heading text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    <h1 className="font-heading text-4xl md:text-7xl font-bold mb-6 leading-tight">
                         <span className="text-white drop-shadow-lg">Wear Designer.</span>
                         <br />
                         <span className="text-accent drop-shadow-lg">Spend High-Street.</span>
@@ -57,7 +57,7 @@ export default function HomePage() {
                         </Link>
                         <Link
                             href="#how-it-works"
-                            className="px-8 py-4 border-2 border-accent/50 text-accent font-semibold rounded-xl hover:bg-accent/10 transition-all backdrop-blur-sm"
+                            className="hidden sm:inline-block px-8 py-4 border-2 border-accent/50 text-accent font-semibold rounded-xl hover:bg-accent/10 transition-all backdrop-blur-sm"
                         >
                             How It Works
                         </Link>
