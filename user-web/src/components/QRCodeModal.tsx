@@ -1,6 +1,7 @@
 'use client';
 
 import { QRCodeSVG } from 'qrcode.react';
+import { useRouter } from 'next/navigation';
 
 // Flexible interface that handles both nested and flat structures
 interface BookingItem {
@@ -37,6 +38,8 @@ interface QRCodeModalProps {
 }
 
 export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModalProps) {
+    const router = useRouter();
+
     if (!isOpen || !bookingData) return null;
 
     function getTimeRemaining(expiresAt: string) {
@@ -131,7 +134,8 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
                 <div className="flex gap-2">
                     <button
                         onClick={() => {
-                            window.location.href = '/my-holds';
+                            onClose();
+                            router.push('/my-holds');
                         }}
                         className="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition"
                     >

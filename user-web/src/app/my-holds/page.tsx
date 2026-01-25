@@ -25,8 +25,10 @@ export default function MyHoldsPage() {
     }, [user, authLoading, router]);
 
     useEffect(() => {
-        loadHolds();
-    }, []);
+        if (user) {
+            loadHolds();
+        }
+    }, [user]);
 
     async function loadHolds() {
         if (!user) return;

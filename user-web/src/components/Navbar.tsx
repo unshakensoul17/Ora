@@ -105,6 +105,16 @@ export default function Navbar() {
                         >
                             Reserve Now
                         </Link>
+                        {/* Premium My Holds Button */}
+                        <Link
+                            href="/my-holds"
+                            className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 font-semibold text-sm rounded-lg hover:bg-emerald-600/30 hover:border-emerald-500/50 transition-all hover:-translate-y-0.5 group"
+                        >
+                            <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            <span>My Holds</span>
+                        </Link>
                     </div>
 
                     {/* User Menu (Desktop) */}
@@ -264,6 +274,13 @@ export default function Navbar() {
                                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
                                         >
                                             My Holds
+                                        </Link>
+                                        <Link
+                                            href="/my-orders"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        >
+                                            My Orders
                                         </Link>
                                         <button
                                             onClick={handleLogout}
