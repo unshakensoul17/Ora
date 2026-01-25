@@ -68,6 +68,7 @@ function ActionButton({ label, variant = 'default', onClick }: { label: string; 
 }
 
 interface ShopData {
+    id: string;
     shopId: string;
     name: string;
     ownerPhone: string;
