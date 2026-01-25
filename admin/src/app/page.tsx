@@ -1,11 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import AdminLayout from '@/components/layout/AdminLayout';
-import KPICard from '@/components/dashboard/KPICard';
 import { useEffect, useState, useMemo } from 'react';
-import AdminLayout from '@/components/layout/AdminLayout';
-import KPICard from '@/components/dashboard/KPICard';
+
 import { getAllShops, getPlatformStats, getInventoryItems, suspendShop, reactivateShop, Shop } from '@/lib/api';
 
 // Progress bar component for inventory accuracy
@@ -189,7 +185,7 @@ export default function DashboardPage() {
             }));
 
             setShops(transformedShops);
-            setShops(transformedShops);
+
             setStats({
                 liveShops: `${activeCount}/${totalCount - activeCount}`,
                 scanRate: platformStats ? `${Math.round((platformStats.verifiedEvents / (platformStats.totalEvents || 1)) * 100)}%` : '0%',
@@ -202,10 +198,11 @@ export default function DashboardPage() {
             setError('Failed to connect to backend. Showing demo data.');
 
             // Fallback demo data
-            { id: '1', shopId: 'SS8/000001', name: 'Fashcycle Fashmall', ownerPhone: '0000000000', city: 'Delhi', status: 'APPROVED', invAccuracy: 82, qrScans: '15/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 45 },
-            { id: '2', shopId: 'SS8/600002', name: 'Fashcycle Sumnakatan', ownerPhone: '0000000000', city: 'Mumbai', status: 'APPROVED', invAccuracy: 88, qrScans: '17/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 38 },
-            { id: '3', shopId: 'SS9/000003', name: 'Fashcycle Rudblut', ownerPhone: '0000000000', city: 'Bangalore', status: 'APPROVED', invAccuracy: 92, qrScans: '15/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 52 },
-            { id: '4', shopId: 'SS8/000004', name: 'Fashcycle Encaptina', ownerPhone: '0000000000', city: 'Kolkata', status: 'PENDING', invAccuracy: 83, qrScans: '0/0', lastActive: 'Never', disputes: 0, revenue: 0, inventoryCount: 0 },
+            setShops([
+                { id: '1', shopId: 'SS8/000001', name: 'Fashcycle Fashmall', ownerPhone: '0000000000', city: 'Delhi', status: 'APPROVED', invAccuracy: 82, qrScans: '15/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 45 },
+                { id: '2', shopId: 'SS8/600002', name: 'Fashcycle Sumnakatan', ownerPhone: '0000000000', city: 'Mumbai', status: 'APPROVED', invAccuracy: 88, qrScans: '17/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 38 },
+                { id: '3', shopId: 'SS9/000003', name: 'Fashcycle Rudblut', ownerPhone: '0000000000', city: 'Bangalore', status: 'APPROVED', invAccuracy: 92, qrScans: '15/18', lastActive: '22 hours ago', disputes: 0, revenue: 42500, inventoryCount: 52 },
+                { id: '4', shopId: 'SS8/000004', name: 'Fashcycle Encaptina', ownerPhone: '0000000000', city: 'Kolkata', status: 'PENDING', invAccuracy: 83, qrScans: '0/0', lastActive: 'Never', disputes: 0, revenue: 0, inventoryCount: 0 },
             ] as any);
             setStats({ liveShops: '3/1', scanRate: '88%', stockouts: 12, revenue: 42500 });
         } finally {
