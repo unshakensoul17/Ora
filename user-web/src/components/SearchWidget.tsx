@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Search } from '@/components/ui/Icons';
 
 const occasions = [
@@ -41,6 +41,8 @@ const suggestedSearches = [
 
 export function SearchWidget() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+
     const [occasion, setOccasion] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -48,6 +50,23 @@ export function SearchWidget() {
     const [category, setCategory] = useState('');
     const [duration, setDuration] = useState(3);
     const [maxPrice, setMaxPrice] = useState(5000);
+
+    // Initialize filters from URL parameters
+    useEffect(() => {
+        const urlCategory = searchParams.get('category');
+        const urlOccasion = searchParams.get('occasion');
+        const urlStartDate = searchParams.get('startDate');
+        const urlEndDate = searchParams.get('endDate');
+        const urlSize = searchParams.get('size');
+        const urlMaxPrice = searchParams.get('maxPrice');
+
+        if (urlCategory) setCategory(urlCategory);
+        if (urlOccasion) setOccasion(urlOccasion);
+        if (urlStartDate) setStartDate(urlStartDate);
+        if (urlEndDate) setEndDate(urlEndDate);
+        if (urlSize) setSize(urlSize);
+        if (urlMaxPrice) setMaxPrice(parseInt(urlMaxPrice) / 100); // Convert from paise to rupees
+    }, [searchParams]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
