@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import AdminLayout from '@/components/layout/AdminLayout';
+import KPICard from '@/components/dashboard/KPICard';
 
 import { getAllShops, getPlatformStats, getInventoryItems, suspendShop, reactivateShop, Shop } from '@/lib/api';
 
