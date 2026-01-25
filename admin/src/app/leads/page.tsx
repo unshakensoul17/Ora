@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AdminLayout from '@/components/layout/AdminLayout';
-import { getAllShops, getPlatformStats, Shop } from '@/lib/api';
+import { getPlatformStats, getAttributionEvents } from '@/lib/api';
 
 function StatusBadge({ status }: { status: string }) {
     const colors: Record<string, string> = {
@@ -50,24 +50,25 @@ export default function AllLeadsPage() {
                 revenue: platformStats.totalRevenue || 0,
             });
 
-            // Get shops to cross-reference
-            const shops = await getAllShops();
+            // Get attribution events (leads)
+            const events = await getAttributionEvents(1, 100);
 
-            // Generate leads based on shops (in real app, this would come from attribution events)
-            const generatedLeads: Lead[] = shops.flatMap((shop: Shop, i: number) => [
-                { id: `${shop.id}-1`, customerName: `Customer ${i * 2 + 1}`, shop: shop.name, product: 'Bridal Lehenga', amount: 4500, time: new Date().toISOString(), status: 'verified' },
-                { id: `${shop.id}-2`, customerName: `Customer ${i * 2 + 2}`, shop: shop.name, product: 'Designer Saree', amount: 3200, time: new Date(Date.now() - 3600000).toISOString(), status: 'pending' },
-            ]);
+            // Map events to Lead interface
+            const realLeads: Lead[] = events.map((event: any) => ({
+                id: event.id,
+                customerName: event.booking?.user?.name || 'Walk-in Customer',
+                shop: event.booking?.inventoryItem?.shop?.name || 'Unknown Shop',
+                product: event.booking?.inventoryItem?.name || 'Rental Item',
+                amount: event.amount || 0,
+                time: event.verifiedAt || new Date().toISOString(),
+                status: 'verified' // Attribution events are generally verified scans
+            }));
 
-            setLeads(generatedLeads);
+            setLeads(realLeads);
         } catch (error) {
             console.error('Failed to load leads:', error);
-            // Demo fallback
-            setLeads([
-                { id: '1', customerName: 'Priya Sharma', shop: 'Bridal Elegance', product: 'Red Lehenga', amount: 4500, time: '2026-01-09T10:30:00', status: 'verified' },
-                { id: '2', customerName: 'Neha Gupta', shop: 'Fashion Hub', product: 'Designer Saree', amount: 3200, time: '2026-01-09T09:15:00', status: 'pending' },
-            ]);
-            setStats({ total: 156, verified: 142, pending: 14, revenue: 78500 });
+            // Fallback to empty state or minimal demo data if crucial
+            setLeads([]);
         } finally {
             setLoading(false);
         }

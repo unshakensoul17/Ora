@@ -2,15 +2,37 @@
 
 // Force rebuild
 import Sidebar from './Sidebar';
+import { useState, useEffect } from 'react';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
     showFilter?: boolean;
     title?: string;
     subtitle?: string;
+    onFilterChange?: (filters: { regions: string[]; performance: string }) => void;
 }
 
-export default function AdminLayout({ children, showFilter = false, title, subtitle }: AdminLayoutProps) {
+export default function AdminLayout({ children, showFilter = false, title, subtitle, onFilterChange }: AdminLayoutProps) {
+    const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+    const [performanceFilter, setPerformanceFilter] = useState<string>('All Rate');
+
+    useEffect(() => {
+        if (onFilterChange) {
+            onFilterChange({
+                regions: selectedRegions,
+                performance: performanceFilter
+            });
+        }
+    }, [selectedRegions, performanceFilter, onFilterChange]);
+
+    const handleRegionChange = (region: string) => {
+        setSelectedRegions(prev =>
+            prev.includes(region)
+                ? prev.filter(r => r !== region)
+                : [...prev, region]
+        );
+    };
+
     return (
         <div className="min-h-screen bg-[#0a0e14]">
             <Sidebar />
@@ -57,7 +79,7 @@ export default function AdminLayout({ children, showFilter = false, title, subti
 
             {/* Right Filter Panel - optional */}
             {showFilter && (
-                <aside className="fixed right-0 top-14 w-64 h-[calc(100vh-56px)] bg-[#0d1117] border-l border-gray-800 p-4 hidden lg:block">
+                <aside className="fixed right-0 top-14 w-64 h-[calc(100vh-56px)] bg-[#0d1117] border-l border-gray-800 p-4 hidden lg:block overflow-y-auto">
                     <h3 className="text-white text-sm font-medium mb-4 flex items-center gap-2">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -70,8 +92,13 @@ export default function AdminLayout({ children, showFilter = false, title, subti
                         <h4 className="text-xs text-gray-400 mb-3">Region</h4>
                         <div className="space-y-2">
                             {['North', 'South', 'East', 'West', 'Central'].map((region) => (
-                                <label key={region} className="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" className="w-3.5 h-3.5 rounded bg-gray-800 border-gray-600" />
+                                <label key={region} className="flex items-center gap-2 cursor-pointer hover:bg-gray-800/50 p-1 rounded transition">
+                                    <input
+                                        type="checkbox"
+                                        className="w-3.5 h-3.5 rounded bg-gray-800 border-gray-600 checked:bg-emerald-500 checked:border-emerald-500 focus:ring-0 focus:ring-offset-0"
+                                        checked={selectedRegions.includes(region)}
+                                        onChange={() => handleRegionChange(region)}
+                                    />
                                     <span className="text-xs text-gray-300">{region}</span>
                                 </label>
                             ))}
@@ -83,8 +110,14 @@ export default function AdminLayout({ children, showFilter = false, title, subti
                         <h4 className="text-xs text-gray-400 mb-3">Performance</h4>
                         <div className="space-y-2">
                             {['All Rate', 'High Performers', 'Low Performers'].map((perf) => (
-                                <label key={perf} className="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="performance" className="w-3.5 h-3.5 bg-gray-800 border-gray-600" />
+                                <label key={perf} className="flex items-center gap-2 cursor-pointer hover:bg-gray-800/50 p-1 rounded transition">
+                                    <input
+                                        type="radio"
+                                        name="performance"
+                                        className="w-3.5 h-3.5 bg-gray-800 border-gray-600 checked:bg-emerald-500 checked:border-emerald-500 focus:ring-0 focus:ring-offset-0"
+                                        checked={performanceFilter === perf}
+                                        onChange={() => setPerformanceFilter(perf)}
+                                    />
                                     <span className="text-xs text-gray-300">{perf}</span>
                                 </label>
                             ))}

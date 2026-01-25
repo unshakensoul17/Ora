@@ -1,9 +1,7 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/layout/AdminLayout';
-import { getAllShops, Shop } from '@/lib/api';
+import { getAllShops, suspendShop, reactivateShop, Shop } from '@/lib/api';
 
 function StatusBadge({ status }: { status: string }) {
     const colors: Record<string, string> = {
@@ -43,6 +41,23 @@ export default function AllShopsPage() {
             setShops([]);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function handleSuspend(shop: Shop) {
+        if (!confirm(`Are you sure you want to ${shop.status === 'SUSPENDED' ? 'activate' : 'suspend'} ${shop.name}?`)) return;
+
+        try {
+            if (shop.status === 'SUSPENDED') {
+                await reactivateShop(shop.id);
+            } else {
+                await suspendShop(shop.id, 'Admin suspended from list');
+            }
+            // Refresh list
+            loadShops();
+        } catch (error) {
+            console.error('Failed to update shop status:', error);
+            alert('Failed to action shop');
         }
     }
 
@@ -117,11 +132,19 @@ export default function AllShopsPage() {
                                 <td className="px-4 py-3"><StatusBadge status={shop.status} /></td>
                                 <td className="px-4 py-3 text-xs text-gray-400">{shop._count?.inventoryItems || 0} items</td>
                                 <td className="px-4 py-3 text-right">
-                                    <Link href={`/shops/${shop.id}`}>
-                                        <button className="px-2 py-1 text-[10px] bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition">
-                                            View
+                                    <div className="flex justify-end gap-2">
+                                        <button
+                                            onClick={() => handleSuspend(shop)}
+                                            className={`px-2 py-1 text-[10px] rounded transition ${shop.status === 'SUSPENDED' ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' : 'bg-red-500/20 text-red-400 hover:bg-red-500/30'}`}
+                                        >
+                                            {shop.status === 'SUSPENDED' ? 'Activate' : 'Suspend'}
                                         </button>
-                                    </Link>
+                                        <Link href={`/shops/${shop.id}`}>
+                                            <button className="px-2 py-1 text-[10px] bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition">
+                                                View
+                                            </button>
+                                        </Link>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
