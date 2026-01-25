@@ -1,9 +1,9 @@
 // API Configuration
-// Change this to your computer's local IP address if running on a real phone
-// e.g., 'http://192.168.1.5:3000/api/v1'
+// Production backend URL (Render)
+// For local development, change to your computer's IP: 'http://192.168.1.5:3000/api/v1'
 // For Android emulator, use '10.0.2.2' instead of 'localhost'
 
-export const API_BASE_URL = "http://10.204.162.252:3000/api/v1";
+export const API_BASE_URL = "https://fashcycle-backend-5608.onrender.com/api/v1";
 
 // Endpoint paths
 export const endpoints = {

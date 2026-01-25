@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from './src/store/authStore';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
 
 // Screens
 import LoginScreen from './src/screens/auth/LoginScreen';
@@ -244,15 +245,38 @@ function AppNavigator() {
 }
 
 export default function App() {
+    useEffect(() => {
+        // Global error handler for unhandled promise rejections
+        const errorHandler = (error: any) => {
+            console.error('Unhandled error:', error);
+            Alert.alert(
+                'Error',
+                `An error occurred: ${error?.message || 'Unknown error'}`,
+                [{ text: 'OK' }]
+            );
+        };
+
+        // Set up global error handlers
+        if (typeof ErrorUtils !== 'undefined') {
+            ErrorUtils.setGlobalHandler(errorHandler);
+        }
+
+        return () => {
+            // Cleanup if needed
+        };
+    }, []);
+
     return (
-        <QueryClientProvider client={queryClient}>
-            <SafeAreaProvider>
-                <NavigationContainer>
-                    <AppNavigator />
-                </NavigationContainer>
-                <StatusBar style="light" />
-            </SafeAreaProvider>
-        </QueryClientProvider>
+        <ErrorBoundary>
+            <QueryClientProvider client={queryClient}>
+                <SafeAreaProvider>
+                    <NavigationContainer>
+                        <AppNavigator />
+                    </NavigationContainer>
+                    <StatusBar style="light" />
+                </SafeAreaProvider>
+            </QueryClientProvider>
+        </ErrorBoundary>
     );
 }
 

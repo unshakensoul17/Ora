@@ -37,10 +37,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
      */
     initialize: async () => {
         try {
+            console.log('Initializing auth store...');
             const [token, shop] = await Promise.all([
                 getToken(),
                 getShopData(),
             ]);
+
+            console.log('Auth data loaded:', { hasToken: !!token, hasShop: !!shop });
 
             if (token && shop) {
                 set({
@@ -50,12 +53,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     isInitialized: true,
                     isLoading: false,
                 });
+                console.log('User authenticated');
             } else {
                 set({ isInitialized: true, isLoading: false });
+                console.log('No saved auth data found');
             }
         } catch (error) {
             console.error('Failed to initialize auth:', error);
-            set({ isInitialized: true, isLoading: false });
+            // Even if initialization fails, mark as initialized to show login screen
+            set({
+                isInitialized: true,
+                isLoading: false,
+                isAuthenticated: false,
+                token: null,
+                shop: null,
+            });
         }
     },
 
