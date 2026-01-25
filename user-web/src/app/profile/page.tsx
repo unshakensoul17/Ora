@@ -215,12 +215,20 @@ export default function ProfilePage() {
                                     <p className="text-xs text-gray-400 mt-1">Active Holds</p>
                                 </div>
                             </div>
-                            <Link
-                                href="/my-holds"
-                                className="mt-4 block text-center py-2 text-accent hover:bg-accent/10 rounded-lg transition text-sm font-medium"
-                            >
-                                View My Holds →
-                            </Link>
+                            <div className="space-y-2 mt-4">
+                                <Link
+                                    href="/my-holds"
+                                    className="block text-center py-2 text-accent hover:bg-accent/10 rounded-lg transition text-sm font-medium"
+                                >
+                                    View My Holds →
+                                </Link>
+                                <Link
+                                    href="/my-orders"
+                                    className="block text-center py-2 text-accent hover:bg-accent/10 rounded-lg transition text-sm font-medium"
+                                >
+                                    View My Orders →
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
