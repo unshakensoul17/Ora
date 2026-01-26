@@ -52,9 +52,9 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link href="/" className="flex items-center space-x-2 group">
                         <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent-hover rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-pink-soft">
-                            <span className="text-white font-bold text-sm">F</span>
+                            <span className="text-white font-bold text-sm">O</span>
                         </div>
-                        <span className="font-heading font-bold text-xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Fashcycle</span>
+                        <span className="font-heading font-bold text-xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">ORA</span>
                     </Link>
 
                     {/* Mobile Menu Button */}

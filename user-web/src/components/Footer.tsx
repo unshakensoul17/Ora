@@ -13,9 +13,9 @@ export function Footer() {
                     <div className="lg:col-span-2">
                         <div className="flex items-center space-x-2 mb-4">
                             <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent-hover rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">F</span>
+                                <span className="text-white font-bold text-sm">O</span>
                             </div>
-                            <span className="font-heading font-bold text-xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Fashcycle</span>
+                            <span className="font-heading font-bold text-xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">ORA</span>
                         </div>
                         <p className="text-neutral-600 text-sm leading-relaxed mb-6 max-w-sm">
                             Indore's premier luxury outfit rental service. We bring designer fashion within reach for your special occasions — sanitized, fitted, and ready for your big day.
@@ -120,7 +120,7 @@ export function Footer() {
                 <div className="max-w-7xl mx-auto px-6 py-4">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-center md:text-left">
                         <p className="text-neutral-600 text-sm">
-                            © {currentYear} Fashcycle. All Rights Reserved.
+                            © {currentYear} ORA. All Rights Reserved.
                         </p>
                         <p className="text-neutral-500 text-xs">
                             Made with ♡ in Indore

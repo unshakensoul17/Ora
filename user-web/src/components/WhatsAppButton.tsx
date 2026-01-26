@@ -10,7 +10,7 @@ interface WhatsAppButtonProps {
 
 export function WhatsAppButton({
     phoneNumber = '919876543210',
-    message = 'Hi, I want to rent an outfit from Fashcycle!'
+    message = 'Hi, I want to rent an outfit from ORA!'
 }: WhatsAppButtonProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);

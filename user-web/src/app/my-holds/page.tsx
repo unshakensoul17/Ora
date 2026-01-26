@@ -151,7 +151,7 @@ export default function MyHoldsPage() {
                                 >
                                     <div className="flex flex-col sm:flex-row gap-6">
                                         {/* Item Image */}
-                                        <div className="w-full sm:w-48 h-64 rounded-lg flex-shrink-0 overflow-hidden">
+                                        <div className="w-full sm:w-48 aspect-[3/4] sm:h-64 rounded-lg flex-shrink-0 overflow-hidden bg-neutral-100">
                                             {imageUrl ? (
                                                 <img
                                                     src={imageUrl}
@@ -159,8 +159,8 @@ export default function MyHoldsPage() {
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-end p-4">
-                                                    <span className="text-white/80 font-medium text-sm">
+                                                <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/40 flex items-end p-4">
+                                                    <span className="text-neutral-700 font-medium text-sm">
                                                         {item?.name || 'Item'}
                                                     </span>
                                                 </div>

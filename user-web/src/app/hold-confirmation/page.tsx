@@ -145,7 +145,7 @@ export default function HoldConfirmationPage() {
             {/* Header */}
             <header className="bg-white/60 backdrop-blur-md py-4 px-6 border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="font-heading text-2xl font-bold text-accent">Fashcycle</Link>
+                    <Link href="/" className="font-heading text-2xl font-bold text-accent">ORA</Link>
                 </div>
             </header>
 

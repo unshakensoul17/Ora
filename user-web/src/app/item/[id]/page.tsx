@@ -344,23 +344,23 @@ export default function ItemDetailPage() {
                                 <h3 className="text-accent font-semibold mb-4">Select Rental Dates</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-sm text-neutral-600 block mb-2">From</label>
+                                        <label className="text-sm text-neutral-700 font-medium block mb-2">From</label>
                                         <input
                                             type="date"
                                             value={startDate}
                                             onChange={(e) => setStartDate(e.target.value)}
                                             min={minDate}
-                                            className="w-full glass-input rounded-lg px-4 py-3 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-accent"
+                                            className="w-full bg-white border-2 border-accent/30 rounded-lg px-4 py-3 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-sm text-neutral-600 block mb-2">To</label>
+                                        <label className="text-sm text-neutral-700 font-medium block mb-2">To</label>
                                         <input
                                             type="date"
                                             value={endDate}
                                             onChange={(e) => setEndDate(e.target.value)}
                                             min={startDate || minDate}
-                                            className="w-full bg-charcoal border border-accent/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent"
+                                            className="w-full bg-white border-2 border-accent/30 rounded-lg px-4 py-3 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
                                         />
                                     </div>
                                 </div>

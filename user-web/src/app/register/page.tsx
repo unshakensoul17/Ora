@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 <div className="glass-panel rounded-2xl p-8 border border-accent-muted/30 shadow-pink-lg">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-2">Create Account</h1>
-                        <p className="text-neutral-700 text-sm">Join Fashcycle to reserve your perfect outfit</p>
+                        <p className="text-neutral-700 text-sm">Join ORA to reserve your perfect outfit</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">

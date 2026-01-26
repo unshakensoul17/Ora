@@ -11,9 +11,9 @@ export function MobileHeader() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent-hover rounded-lg flex items-center justify-center shadow-lg shadow-accent/20">
-                    <span className="text-primary font-bold text-sm">F</span>
+                    <span className="text-white font-bold text-sm">O</span>
                 </div>
-                <span className="font-heading font-bold text-lg text-white tracking-wide">Fashcycle</span>
+                <span className="font-heading font-bold text-lg text-white tracking-wide">ORA</span>
             </Link>
 
             {/* Optional: Add a small action like 'How it works' or User icon if needed, 

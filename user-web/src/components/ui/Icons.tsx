@@ -8,7 +8,7 @@ interface IconProps {
 }
 
 /**
- * Consistent SVG icon library for Fashcycle
+ * Consistent SVG icon library for ORA
  * All icons use currentColor for flexible theming
  */
 

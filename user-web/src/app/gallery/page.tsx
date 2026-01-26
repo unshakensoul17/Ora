@@ -49,7 +49,7 @@ export default function GalleryPage() {
             {/* Header */}
             <header className="bg-white/60 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="font-heading text-2xl font-bold text-accent">Fashcycle</Link>
+                    <Link href="/" className="font-heading text-2xl font-bold text-accent">ORA</Link>
                     <div className="flex gap-6">
                         <Link href="/search" className="text-neutral-700 hover:text-accent transition">Rent an Outfit</Link>
                     </div>
@@ -62,7 +62,7 @@ export default function GalleryPage() {
                     Real Brides, <span className="text-accent">Real Style</span>
                 </h1>
                 <p className="text-xl text-neutral-700 max-w-2xl mx-auto animate-fade-in delay-100">
-                    See how our community shines in Fashcycle rentals.
+                    See how our community shines in ORA rentals.
                     Get inspired by these stunning looks from weddings and special events across Indore.
                 </p>
             </section>

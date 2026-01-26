@@ -11,11 +11,11 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
-    title: 'Fashcycle - Luxury Designer Outfit Rental in Indore',
+    title: 'ORA - Luxury Designer Outfit Rental in Indore',
     description: 'Rent premium designer Indian wedding outfits in Indore. Reserve online, try in-store. Lehengas, Sherwanis, Sarees — 100% sanitized, fitted, and ready.',
     keywords: ['fashion rental', 'wedding outfits', 'lehenga rental', 'sherwani rental', 'Indore', 'bridal lehenga', 'groom sherwani'],
     openGraph: {
-        title: 'Fashcycle - Luxury Designer Outfit Rental',
+        title: 'ORA - Luxury Designer Outfit Rental',
         description: 'Rent premium designer Indian wedding outfits in Indore. Reserve online, try in-store.',
         type: 'website',
         locale: 'en_IN',
