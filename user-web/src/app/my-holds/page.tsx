@@ -94,46 +94,46 @@ export default function MyHoldsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-charcoal pt-20 pb-safe pb-20 md:pb-0">
+        <div className="min-h-screen bg-gradient-to-b from-primary to-white pt-20 pb-safe pb-20 md:pb-0">
             {/* Breadcrumb Navigation */}
-            <div className="bg-charcoal-light border-b border-white/5">
+            <div className="bg-white/60 backdrop-blur-sm border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto px-6 py-4">
                     <nav className="flex items-center gap-2 text-sm">
-                        <Link href="/" className="text-gray-400 hover:text-accent transition-colors">
+                        <Link href="/" className="text-neutral-600 hover:text-accent transition-colors">
                             Home
                         </Link>
-                        <span className="text-gray-600">›</span>
-                        <span className="text-white font-medium">My Reservations</span>
+                        <span className="text-neutral-400">›</span>
+                        <span className="text-neutral-900 font-semibold">My Reservations</span>
                     </nav>
                 </div>
             </div>
 
             <main className="max-w-7xl mx-auto px-6 py-12">
-                <h1 className="text-4xl font-bold text-white font-heading mb-2">My Reservations</h1>
-                <p className="text-gray-400 mb-8">Manage your outfit holds and reservations</p>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent font-heading mb-2">My Reservations</h1>
+                <p className="text-neutral-600 mb-8">Manage your outfit holds and reservations</p>
 
                 {loading ? (
-                    <div className="text-center py-12 text-gray-400">Loading your holds...</div>
+                    <div className="text-center py-12 text-neutral-600">Loading your holds...</div>
                 ) : error ? (
-                    <div className="bg-charcoal-lighter border border-red-500/30 rounded-xl p-12 text-center">
+                    <div className="glass-card border border-red-400/30 rounded-xl p-12 text-center">
                         <div className="text-red-400 text-xl mb-4">{error}</div>
                         <button
                             onClick={loadHolds}
-                            className="inline-block bg-accent text-primary px-8 py-3 rounded-lg font-semibold hover:bg-accent-hover transition"
+                            className="inline-block bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-accent-hover transition"
                         >
                             Retry
                         </button>
                     </div>
                 ) : holds.length === 0 ? (
-                    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-12 text-center">
+                    <div className="glass-card rounded-xl p-12 text-center">
                         <div className="text-6xl mb-4">👗</div>
-                        <h2 className="text-2xl font-bold text-white mb-2">No Reservations Yet</h2>
-                        <p className="text-gray-400 mb-6">
+                        <h2 className="text-2xl font-bold text-neutral-900 mb-2">No Reservations Yet</h2>
+                        <p className="text-neutral-600 mb-6">
                             Start browsing to find your perfect outfit!
                         </p>
                         <Link
                             href="/search"
-                            className="inline-block bg-amber-500 text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-amber-400 transition"
+                            className="inline-block bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-accent-hover transition"
                         >
                             Browse Outfits
                         </Link>
@@ -147,7 +147,7 @@ export default function MyHoldsPage() {
                             return (
                                 <div
                                     key={hold.id}
-                                    className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-amber-500/30 transition"
+                                    className="glass-card rounded-xl p-6 hover:border-accent/40 transition"
                                 >
                                     <div className="flex flex-col sm:flex-row gap-6">
                                         {/* Item Image */}
@@ -171,10 +171,10 @@ export default function MyHoldsPage() {
                                         <div className="flex-1">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <h3 className="text-2xl font-bold text-white mb-1">
+                                                    <h3 className="text-2xl font-bold text-neutral-900 mb-1">
                                                         {item?.name || 'Outfit'}
                                                     </h3>
-                                                    <p className="text-gray-400">
+                                                    <p className="text-neutral-600">
                                                         {item?.shop?.locality || 'Indore'}
                                                     </p>
                                                 </div>
@@ -185,14 +185,14 @@ export default function MyHoldsPage() {
 
                                             <div className="grid grid-cols-2 gap-4 mb-4">
                                                 <div>
-                                                    <p className="text-gray-500 text-sm">Pickup Date</p>
-                                                    <p className="text-white font-medium">
+                                                    <p className="text-neutral-500 text-sm">Pickup Date</p>
+                                                    <p className="text-neutral-900 font-semibold">
                                                         {hold.startDate ? new Date(hold.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Invalid Date'}
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-gray-500 text-sm">Return Date</p>
-                                                    <p className="text-white font-medium">
+                                                    <p className="text-neutral-500 text-sm">Return Date</p>
+                                                    <p className="text-neutral-900 font-semibold">
                                                         {hold.endDate ? new Date(hold.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Invalid Date'}
                                                     </p>
                                                 </div>
@@ -209,8 +209,8 @@ export default function MyHoldsPage() {
                                                 </div>
                                             )}
 
-                                            <div className="mb-4 p-4 bg-gray-900 rounded-lg">
-                                                <p className="text-gray-400 text-sm mb-2">Your QR Code</p>
+                                            <div className="mb-4 p-4 bg-white/60 rounded-lg">
+                                                <p className="text-neutral-600 text-sm mb-2">Your QR Code</p>
                                                 <div className="bg-white p-3 rounded-lg inline-block">
                                                     <QRCodeSVG
                                                         value={`fashcycle://booking/${hold.id}?hash=${hold.qrCodeHash}`}
@@ -234,7 +234,7 @@ export default function MyHoldsPage() {
                                                             alert('Shop information not available');
                                                         }
                                                     }}
-                                                    className="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition"
+                                                    className="px-6 py-2 bg-accent/15 border border-accent/40 text-accent rounded-lg font-medium hover:bg-accent/25 hover:border-accent/60 transition"
                                                 >
                                                     📍 View Location
                                                 </button>
@@ -260,16 +260,16 @@ export default function MyHoldsPage() {
             {/* Location Modal */}
             {showLocationModal && selectedShop && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowLocationModal(false)}>
-                    <div className="bg-gray-800 rounded-2xl max-w-lg w-full p-6 border border-gray-700" onClick={(e) => e.stopPropagation()}>
+                    <div className="glass-panel rounded-2xl max-w-lg w-full p-6 border border-accent-muted/30" onClick={(e) => e.stopPropagation()}>
                         {/* Header */}
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-white mb-1">{selectedShop.name}</h3>
-                                <p className="text-gray-400 text-sm">Shop Location & Contact</p>
+                                <h3 className="text-2xl font-bold text-neutral-900 mb-1">{selectedShop.name}</h3>
+                                <p className="text-neutral-600 text-sm">Shop Location & Contact</p>
                             </div>
                             <button
                                 onClick={() => setShowLocationModal(false)}
-                                className="text-gray-400 hover:text-white transition"
+                                className="text-neutral-600 hover:text-neutral-900 transition"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

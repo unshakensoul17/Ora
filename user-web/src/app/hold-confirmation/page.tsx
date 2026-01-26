@@ -55,16 +55,16 @@ function HoldDetails() {
                 <span className="text-4xl">✓</span>
             </div>
 
-            <h1 className="font-heading text-3xl font-bold text-white mb-2">
+            <h1 className="font-heading text-3xl font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-2">
                 Hold Confirmed!
             </h1>
-            <p className="text-gray-400 mb-8">
+            <p className="text-neutral-600 mb-8">
                 Show this QR code at the boutique to verify your hold.
             </p>
 
             {/* Countdown Timer */}
-            <div className="bg-primary p-4 rounded-xl mb-8">
-                <p className="text-gray-400 text-sm mb-2">Hold expires in</p>
+            <div className="glass-card p-4 rounded-xl mb-8">
+                <p className="text-neutral-600 text-sm mb-2">Hold expires in</p>
                 <p className="text-4xl font-bold text-accent font-mono">{formatTime(timeLeft)}</p>
             </div>
 
@@ -88,28 +88,28 @@ function HoldDetails() {
             </div>
 
             {/* Booking Details */}
-            <div className="bg-charcoal-lighter p-6 rounded-xl text-left mb-8">
+            <div className="glass-card p-6 rounded-xl text-left mb-8">
                 <h3 className="text-accent font-semibold mb-4">Booking Details</h3>
                 <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
-                        <span className="text-gray-400">Item</span>
-                        <span className="text-white">{item.name}</span>
+                        <span className="text-neutral-600">Item</span>
+                        <span className="text-neutral-900">{item.name}</span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="text-gray-400">Dates</span>
-                        <span className="text-white">{formatDate(startDate)} - {formatDate(endDate)}</span>
+                        <span className="text-neutral-600">Dates</span>
+                        <span className="text-neutral-900">{formatDate(startDate)} - {formatDate(endDate)}</span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="text-gray-400">Boutique Area</span>
-                        <span className="text-white">{item.locality}</span>
+                        <span className="text-neutral-600">Boutique Area</span>
+                        <span className="text-neutral-900">{item.locality}</span>
                     </div>
                 </div>
             </div>
 
             {/* Shop Location */}
-            <div className="bg-charcoal-lighter p-6 rounded-xl text-left mb-8">
+            <div className="glass-card p-6 rounded-xl text-left mb-8">
                 <h3 className="text-accent font-semibold mb-4">📍 Boutique Location</h3>
-                <p className="text-white mb-4">{item.address}</p>
+                <p className="text-neutral-900 mb-4">{item.address}</p>
                 <a
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.address)}`}
                     target="_blank"
@@ -124,7 +124,7 @@ function HoldDetails() {
             <div className="space-y-3">
                 <Link
                     href="/my-holds"
-                    className="block w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-xl"
+                    className="block w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-xl shadow-pink-md hover:shadow-pink-lg hover:scale-[1.02] transition-all"
                 >
                     View My Holds
                 </Link>
@@ -141,9 +141,9 @@ function HoldDetails() {
 
 export default function HoldConfirmationPage() {
     return (
-        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
+        <main className="min-h-screen bg-gradient-to-b from-primary to-white pb-safe pb-20 md:pb-0">
             {/* Header */}
-            <header className="bg-primary py-4 px-6 border-b border-accent/20">
+            <header className="bg-white/60 backdrop-blur-md py-4 px-6 border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <Link href="/" className="font-heading text-2xl font-bold text-accent">Fashcycle</Link>
                 </div>

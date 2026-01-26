@@ -105,7 +105,7 @@ export function SearchWidget() {
     const minDate = tomorrow.toISOString().split('T')[0];
 
     return (
-        <form onSubmit={handleSearch} className="bg-charcoal-lighter border border-white/10 rounded-2xl p-6 md:p-8 shadow-luxury-lg">
+        <form onSubmit={handleSearch} className="glass-card rounded-2xl p-6 md:p-8 shadow-pink-lg">
             {/* Duration Quick Chips */}
             <div className="mb-6">
                 <label className="form-label">How long do you need it?</label>
@@ -229,7 +229,7 @@ export function SearchWidget() {
                     onChange={(e) => setMaxPrice(Number(e.target.value))}
                     className="w-full h-2 bg-charcoal-light rounded-lg appearance-none cursor-pointer accent-accent"
                 />
-                <div className="flex justify-between text-gray-500 text-xs mt-1">
+                <div className="flex justify-between text-neutral-500 text-xs mt-1">
                     <span>₹500</span>
                     <span>₹5,000+</span>
                 </div>
@@ -238,25 +238,25 @@ export function SearchWidget() {
             {/* Search Button */}
             <button
                 type="submit"
-                className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-xl shadow-luxury glow-gold hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-xl shadow-pink-lg glow-pink hover:shadow-pink-lg hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
                 <Search size={20} />
                 Search Outfits
             </button>
 
             {/* Suggested Searches */}
-            <div className="mt-6 pt-6 border-t border-white/10">
-                <p className="text-gray-400 text-xs uppercase tracking-wider mb-3">Popular Searches</p>
+            <div className="mt-6 pt-6 border-t border-accent-muted/20">
+                <p className="text-neutral-600 text-xs uppercase tracking-wider mb-3">Popular Searches</p>
                 <div className="flex flex-wrap gap-2">
                     {suggestedSearches.map((search, index) => (
                         <button
                             key={index}
                             type="button"
                             onClick={() => handleSuggestedSearch(search)}
-                            className="text-sm text-gray-300 hover:text-accent transition-colors"
+                            className="text-sm text-neutral-700 hover:text-accent transition-colors"
                         >
                             {search.query}
-                            {index < suggestedSearches.length - 1 && <span className="text-gray-600 ml-2">•</span>}
+                            {index < suggestedSearches.length - 1 && <span className="text-neutral-400 ml-2">•</span>}
                         </button>
                     ))}
                 </div>

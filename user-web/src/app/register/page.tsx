@@ -81,24 +81,24 @@ export default function RegisterPage() {
     return (
         <div className="min-h-screen relative flex items-center justify-center px-4 py-12">
             {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-dark to-charcoal -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blush via-primary to-white -z-10" />
 
             {/* Decorative elements */}
-            <div className="absolute top-20 right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+            <div className="absolute top-20 right-20 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
 
             {/* Registration Card */}
             <div className="w-full max-w-md">
-                <div className="glass-panel rounded-2xl p-8 border border-white/20">
+                <div className="glass-panel rounded-2xl p-8 border border-accent-muted/30 shadow-pink-lg">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-heading font-bold text-white mb-2">Create Account</h1>
-                        <p className="text-gray-300 text-sm">Join Fashcycle to reserve your perfect outfit</p>
+                        <h1 className="text-3xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-2">Create Account</h1>
+                        <p className="text-neutral-700 text-sm">Join Fashcycle to reserve your perfect outfit</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Name */}
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="password" className="block text-sm font-medium text-neutral-900 mb-1">
                                 Full Name *
                             </label>
                             <input
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-white placeholder-gray-400"
+                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                 placeholder="Enter your full name"
                                 required
                             />
@@ -124,7 +124,7 @@ export default function RegisterPage() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-white placeholder-gray-400"
+                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                 placeholder="you@example.com"
                                 required
                             />
@@ -141,7 +141,7 @@ export default function RegisterPage() {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-white placeholder-gray-400"
+                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                 placeholder="+91 98765 43210"
                                 required
                             />
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                                 name="city"
                                 value={formData.city}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-white placeholder-gray-400"
+                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                 placeholder="Indore"
                             />
                         </div>
@@ -182,7 +182,7 @@ export default function RegisterPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-neutral-900 transition"
                                     aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                     {showPassword ? (
@@ -209,7 +209,7 @@ export default function RegisterPage() {
                                             />
                                         ))}
                                     </div>
-                                    <p className="text-xs text-gray-300">
+                                    <p className="text-xs text-neutral-700">
                                         Strength: {strengthLabels[passwordStrength - 1] || 'Too weak'}
                                     </p>
                                 </div>
@@ -235,7 +235,7 @@ export default function RegisterPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-neutral-900 transition"
                                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                                 >
                                     {showConfirmPassword ? (
@@ -263,7 +263,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-lg shadow-lg hover:shadow-accent/50 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-lg shadow-pink-lg hover:shadow-pink-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Creating Account...' : 'Create Account'}
                         </button>
@@ -271,7 +271,7 @@ export default function RegisterPage() {
 
                     {/* Login Link */}
                     <div className="mt-6 text-center">
-                        <p className="text-gray-300 text-sm">
+                        <p className="text-neutral-700 text-sm">
                             Already have an account?{' '}
                             <Link href="/login" className="text-accent hover:text-accent-hover font-medium transition">
                                 Log In
@@ -282,7 +282,7 @@ export default function RegisterPage() {
 
                 {/* Back to Home */}
                 <div className="mt-4 text-center">
-                    <Link href="/" className="text-gray-400 hover:text-white text-sm transition">
+                    <Link href="/" className="text-neutral-600 hover:text-neutral-900 text-sm transition">
                         ← Back to Home
                     </Link>
                 </div>

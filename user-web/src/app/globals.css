@@ -3,35 +3,41 @@
 @tailwind utilities;
 
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --foreground: #F5F5F5;
-    --background: #121212;
+    --foreground: #374151;
+    --background: #FFFFFF;
+    --accent-pink: #FF69B4;
+    --blush: #FFF0F5;
+    --pastel-pink: #FFE5EC;
 }
 
 body {
     color: var(--foreground);
-    background: var(--background);
+    background: linear-gradient(135deg, #FFF0F5 0%, #FFE5EC 50%, #FFFFFF 100%);
+    background-attachment: fixed;
     font-family: 'Inter', sans-serif;
+    min-height: 100vh;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    background: #FFF0F5;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #D4AF37;
-    border-radius: 4px;
+    background: linear-gradient(180deg, #FF69B4 0%, #FFB6C1 100%);
+    border-radius: 10px;
+    border: 2px solid #FFF0F5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #F0C84B;
+    background: linear-gradient(180deg, #FF1493 0%, #FF69B4 100%);
 }
 
 /* Animation utilities */
@@ -67,78 +73,163 @@ body {
     }
 }
 
-/* Glassmorphism Utilities */
+/* Glassmorphism Utilities - Pink Theme */
 @layer utilities {
     .glass-panel {
-        @apply backdrop-blur-xl bg-charcoal/40 border border-white/10 shadow-2xl;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 182, 193, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.08);
     }
 
     .glass-card {
-        @apply backdrop-blur-md bg-white/5 border border-white/5 shadow-lg transition-all duration-300;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 182, 193, 0.15);
+        box-shadow: 0 4px 20px 0 rgba(255, 105, 180, 0.06);
+        transition: all 0.3s ease;
     }
 
     .glass-card:hover {
-        @apply bg-white/10 border-white/20 shadow-xl;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 105, 180, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.12);
+        transform: translateY(-2px);
     }
 
     .glass-input {
-        @apply bg-charcoal/50 border border-white/10 focus:border-accent/50 focus:bg-charcoal/80 transition-all outline-none;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 182, 193, 0.25);
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .glass-input:focus {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 105, 180, 0.5);
+        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
     }
 
     .glass-button {
-        @apply backdrop-blur-sm bg-accent/90 hover:bg-accent text-primary shadow-lg shadow-accent/20 transition-all;
+        backdrop-filter: blur(8px);
+        background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .glass-button:hover {
+        background: linear-gradient(135deg, #FF1493 0%, #C71585 100%);
+        box-shadow: 0 6px 25px rgba(255, 105, 180, 0.4);
+        transform: translateY(-2px);
     }
 }
 
-/* Luxury Shadow System - Softer, more premium */
+/* Pink Shadow System - Soft, Gen-Z aesthetic */
 @layer utilities {
-    .shadow-luxury {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25),
-            0 1px 3px rgba(0, 0, 0, 0.1);
+    .shadow-pink-soft {
+        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.08),
+            0 1px 3px rgba(255, 182, 193, 0.1);
     }
 
-    .shadow-luxury-lg {
-        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3),
-            0 2px 8px rgba(0, 0, 0, 0.15);
+    .shadow-pink-md {
+        box-shadow: 0 8px 32px rgba(255, 105, 180, 0.12),
+            0 2px 8px rgba(255, 182, 193, 0.15);
     }
 
-    .shadow-luxury-xl {
-        box-shadow: 0 12px 60px rgba(0, 0, 0, 0.35),
-            0 4px 12px rgba(0, 0, 0, 0.2);
+    .shadow-pink-lg {
+        box-shadow: 0 12px 48px rgba(255, 105, 180, 0.15),
+            0 4px 12px rgba(255, 182, 193, 0.2);
     }
 
-    /* Gold glow - subtle, premium highlight */
-    .glow-gold {
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.12);
+    /* Pink glow - vibrant, modern highlight */
+    .glow-pink {
+        box-shadow: 0 0 25px rgba(255, 105, 180, 0.25);
     }
 
-    .glow-gold-lg {
-        box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+    .glow-pink-lg {
+        box-shadow: 0 0 45px rgba(255, 105, 180, 0.35);
+    }
+
+    /* Floating card effect */
+    .floating-card {
+        box-shadow: 0 10px 40px rgba(255, 105, 180, 0.1),
+            0 2px 8px rgba(255, 182, 193, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .floating-card:hover {
+        box-shadow: 0 20px 60px rgba(255, 105, 180, 0.18),
+            0 5px 15px rgba(255, 182, 193, 0.15);
+        transform: translateY(-4px);
     }
 }
 
-/* Form Input Styling */
+/* Form Input Styling - Pink Theme */
 @layer components {
 
     /* Better mobile touch targets */
     .form-input,
     .form-select {
-        @apply w-full bg-charcoal-light border border-white/10 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-all duration-200;
-        /* Prevent zoom on iOS input focus */
+        width: 100%;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        border: 1.5px solid rgba(255, 182, 193, 0.3);
+        border-radius: 12px;
+        padding: 14px 16px;
         font-size: 16px;
+        color: #374151;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .form-input::placeholder,
+    .form-select::placeholder {
+        color: #9CA3AF;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1.5px solid rgba(255, 105, 180, 0.5);
+        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
     }
 
     .form-label {
-        @apply text-accent text-xs font-bold uppercase tracking-wider mb-2 block ml-1;
+        color: #FF69B4;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+        display: block;
+        margin-left: 0.25rem;
     }
 
-    /* Keep chip styles */
+    /* Chip styles - Pink theme */
     .chip {
-        @apply px-4 py-2.5 rounded-full text-sm font-medium border border-white/10 bg-white/5 text-gray-300 active:scale-95 transition-all duration-200 cursor-pointer select-none;
+        padding: 10px 16px;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border: 1.5px solid rgba(255, 182, 193, 0.3);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(8px);
+        color: #6B7280;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+    }
+
+    .chip:active {
+        transform: scale(0.95);
     }
 
     .chip-active {
-        @apply bg-accent/20 border-accent/50 text-accent;
+        background: rgba(255, 105, 180, 0.15);
+        border: 1.5px solid rgba(255, 105, 180, 0.5);
+        color: #FF1493;
+        font-weight: 600;
     }
 
     /* Hide Scrollbar but keep functionality */
@@ -157,7 +248,7 @@ body {
     }
 }
 
-/* Ambient Background */
+/* Ambient Background - Pink Theme */
 body::before {
     content: '';
     position: fixed;
@@ -166,40 +257,43 @@ body::before {
     width: 100vw;
     height: 100vh;
     background:
-        radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(3, 69, 47, 0.15) 0%, transparent 25%);
+        radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 240, 245, 0.2) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
 }
 
-/* React Calendar Customization - Glassmorphism Theme */
+/* React Calendar Customization - Pink Glassmorphism Theme */
 .react-calendar {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(212, 175, 55, 0.1) !important;
-    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1.5px solid rgba(255, 182, 193, 0.25) !important;
+    border-radius: 16px !important;
     font-family: 'Inter', sans-serif !important;
     width: 100% !important;
-    padding: 12px !important;
+    padding: 16px !important;
+    box-shadow: 0 8px 32px rgba(255, 105, 180, 0.1) !important;
 }
 
 .react-calendar__navigation {
     margin-bottom: 16px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1.5px solid rgba(255, 182, 193, 0.15);
     padding-bottom: 12px;
 }
 
 .react-calendar__navigation button {
-    color: #D4AF37 !important;
+    color: #FF69B4 !important;
     min-width: 44px;
     background: none;
     font-size: 16px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: all 0.2s;
 }
 
 .react-calendar__navigation button:hover:enabled {
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(255, 105, 180, 0.1);
 }
 
 .react-calendar__navigation button:disabled {
@@ -212,7 +306,7 @@ body::before {
     font-weight: 700;
     font-size: 0.7em;
     letter-spacing: 0.5px;
-    color: rgba(212, 175, 55, 0.6);
+    color: rgba(255, 105, 180, 0.7);
     margin-bottom: 8px;
 }
 
@@ -221,62 +315,63 @@ body::before {
 }
 
 .react-calendar__month-view__days__day {
-    color: #E5E7EB;
+    color: #374151;
     font-weight: 500;
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
-    color: rgba(156, 163, 175, 0.4);
+    color: rgba(107, 114, 128, 0.4);
 }
 
 .react-calendar__tile {
     padding: 14px 6px !important;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.5);
     text-align: center;
     line-height: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: all 0.2s;
-    border: 1px solid transparent;
+    border: 1.5px solid transparent;
     font-size: 14px;
 }
 
 .react-calendar__tile:disabled {
-    background-color: rgba(31, 41, 55, 0.5);
-    opacity: 0.4;
-    color: #6B7280;
+    background-color: rgba(243, 244, 246, 0.6);
+    opacity: 0.5;
+    color: #9CA3AF;
     cursor: not-allowed;
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-    background: rgba(212, 175, 55, 0.15);
-    border-color: rgba(212, 175, 55, 0.3);
+    background: rgba(255, 105, 180, 0.12);
+    border-color: rgba(255, 105, 180, 0.3);
     transform: translateY(-1px);
 }
 
 .react-calendar__tile--now {
-    background: rgba(212, 175, 55, 0.1) !important;
-    color: #D4AF37 !important;
-    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    background: rgba(255, 105, 180, 0.15) !important;
+    color: #FF1493 !important;
+    border: 1.5px solid rgba(255, 105, 180, 0.4) !important;
     font-weight: 700;
 }
 
 .react-calendar__tile--now:hover {
-    background: rgba(212, 175, 55, 0.2) !important;
+    background: rgba(255, 105, 180, 0.25) !important;
 }
 
 .react-calendar__tile--active {
-    background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%) !important;
-    color: #121212 !important;
+    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%) !important;
+    color: #FFFFFF !important;
     font-weight: 700 !important;
-    border: 1px solid #D4AF37 !important;
+    border: 1.5px solid #FF69B4 !important;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3) !important;
 }
 
-/* Custom Status Classes - Updated Colors */
+/* Custom Status Classes - Pink Theme */
 .calendar-tile-blocked {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.2) 100%) !important;
-    color: #FCA5A5 !important;
-    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.18) 100%) !important;
+    color: #DC2626 !important;
+    border: 1.5px solid rgba(239, 68, 68, 0.35) !important;
     position: relative;
 }
 
@@ -287,24 +382,24 @@ body::before {
     left: 10%;
     right: 10%;
     height: 2px;
-    background: rgba(239, 68, 68, 0.6);
+    background: rgba(239, 68, 68, 0.5);
     transform: translateY(-50%);
 }
 
 .calendar-tile-hold {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.2) 100%) !important;
-    color: #FCD34D !important;
-    border: 1px solid rgba(251, 191, 36, 0.4) !important;
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.12) 0%, rgba(249, 115, 22, 0.18) 100%) !important;
+    color: #EA580C !important;
+    border: 1.5px solid rgba(251, 146, 60, 0.35) !important;
 }
 
 .calendar-tile-maintenance {
-    background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(75, 85, 99, 0.2) 100%) !important;
-    color: #D1D5DB !important;
-    border: 1px solid rgba(107, 114, 128, 0.4) !important;
+    background: linear-gradient(135deg, rgba(156, 163, 175, 0.12) 0%, rgba(107, 114, 128, 0.18) 100%) !important;
+    color: #6B7280 !important;
+    border: 1.5px solid rgba(156, 163, 175, 0.35) !important;
 }
 
 .calendar-tile-available {
-    background: rgba(16, 185, 129, 0.08) !important;
-    color: #6EE7B7 !important;
-    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.18) 100%) !important;
+    color: #059669 !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.35) !important;
 }

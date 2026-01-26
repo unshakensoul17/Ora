@@ -138,7 +138,7 @@ export default function ItemDetailPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-charcoal flex items-center justify-center pt-20">
+            <div className="min-h-screen bg-gradient-to-b from-primary to-white flex items-center justify-center pt-20">
                 <div className="text-accent text-xl">Loading item details...</div>
             </div>
         );
@@ -146,19 +146,19 @@ export default function ItemDetailPage() {
 
     if (error && !item) {
         return (
-            <div className="min-h-screen bg-charcoal flex items-center justify-center pt-20">
+            <div className="min-h-screen bg-gradient-to-b from-primary to-white flex items-center justify-center pt-20">
                 <div className="text-center">
-                    <div className="text-white text-xl mb-4">{error}</div>
+                    <div className="text-neutral-900 text-xl mb-4">{error}</div>
                     <div className="flex gap-4 justify-center">
                         <button
                             onClick={loadItem}
-                            className="px-6 py-3 bg-accent text-primary rounded-lg hover:bg-accent-hover transition"
+                            className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition"
                         >
                             Retry
                         </button>
                         <Link
                             href="/"
-                            className="px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/5 transition"
+                            className="px-6 py-3 border border-accent/40 text-accent rounded-lg hover:bg-accent/10 transition"
                         >
                             Go Home
                         </Link>
@@ -170,12 +170,12 @@ export default function ItemDetailPage() {
 
     if (!item) {
         return (
-            <div className="min-h-screen bg-charcoal flex items-center justify-center pt-20">
+            <div className="min-h-screen bg-gradient-to-b from-primary to-white flex items-center justify-center pt-20">
                 <div className="text-center">
-                    <div className="text-white text-xl mb-4">Item not found</div>
+                    <div className="text-neutral-900 text-xl mb-4">Item not found</div>
                     <Link
                         href="/"
-                        className="px-6 py-3 bg-accent text-primary rounded-lg hover:bg-accent-hover transition"
+                        className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition"
                     >
                         Go Home
                     </Link>
@@ -191,20 +191,20 @@ export default function ItemDetailPage() {
         : '';
 
     return (
-        <main className="min-h-screen bg-charcoal pt-20 pb-safe pb-20 md:pb-0">
+        <main className="min-h-screen bg-gradient-to-b from-primary to-white pt-20 pb-safe pb-20 md:pb-0">
             {/* Breadcrumb Navigation */}
-            <div className="bg-charcoal-light border-b border-white/5">
+            <div className="bg-white/60 backdrop-blur-sm border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto px-6 py-4">
                     <nav className="flex items-center gap-2 text-sm flex-wrap">
-                        <Link href="/" className="text-gray-400 hover:text-accent transition-colors">
+                        <Link href="/" className="text-neutral-600 hover:text-accent transition-colors">
                             Home
                         </Link>
-                        <ChevronRight size={14} className="text-gray-600" />
-                        <Link href="/search" className="text-gray-400 hover:text-accent transition-colors">
+                        <ChevronRight size={14} className="text-neutral-400" />
+                        <Link href="/search" className="text-neutral-600 hover:text-accent transition-colors">
                             Browse
                         </Link>
-                        <ChevronRight size={14} className="text-gray-600" />
-                        <span className="text-white font-medium truncate max-w-[200px]">
+                        <ChevronRight size={14} className="text-neutral-400" />
+                        <span className="text-neutral-900 font-semibold truncate max-w-[200px]">
                             {item.name}
                         </span>
                     </nav>
@@ -217,7 +217,7 @@ export default function ItemDetailPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Image Gallery */}
                         <div>
-                            <div className="aspect-[3/4] bg-gray-800 rounded-2xl overflow-hidden relative shadow-luxury-lg">
+                            <div className="aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden relative shadow-pink-lg">
                                 {imageUrl ? (
                                     <ImageZoom
                                         src={imageUrl}
@@ -260,39 +260,39 @@ export default function ItemDetailPage() {
                                 {item.shop.locality}
                             </div>
 
-                            <p className="text-gray-500 text-sm uppercase tracking-wide mb-2">{item.brand}</p>
-                            <h1 className="font-heading text-4xl font-bold text-white mb-4">{item.name}</h1>
+                            <p className="text-neutral-500 text-sm uppercase tracking-wide mb-2">{item.brand}</p>
+                            <h1 className="font-heading text-4xl font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-4">{item.name}</h1>
 
-                            <p className="text-gray-400 mb-8 leading-relaxed">{item.description}</p>
+                            <p className="text-neutral-600 mb-8 leading-relaxed">{item.description}</p>
 
                             {/* Details Grid */}
                             <div className="grid grid-cols-3 gap-4 mb-8">
-                                <div className="bg-charcoal-lighter p-4 rounded-lg">
-                                    <p className="text-gray-500 text-xs uppercase mb-1">Size</p>
-                                    <p className="text-white font-semibold">{item.size}</p>
+                                <div className="bg-white/60 p-4 rounded-lg">
+                                    <p className="text-neutral-500 text-xs uppercase mb-1">Size</p>
+                                    <p className="text-neutral-900 font-semibold">{item.size}</p>
                                 </div>
-                                <div className="bg-charcoal-lighter p-4 rounded-lg">
-                                    <p className="text-gray-500 text-xs uppercase mb-1">Color</p>
-                                    <p className="text-white font-semibold">{item.color}</p>
+                                <div className="bg-white/60 p-4 rounded-lg">
+                                    <p className="text-neutral-500 text-xs uppercase mb-1">Color</p>
+                                    <p className="text-neutral-900 font-semibold">{item.color}</p>
                                 </div>
-                                <div className="bg-charcoal-lighter p-4 rounded-lg">
-                                    <p className="text-gray-500 text-xs uppercase mb-1">Category</p>
-                                    <p className="text-white font-semibold">{item.category.replace('_', ' ')}</p>
+                                <div className="bg-white/60 p-4 rounded-lg">
+                                    <p className="text-neutral-500 text-xs uppercase mb-1">Category</p>
+                                    <p className="text-neutral-900 font-semibold">{item.category.replace('_', ' ')}</p>
                                 </div>
                             </div>
 
                             {/* Pricing */}
-                            <div className="bg-charcoal-lighter p-6 rounded-xl border border-accent/20 mb-8 shadow-luxury">
+                            <div className="glass-card p-6 rounded-xl border border-accent/30 mb-8 shadow-pink-md">
                                 <div className="flex items-baseline gap-3 mb-2">
                                     <span className="text-4xl font-bold text-accent font-heading">
                                         {formatPrice(item.rentalPrice)}
                                     </span>
-                                    <span className="text-lg text-gray-500">/ 3 days</span>
+                                    <span className="text-lg text-neutral-600">/ 3 days</span>
                                 </div>
-                                <p className="text-gray-500 text-sm mb-3">
+                                <p className="text-neutral-600 text-sm mb-3">
                                     Extra day: {formatPrice(getExtraDayRate(item.rentalPrice))}
                                 </p>
-                                <div className="flex gap-4 text-sm text-gray-400">
+                                <div className="flex gap-4 text-sm text-neutral-600">
                                     <span>Security Deposit: {formatPrice(item.securityDeposit)}</span>
                                 </div>
                                 {item.retailPrice && (
@@ -303,11 +303,11 @@ export default function ItemDetailPage() {
                             </div>
 
                             {/* Visual Availability Calendar */}
-                            <div className="bg-charcoal-lighter p-6 rounded-xl mb-6 border border-accent/10">
+                            <div className="glass-card p-6 rounded-xl mb-6">
                                 <h3 className="text-accent font-semibold mb-4 flex items-center gap-2">
                                     <span>📅</span> Availability Calendar
                                 </h3>
-                                <div className="glass-panel rounded-xl p-4">
+                                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4">
                                     <Calendar
                                         onChange={() => { }}
                                         value={null}
@@ -340,21 +340,21 @@ export default function ItemDetailPage() {
                             </div>
 
                             {/* Date Selection */}
-                            <div className="bg-charcoal-lighter p-6 rounded-xl mb-6">
+                            <div className="glass-card p-6 rounded-xl mb-6">
                                 <h3 className="text-accent font-semibold mb-4">Select Rental Dates</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-sm text-gray-400 block mb-2">From</label>
+                                        <label className="text-sm text-neutral-600 block mb-2">From</label>
                                         <input
                                             type="date"
                                             value={startDate}
                                             onChange={(e) => setStartDate(e.target.value)}
                                             min={minDate}
-                                            className="w-full bg-charcoal border border-accent/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent"
+                                            className="w-full glass-input rounded-lg px-4 py-3 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-accent"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-sm text-gray-400 block mb-2">To</label>
+                                        <label className="text-sm text-neutral-600 block mb-2">To</label>
                                         <input
                                             type="date"
                                             value={endDate}
@@ -377,7 +377,7 @@ export default function ItemDetailPage() {
                             <button
                                 onClick={handleReserve}
                                 disabled={isReserving}
-                                className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-bold text-lg rounded-xl shadow-lg shadow-accent/30 hover:shadow-accent/50 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-bold text-lg rounded-xl shadow-pink-lg hover:shadow-pink-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isReserving ? (
                                     <span className="flex items-center justify-center gap-2">
@@ -389,7 +389,7 @@ export default function ItemDetailPage() {
                                 )}
                             </button>
 
-                            <p className="text-center text-gray-500 text-sm mt-4">
+                            <p className="text-center text-neutral-600 text-sm mt-4">
                                 No payment required now. Visit the boutique to try and rent.
                             </p>
                         </div>

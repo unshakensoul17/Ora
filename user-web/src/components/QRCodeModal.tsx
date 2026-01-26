@@ -71,44 +71,44 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
     return (
         <div
             className="fixed inset-0 z-[9999] flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
             onClick={onClose}
         >
             <div
-                className="bg-gray-900 rounded-2xl w-full max-w-sm mx-4 p-6 shadow-2xl border border-emerald-500/30"
+                className="glass-panel rounded-2xl w-full max-w-sm mx-4 p-6 shadow-pink-lg border border-accent-muted/30"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Success Header */}
                 <div className="text-center mb-5">
-                    <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-14 h-14 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h2 className="text-xl font-bold text-white">Reservation Confirmed!</h2>
-                    <p className="text-gray-400 text-sm">Your outfit is on hold</p>
+                    <h2 className="text-xl font-bold text-neutral-900">Reservation Confirmed!</h2>
+                    <p className="text-neutral-600 text-sm">Your outfit is on hold</p>
                 </div>
 
                 {/* Booking Details */}
-                <div className="bg-gray-800 rounded-lg p-4 mb-4">
-                    <h3 className="text-white font-semibold text-sm">{item?.name || 'Unknown Item'}</h3>
-                    <p className="text-gray-500 text-xs mb-3">
+                <div className="bg-white/60 rounded-lg p-4 mb-4">
+                    <h3 className="text-neutral-900 font-semibold text-sm">{item?.name || 'Unknown Item'}</h3>
+                    <p className="text-neutral-600 text-xs mb-3">
                         {shop?.locality || 'Unknown Location'}
                     </p>
 
                     <div className="flex justify-between text-xs mb-3">
                         <div>
-                            <p className="text-gray-500">Pickup</p>
-                            <p className="text-white font-medium">{pickupDate ? new Date(pickupDate).toLocaleDateString() : 'N/A'}</p>
+                            <p className="text-neutral-500">Pickup</p>
+                            <p className="text-neutral-900 font-medium">{pickupDate ? new Date(pickupDate).toLocaleDateString() : 'N/A'}</p>
                         </div>
                         <div className="text-right">
-                            <p className="text-gray-500">Return</p>
-                            <p className="text-white font-medium">{returnDate ? new Date(returnDate).toLocaleDateString() : 'N/A'}</p>
+                            <p className="text-neutral-500">Return</p>
+                            <p className="text-neutral-900 font-medium">{returnDate ? new Date(returnDate).toLocaleDateString() : 'N/A'}</p>
                         </div>
                     </div>
 
                     <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                        <p className="text-amber-400 text-xs font-medium text-center">
+                        <p className="text-amber-600 text-xs font-medium text-center">
                             ⏰ Hold expires in {getTimeRemaining(booking.expiresAt || booking.holdExpiresAt || '')}
                         </p>
                     </div>
@@ -116,7 +116,7 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
 
                 {/* Real Scannable QR Code */}
                 <div className="text-center mb-4">
-                    <p className="text-gray-400 text-xs mb-3">Show this QR code at the shop</p>
+                    <p className="text-neutral-600 text-xs mb-3">Show this QR code at the shop</p>
                     <div className="bg-white p-4 rounded-lg inline-block mx-auto">
                         <QRCodeSVG
                             value={qrValue}
@@ -127,7 +127,7 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
                             fgColor="#000000"
                         />
                     </div>
-                    <p className="text-gray-600 text-xs mt-2">Booking ID: {(booking?.id || '').slice(0, 12)}</p>
+                    <p className="text-neutral-500 text-xs mt-2">Booking ID: {(booking?.id || '').slice(0, 12)}</p>
                 </div>
 
                 {/* Action Buttons */}
@@ -137,13 +137,13 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
                             onClose();
                             router.push('/my-holds');
                         }}
-                        className="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition"
+                        className="flex-1 bg-gradient-to-r from-accent to-accent-hover text-white py-2.5 rounded-lg text-sm font-semibold shadow-pink-md hover:shadow-pink-lg hover:scale-[1.02] transition-all"
                     >
                         View My Holds
                     </button>
                     <button
                         onClick={onClose}
-                        className="px-4 py-2.5 bg-gray-700 text-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-600 transition"
+                        className="px-4 py-2.5 bg-white/60 text-neutral-700 rounded-lg text-sm font-semibold hover:bg-white/80 transition"
                     >
                         Close
                     </button>

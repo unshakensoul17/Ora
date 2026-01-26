@@ -45,23 +45,23 @@ export default function GalleryPage() {
     );
 
     return (
-        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
+        <main className="min-h-screen bg-gradient-to-b from-primary to-white pb-safe pb-20 md:pb-0">
             {/* Header */}
-            <header className="bg-primary/90 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-accent/20">
+            <header className="bg-white/60 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-accent-muted/20">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <Link href="/" className="font-heading text-2xl font-bold text-accent">Fashcycle</Link>
                     <div className="flex gap-6">
-                        <Link href="/search" className="text-white/80 hover:text-accent transition">Rent an Outfit</Link>
+                        <Link href="/search" className="text-neutral-700 hover:text-accent transition">Rent an Outfit</Link>
                     </div>
                 </div>
             </header>
 
             {/* Hero Section */}
             <section className="py-12 md:py-20 px-6 text-center">
-                <h1 className="font-heading text-4xl md:text-6xl text-white mb-6 animate-slide-up">
+                <h1 className="font-heading text-4xl md:text-6xl bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-6 animate-slide-up">
                     Real Brides, <span className="text-accent">Real Style</span>
                 </h1>
-                <p className="text-xl text-gray-300 max-w-2xl mx-auto animate-fade-in delay-100">
+                <p className="text-xl text-neutral-700 max-w-2xl mx-auto animate-fade-in delay-100">
                     See how our community shines in Fashcycle rentals.
                     Get inspired by these stunning looks from weddings and special events across Indore.
                 </p>
@@ -75,11 +75,11 @@ export default function GalleryPage() {
                             <div className="text-accent text-xl">Loading beautiful moments...</div>
                         </div>
                     ) : displayItems.length === 0 ? (
-                        <div className="text-center py-20 bg-white/5 rounded-3xl">
-                            <p className="text-gray-400 text-lg mb-4">No photos yet.</p>
+                        <div className="text-center py-20 glass-card rounded-3xl">
+                            <p className="text-neutral-600 text-lg mb-4">No photos yet.</p>
                             <Link
                                 href="/my-orders"
-                                className="inline-block px-8 py-3 bg-accent text-primary font-bold rounded-lg hover:bg-accent-hover transition"
+                                className="inline-block px-8 py-3 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover transition"
                             >
                                 Be the First to Post
                             </Link>
@@ -107,9 +107,9 @@ export default function GalleryPage() {
                                         </div>
                                     </div>
 
-                                    <div className="p-4 bg-charcoal/90">
+                                    <div className="p-4 bg-white/60 backdrop-blur-sm">
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-white font-medium text-sm">{item.user.name}</span>
+                                            <span className="text-neutral-900 font-medium text-sm">{item.user.name}</span>
                                             <div className="text-accent text-xs">{'★'.repeat(item.rating)}</div>
                                         </div>
                                     </div>

@@ -64,18 +64,18 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen relative flex items-center justify-center px-4 py-12">
             {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-dark to-charcoal -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blush via-primary to-white -z-10" />
 
             {/* Decorative elements */}
-            <div className="absolute top-20 right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+            <div className="absolute top-20 right-20 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
 
             {/* Login Card */}
             <div className="w-full max-w-md">
-                <div className="glass-panel rounded-2xl p-8 border border-white/20">
+                <div className="glass-panel rounded-2xl p-8 border border-accent-muted/30 shadow-pink-lg">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-heading font-bold text-white mb-2">Welcome Back</h1>
-                        <p className="text-gray-300 text-sm">Log in to reserve and manage your outfits</p>
+                        <h1 className="text-3xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-2">Welcome Back</h1>
+                        <p className="text-neutral-700 text-sm">Log in to reserve and manage your outfits</p>
                     </div>
 
                     {/* Verification Success Message */}
@@ -88,7 +88,7 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Email */}
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="email" className="block text-sm font-medium text-neutral-900 mb-1">
                                 Email Address
                             </label>
                             <input
@@ -97,7 +97,7 @@ export default function LoginPage() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-white placeholder-gray-400"
+                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                 placeholder="you@example.com"
                                 required
                                 autoFocus
@@ -107,7 +107,7 @@ export default function LoginPage() {
                         {/* Password */}
                         <div>
                             <div className="flex items-center justify-between mb-1">
-                                <label htmlFor="password" className="text-sm font-medium text-gray-200">
+                                <label htmlFor="password" className="text-sm font-medium text-neutral-900">
                                     Password
                                 </label>
                                 <Link
@@ -124,14 +124,14 @@ export default function LoginPage() {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 pr-12 glass-input rounded-lg text-white placeholder-gray-400"
+                                    className="w-full px-4 py-3 pr-12 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
                                     placeholder="Enter your password"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-neutral-900 transition"
                                     aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                     {showPassword ? (
@@ -158,7 +158,7 @@ export default function LoginPage() {
                                 onChange={handleChange}
                                 className="w-4 h-4 text-accent bg-white/10 border-white/20 rounded focus:ring-accent focus:ring-2"
                             />
-                            <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-300">
+                            <label htmlFor="rememberMe" className="ml-2 text-sm text-neutral-700">
                                 Remember me for 30 days
                             </label>
                         </div>
@@ -174,7 +174,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-lg shadow-lg hover:shadow-accent/50 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-lg shadow-pink-lg hover:shadow-pink-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Logging in...' : 'Log In'}
                         </button>
@@ -183,16 +183,16 @@ export default function LoginPage() {
                     {/* Divider */}
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-white/20" />
+                            <div className="w-full border-t border-accent-muted/20" />
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-transparent text-gray-400">or</span>
+                            <span className="px-4 bg-transparent text-neutral-600">or</span>
                         </div>
                     </div>
 
                     {/* Register Link */}
                     <div className="text-center">
-                        <p className="text-gray-300 text-sm">
+                        <p className="text-neutral-700 text-sm">
                             Don't have an account?{' '}
                             <Link href="/register" className="text-accent hover:text-accent-hover font-medium transition">
                                 Create Account
@@ -203,7 +203,7 @@ export default function LoginPage() {
 
                 {/* Back to Home */}
                 <div className="mt-4 text-center">
-                    <Link href="/" className="text-gray-400 hover:text-white text-sm transition">
+                    <Link href="/" className="text-neutral-600 hover:text-neutral-900 text-sm transition">
                         ← Back to Home
                     </Link>
                 </div>

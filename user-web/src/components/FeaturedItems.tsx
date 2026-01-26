@@ -35,12 +35,12 @@ export function FeaturedItems() {
         return (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
-                    <div key={i} className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden animate-pulse">
-                        <div className="aspect-[3/4] bg-gray-800" />
+                    <div key={i} className="glass-card rounded-2xl overflow-hidden animate-pulse">
+                        <div className="aspect-[3/4] bg-neutral-200" />
                         <div className="p-5 space-y-3">
-                            <div className="h-3 bg-gray-800 rounded w-1/2" />
-                            <div className="h-5 bg-gray-800 rounded w-3/4" />
-                            <div className="h-6 bg-gray-800 rounded w-1/3" />
+                            <div className="h-3 bg-neutral-200 rounded w-1/2" />
+                            <div className="h-5 bg-neutral-200 rounded w-3/4" />
+                            <div className="h-6 bg-neutral-200 rounded w-1/3" />
                         </div>
                     </div>
                 ))}
@@ -51,7 +51,7 @@ export function FeaturedItems() {
     if (items.length === 0) {
         return (
             <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">No items available yet</p>
+                <p className="text-neutral-500 text-lg">No items available yet</p>
             </div>
         );
     }
@@ -69,12 +69,12 @@ export function FeaturedItems() {
                 return (
                     <div
                         key={item.id}
-                        className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden group hover:border-accent/30 transition-all duration-300 flex flex-col shadow-luxury min-w-[260px] sm:min-w-0 snap-center"
+                        className="glass-card rounded-2xl overflow-hidden group hover:border-accent/40 transition-all duration-300 flex flex-col shadow-pink-soft hover:shadow-pink-md min-w-[260px] sm:min-w-0 snap-center"
                     >
                         {/* Image Container */}
-                        <div className="aspect-[3/4] bg-gray-800 relative overflow-hidden">
+                        <div className="aspect-[3/4] bg-neutral-100 relative overflow-hidden">
                             {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10" />
 
                             {/* Tags - Top Left */}
                             <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
@@ -89,7 +89,7 @@ export function FeaturedItems() {
                                     </span>
                                 )}
                                 {isTopRated && (
-                                    <span className="inline-flex items-center gap-1 text-xs bg-accent/90 text-primary px-2 py-1 rounded-full font-medium backdrop-blur-sm">
+                                    <span className="inline-flex items-center gap-1 text-xs bg-accent/90 text-white px-2 py-1 rounded-full font-medium backdrop-blur-sm">
                                         <Star size={12} />
                                         Top Rated
                                     </span>
@@ -108,10 +108,10 @@ export function FeaturedItems() {
                                     className="absolute inset-0 opacity-80 group-hover:scale-105 transition-transform duration-500"
                                     style={{
                                         background: item.category === 'LEHENGA'
-                                            ? 'linear-gradient(135deg, #8B0000, #DC143C)'
+                                            ? 'linear-gradient(135deg, #FFB6C1, #FF69B4)'
                                             : item.category === 'SHERWANI'
-                                                ? 'linear-gradient(135deg, #1a1a2e, #16213e)'
-                                                : 'linear-gradient(135deg, #2d4a3e, #1a3a2e)'
+                                                ? 'linear-gradient(135deg, #FFF0F5, #FFE5EC)'
+                                                : 'linear-gradient(135deg, #FFE4E1, #FFC0CB)'
                                     }}
                                 />
                             )}
@@ -136,12 +136,12 @@ export function FeaturedItems() {
                         {/* Info Section */}
                         <div className="p-5 flex flex-col flex-1">
                             {/* Category */}
-                            <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                            <p className="text-neutral-500 text-xs uppercase tracking-wide mb-1">
                                 {item.category.replace('_', ' ')}
                             </p>
 
                             {/* Name - max 2 lines */}
-                            <h3 className="font-heading text-lg font-semibold text-white mb-3 line-clamp-2 min-h-[3.5rem]">
+                            <h3 className="font-heading text-lg font-semibold text-neutral-900 mb-3 line-clamp-2 min-h-[3.5rem]">
                                 {item.name}
                             </h3>
 
@@ -151,13 +151,13 @@ export function FeaturedItems() {
                                     <span className="text-2xl font-bold text-accent font-heading">
                                         {formatPrice(item.rentalPrice)}
                                     </span>
-                                    <span className="text-gray-400 text-sm">/ 3 days</span>
+                                    <span className="text-neutral-600 text-sm">/ 3 days</span>
                                 </div>
-                                <p className="text-gray-500 text-xs mt-1">
+                                <p className="text-neutral-500 text-xs mt-1">
                                     Extra day {formatPrice(getExtraDayRate(item.rentalPrice))}
                                 </p>
                                 {item.securityDeposit && (
-                                    <p className="text-gray-500 text-xs">
+                                    <p className="text-neutral-500 text-xs">
                                         Deposit: {formatPrice(item.securityDeposit)}
                                     </p>
                                 )}
@@ -170,13 +170,13 @@ export function FeaturedItems() {
                             <div className="flex gap-2 mt-auto">
                                 <Link
                                     href={`/item/${item.id}`}
-                                    className="flex-1 py-2.5 bg-gradient-to-r from-accent to-accent-hover text-primary text-center font-semibold rounded-lg text-sm hover:shadow-lg hover:shadow-accent/30 transition-all"
+                                    className="flex-1 py-2.5 bg-gradient-to-r from-accent to-accent-hover text-white text-center font-semibold rounded-lg text-sm hover:shadow-pink-md transition-all"
                                 >
                                     Reserve
                                 </Link>
                                 <Link
                                     href={`/item/${item.id}`}
-                                    className="px-4 py-2.5 border border-white/20 text-white rounded-lg text-sm font-medium hover:bg-white/5 transition-all flex items-center gap-1.5"
+                                    className="px-4 py-2.5 border-2 border-accent-muted/40 text-neutral-700 rounded-lg text-sm font-medium hover:bg-accent/10 hover:border-accent/50 transition-all flex items-center gap-1.5"
                                 >
                                     <Eye size={16} />
                                     <span className="hidden sm:inline">View</span>

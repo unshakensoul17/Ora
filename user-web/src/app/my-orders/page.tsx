@@ -52,30 +52,30 @@ export default function MyOrdersPage() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-charcoal flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-b from-primary to-white flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
             </div>
         );
     }
 
     return (
-        <main className="min-h-screen bg-charcoal pb-safe pb-20 md:pb-0">
+        <main className="min-h-screen bg-gradient-to-b from-primary to-white pb-safe pb-20 md:pb-0">
             <Navbar />
 
             <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
                 <header className="mb-10">
-                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">My Wardrobe</h1>
-                    <p className="text-gray-400">Track your past rentals and upcoming returns</p>
+                    <h1 className="text-3xl md:text-4xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-2">My Wardrobe</h1>
+                    <p className="text-neutral-600">Track your past rentals and upcoming returns</p>
                 </header>
 
                 {orders.length === 0 ? (
-                    <div className="glass-panel p-12 rounded-2xl text-center border border-white/10">
+                    <div className="glass-card p-12 rounded-2xl text-center">
                         <div className="text-6xl mb-4">🛍️</div>
-                        <h3 className="text-xl text-white font-medium mb-2">No orders yet</h3>
-                        <p className="text-gray-400 mb-8">You haven't rented any outfits yet. Time to find something special!</p>
+                        <h3 className="text-xl text-neutral-900 font-medium mb-2">No orders yet</h3>
+                        <p className="text-neutral-600 mb-8">You haven't rented any outfits yet. Time to find something special!</p>
                         <button
                             onClick={() => router.push('/search')}
-                            className="px-8 py-3 bg-accent text-primary font-bold rounded-lg hover:bg-accent-hover transition-colors"
+                            className="px-8 py-3 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover transition-colors"
                         >
                             Browse Collection
                         </button>
@@ -83,9 +83,9 @@ export default function MyOrdersPage() {
                 ) : (
                     <div className="space-y-6">
                         {orders.map((order) => (
-                            <div key={order.id} className="glass-card p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row gap-6">
+                            <div key={order.id} className="glass-card p-6 rounded-2xl flex flex-col md:flex-row gap-6">
                                 {/* Image */}
-                                <div className="w-full md:w-32 h-32 relative rounded-xl overflow-hidden bg-charcoal-light flex-shrink-0">
+                                <div className="w-full md:w-32 h-32 relative rounded-xl overflow-hidden bg-neutral-100 flex-shrink-0">
                                     <img
                                         src={getImageUrl(order.item.images[0])}
                                         alt={order.item.name}
@@ -96,7 +96,7 @@ export default function MyOrdersPage() {
                                 {/* Details */}
                                 <div className="flex-grow">
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                                        <h3 className="text-xl font-bold text-white">{order.item.name}</h3>
+                                        <h3 className="text-xl font-bold text-neutral-900">{order.item.name}</h3>
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide mt-2 md:mt-0 
                                             ${order.status === 'RETURNED' ? 'bg-green-500/20 text-green-400' :
                                                 order.status === 'RENTED' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'}`}>
@@ -104,17 +104,17 @@ export default function MyOrdersPage() {
                                         </span>
                                     </div>
 
-                                    <p className="text-gray-400 text-sm mb-4">{order.item.shop.locality}, Indore</p>
+                                    <p className="text-neutral-600 text-sm mb-4">{order.item.shop.locality}, Indore</p>
 
                                     <div className="grid grid-cols-2 gap-4 text-sm mb-4">
                                         <div>
-                                            <p className="text-gray-500">Rental Period</p>
-                                            <p className="text-gray-300">
+                                            <p className="text-neutral-500">Rental Period</p>
+                                            <p className="text-neutral-700">
                                                 {format(new Date(order.startDate), 'MMM d')} - {format(new Date(order.endDate), 'MMM d, yyyy')}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-gray-500">Total Paid</p>
+                                            <p className="text-neutral-500">Total Paid</p>
                                             <p className="text-accent font-medium">₹{(order.platformPrice / 100).toLocaleString()}</p>
                                         </div>
                                     </div>
@@ -129,7 +129,7 @@ export default function MyOrdersPage() {
                                                 setSelectedBookingId(order.id);
                                                 setShowQRModal(true);
                                             }}
-                                            className="w-full px-6 py-3 bg-accent text-primary hover:bg-accent/90 rounded-lg font-semibold transition-all"
+                                            className="w-full px-6 py-3 bg-accent text-white hover:bg-accent/90 rounded-lg font-semibold transition-all"
                                         >
                                             Show QR Code
                                         </button>
@@ -139,7 +139,7 @@ export default function MyOrdersPage() {
                                     {order.status === 'RETURNED' && !order.review ? (
                                         <button
                                             onClick={() => handleOpenReview(order.id)}
-                                            className="w-full px-6 py-3 border border-accent text-accent hover:bg-accent hover:text-primary rounded-lg font-semibold transition-all"
+                                            className="w-full px-6 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white rounded-lg font-semibold transition-all"
                                         >
                                             Write Review
                                         </button>

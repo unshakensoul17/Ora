@@ -59,36 +59,36 @@ export default function ProfilePage() {
 
     if (authLoading || !user) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-charcoal">
-                <div className="text-white">Loading...</div>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary to-white">
+                <div className="text-neutral-700">Loading...</div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-charcoal py-12 px-4 pb-safe pb-20 md:pb-0">
+        <div className="min-h-screen bg-gradient-to-b from-primary to-white py-12 px-4 pb-safe pb-20 md:pb-0">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <Link href="/" className="text-accent hover:text-accent-hover text-sm transition inline-block mb-4">
                         ← Back to Home
                     </Link>
-                    <h1 className="text-3xl font-heading font-bold text-white">My Profile</h1>
-                    <p className="text-gray-400 mt-2">Manage your account settings and personal information</p>
+                    <h1 className="text-3xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent">My Profile</h1>
+                    <p className="text-neutral-600 mt-2">Manage your account settings and personal information</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Sidebar */}
                     <div className="lg:col-span-1">
-                        <div className="bg-primary-dark border border-gray-800 rounded-xl p-6">
+                        <div className="glass-card rounded-xl p-6">
                             <div className="flex flex-col items-center text-center">
                                 <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mb-4">
                                     <span className="text-2xl font-bold text-accent">
                                         {user.name?.charAt(0).toUpperCase() || 'U'}
                                     </span>
                                 </div>
-                                <h2 className="text-xl font-semibold text-white">{user.name}</h2>
-                                <p className="text-gray-400 text-sm mt-1">{user.email}</p>
+                                <h2 className="text-xl font-semibold text-neutral-900">{user.name}</h2>
+                                <p className="text-neutral-600 text-sm mt-1">{user.email}</p>
                                 {user.emailVerified && (
                                     <span className="mt-3 px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
                                         ✓ Verified
@@ -96,7 +96,7 @@ export default function ProfilePage() {
                                 )}
                             </div>
 
-                            <div className="mt-6 pt-6 border-t border-gray-800">
+                            <div className="mt-6 pt-6 border-t border-accent-muted/20">
                                 <button
                                     onClick={logout}
                                     className="w-full py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition text-sm font-medium"
@@ -110,8 +110,8 @@ export default function ProfilePage() {
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Personal Information */}
-                        <div className="bg-primary-dark border border-gray-800 rounded-xl p-6">
-                            <h3 className="text-lg font-semibold text-white mb-4">Personal Information</h3>
+                        <div className="glass-card rounded-xl p-6">
+                            <h3 className="text-lg font-semibold text-neutral-900 mb-4">Personal Information</h3>
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 {/* Name */}
@@ -125,7 +125,7 @@ export default function ProfilePage() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-charcoal border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
                                         placeholder="Your full name"
                                     />
                                 </div>
@@ -140,9 +140,9 @@ export default function ProfilePage() {
                                         id="email"
                                         value={user.email}
                                         disabled
-                                        className="w-full px-4 py-2 bg-charcoal/50 border border-gray-700 rounded-lg text-gray-500 cursor-not-allowed"
+                                        className="w-full px-4 py-2 bg-white/40 border border-accent-muted/30 rounded-lg text-neutral-600 cursor-not-allowed"
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                                    <p className="text-xs text-neutral-500 mt-1">Email cannot be changed</p>
                                 </div>
 
                                 {/* Phone */}
@@ -156,7 +156,7 @@ export default function ProfilePage() {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-charcoal border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
                                         placeholder="+91 98765 43210"
                                     />
                                 </div>
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                                         name="city"
                                         value={formData.city}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-charcoal border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
                                         placeholder="Indore"
                                     />
                                 </div>
@@ -195,7 +195,7 @@ export default function ProfilePage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full py-2 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-lg shadow-lg hover:shadow-accent/50 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full py-2 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-lg shadow-pink-md hover:shadow-pink-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {loading ? 'Saving...' : 'Save Changes'}
                                 </button>
@@ -203,12 +203,12 @@ export default function ProfilePage() {
                         </div>
 
                         {/* Account Stats */}
-                        <div className="bg-primary-dark border border-gray-800 rounded-xl p-6">
-                            <h3 className="text-lg font-semibold text-white mb-4">Account Activity</h3>
+                        <div className="glass-card rounded-xl p-6">
+                            <h3 className="text-lg font-semibold text-neutral-900 mb-4">Account Activity</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="text-center p-4 bg-charcoal rounded-lg">
+                                <div className="text-center p-4 bg-white/60 rounded-lg">
                                     <p className="text-2xl font-bold text-accent">0</p>
-                                    <p className="text-xs text-gray-400 mt-1">Total Bookings</p>
+                                    <p className="text-xs text-neutral-600 mt-1">Total Bookings</p>
                                 </div>
                                 <div className="text-center p-4 bg-charcoal rounded-lg">
                                     <p className="text-2xl font-bold text-accent">0</p>

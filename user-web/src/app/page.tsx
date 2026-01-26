@@ -12,22 +12,22 @@ export default function HomePage() {
             {/* Hero Section */}
             <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
                 {/* Background gradient with subtle pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-dark to-charcoal" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blush via-primary to-white" />
 
-                {/* Decorative orbs - softer */}
-                <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[100px]" />
-                <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-primary-light/10 rounded-full blur-[80px]" />
+                {/* Decorative orbs - softer pink */}
+                <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-accent-muted/20 rounded-full blur-[120px]" />
+                <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-accent/15 rounded-full blur-[100px]" />
 
                 {/* Content */}
                 <div className="relative z-10 text-center max-w-5xl px-6 animate-slide-up">
                     {/* Main Heading */}
                     <h1 className="font-heading text-4xl md:text-7xl font-bold mb-6 leading-tight">
-                        <span className="text-white drop-shadow-lg">Wear Designer.</span>
+                        <span className="bg-gradient-to-r from-neutral-900 via-neutral-700 to-neutral-900 bg-clip-text text-transparent drop-shadow-sm">Wear Designer.</span>
                         <br />
-                        <span className="text-accent drop-shadow-lg">Spend High-Street.</span>
+                        <span className="bg-gradient-to-r from-accent via-accent-hover to-accent bg-clip-text text-transparent drop-shadow-sm">Spend High-Street.</span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-gray-200 mb-8 font-light max-w-2xl mx-auto">
+                    <p className="text-xl md:text-2xl text-neutral-700 mb-8 font-medium max-w-2xl mx-auto">
                         Indore's Premier Luxury Rental Wardrobe.
                         <br className="hidden sm:block" />
                         Sanitized, Fitted & Ready for Your Special Day.
@@ -39,7 +39,7 @@ export default function HomePage() {
                             <Link
                                 key={cat}
                                 href={`/search?category=${cat.toUpperCase().replace('-', '_')}`}
-                                className="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-white/10 hover:border-accent/30 transition-all"
+                                className="px-5 py-2.5 rounded-full glass-card text-neutral-700 text-sm font-medium hover:text-accent hover:shadow-pink-soft transition-all"
                             >
                                 {cat}
                             </Link>
@@ -50,22 +50,22 @@ export default function HomePage() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
                         <Link
                             href="/search"
-                            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-xl shadow-luxury-lg glow-gold hover:shadow-xl transition-all hover:-translate-y-1"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-2xl shadow-pink-lg glow-pink hover:shadow-pink-lg hover:scale-105 transition-all"
                         >
                             <Search size={20} />
                             Find Your Outfit
                         </Link>
                         <Link
                             href="#how-it-works"
-                            className="hidden sm:inline-block px-8 py-4 border-2 border-accent/50 text-accent font-semibold rounded-xl hover:bg-accent/10 transition-all backdrop-blur-sm"
+                            className="hidden sm:inline-block px-8 py-4 border-2 border-accent/40 text-accent font-semibold rounded-2xl hover:bg-accent/10 hover:border-accent/60 transition-all backdrop-blur-sm"
                         >
                             How It Works
                         </Link>
                     </div>
 
                     {/* Reassurance Microtext */}
-                    <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
-                        <CheckCircle size={16} className="text-green-400" />
+                    <p className="text-neutral-600 text-sm flex items-center justify-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
                         Reserve in 60 seconds — pay in-store only
                     </p>
                 </div>
@@ -80,10 +80,10 @@ export default function HomePage() {
             {/* Search Widget */}
             <section className="py-16 px-6">
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="font-heading text-3xl text-center mb-2 text-white">
+                    <h2 className="font-heading text-3xl text-center mb-2 bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent">
                         Find Your Perfect Outfit
                     </h2>
-                    <p className="text-gray-400 text-center mb-8">
+                    <p className="text-neutral-600 text-center mb-8">
                         Search by occasion, dates, and size
                     </p>
                     <SearchWidget />
@@ -91,13 +91,13 @@ export default function HomePage() {
             </section>
 
             {/* Featured Collection */}
-            <section className="py-16 px-6 bg-charcoal-light">
+            <section className="py-16 px-6 bg-gradient-to-b from-white to-blush-pink">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-12">
-                        <h2 className="font-heading text-3xl md:text-4xl text-white mb-3">
+                        <h2 className="font-heading text-3xl md:text-4xl bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-3">
                             Trending This Wedding Season
                         </h2>
-                        <p className="text-gray-400">
+                        <p className="text-neutral-600">
                             Curated collection of premium designer outfits
                         </p>
                     </div>
@@ -105,7 +105,7 @@ export default function HomePage() {
                     <div className="text-center mt-10">
                         <Link
                             href="/search"
-                            className="inline-flex items-center gap-2 px-6 py-3 border border-accent/30 text-accent font-medium rounded-lg hover:bg-accent/10 transition-all"
+                            className="inline-flex items-center gap-2 px-6 py-3 border-2 border-accent/40 text-accent font-medium rounded-xl hover:bg-accent/10 hover:border-accent/60 transition-all"
                         >
                             View All Outfits
                             <span>→</span>
@@ -115,13 +115,13 @@ export default function HomePage() {
             </section>
 
             {/* How It Works Section */}
-            <section id="how-it-works" className="py-20 px-6 bg-primary">
+            <section id="how-it-works" className="py-20 px-6 bg-white">
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center mb-16">
-                        <h2 className="font-heading text-3xl md:text-4xl text-white mb-3">
+                        <h2 className="font-heading text-3xl md:text-4xl bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent mb-3">
                             Reserve Online. Try In-Store.
                         </h2>
-                        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+                        <p className="text-neutral-700 text-lg max-w-2xl mx-auto">
                             No full payment online. Reserve your outfit for 4 hours, visit the boutique,
                             try it on, and pay only if you love it.
                         </p>
@@ -129,67 +129,67 @@ export default function HomePage() {
 
                     <div className="grid md:grid-cols-3 gap-8 mb-12">
                         {/* Step 1 */}
-                        <div className="relative bg-white/5 border border-white/10 p-8 rounded-2xl shadow-luxury hover:-translate-y-1 transition-all">
-                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary font-bold text-lg shadow-luxury">
+                        <div className="relative glass-card p-8 rounded-2xl floating-card">
+                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-gradient-to-br from-accent to-accent-hover rounded-full flex items-center justify-center text-white font-bold text-lg shadow-pink-md">
                                 1
                             </div>
-                            <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mb-6">
                                 <Search size={28} className="text-accent" />
                             </div>
                             <h3 className="text-accent font-heading text-xl font-bold mb-3">
                                 Browse & Reserve
                             </h3>
-                            <p className="text-gray-300">
+                            <p className="text-neutral-700">
                                 Find your outfit, select dates, and place a hold with zero upfront payment.
                             </p>
                         </div>
 
                         {/* Step 2 */}
-                        <div className="relative bg-white/5 border border-white/10 p-8 rounded-2xl shadow-luxury hover:-translate-y-1 transition-all">
-                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary font-bold text-lg shadow-luxury">
+                        <div className="relative glass-card p-8 rounded-2xl floating-card">
+                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-gradient-to-br from-accent to-accent-hover rounded-full flex items-center justify-center text-white font-bold text-lg shadow-pink-md">
                                 2
                             </div>
-                            <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mb-6">
                                 <MapPin size={28} className="text-accent" />
                             </div>
                             <h3 className="text-accent font-heading text-xl font-bold mb-3">
                                 Visit the Boutique
                             </h3>
-                            <p className="text-gray-300">
+                            <p className="text-neutral-700">
                                 Show your QR code and try the outfit in person at our Indore store.
                             </p>
                         </div>
 
                         {/* Step 3 */}
-                        <div className="relative bg-white/5 border border-white/10 p-8 rounded-2xl shadow-luxury hover:-translate-y-1 transition-all">
-                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary font-bold text-lg shadow-luxury">
+                        <div className="relative glass-card p-8 rounded-2xl floating-card">
+                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-gradient-to-br from-accent to-accent-hover rounded-full flex items-center justify-center text-white font-bold text-lg shadow-pink-md">
                                 3
                             </div>
-                            <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mb-6">
                                 <Sparkles size={28} className="text-accent" />
                             </div>
                             <h3 className="text-accent font-heading text-xl font-bold mb-3">
                                 Rent & Shine
                             </h3>
-                            <p className="text-gray-300">
+                            <p className="text-neutral-700">
                                 Love it? Pay the rental fee and take it home for your special event.
                             </p>
                         </div>
                     </div>
 
                     {/* Reassurance Stats */}
-                    <div className="flex flex-wrap justify-center gap-8 mb-10 py-6 border-y border-white/10">
+                    <div className="flex flex-wrap justify-center gap-8 mb-10 py-6 border-y border-accent-muted/20">
                         <div className="flex items-center gap-3">
                             <Clock size={20} className="text-accent" />
-                            <span className="text-gray-300 text-sm">Reservation holds for <strong className="text-white">4 hours</strong></span>
+                            <span className="text-neutral-700 text-sm">Reservation holds for <strong className="text-neutral-900">4 hours</strong></span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <CheckCircle size={20} className="text-green-400" />
-                            <span className="text-gray-300 text-sm">Average pickup time: <strong className="text-white">7 minutes</strong></span>
+                            <CheckCircle size={20} className="text-green-500" />
+                            <span className="text-neutral-700 text-sm">Average pickup time: <strong className="text-neutral-900">7 minutes</strong></span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Sparkles size={20} className="text-blue-400" />
-                            <span className="text-gray-300 text-sm"><strong className="text-white">100%</strong> sanitized outfits</span>
+                            <Sparkles size={20} className="text-blue-500" />
+                            <span className="text-neutral-700 text-sm"><strong className="text-neutral-900">100%</strong> sanitized outfits</span>
                         </div>
                     </div>
 
@@ -197,7 +197,7 @@ export default function HomePage() {
                     <div className="text-center">
                         <Link
                             href="/search"
-                            className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-xl shadow-luxury-lg glow-gold hover:shadow-xl transition-all hover:-translate-y-1"
+                            className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-2xl shadow-pink-lg glow-pink hover:scale-105 transition-all"
                         >
                             <Search size={20} />
                             Start Reservation

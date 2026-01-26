@@ -34,7 +34,7 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
         return (
             <div className="py-12 px-6">
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-gray-400">Loading reviews...</div>
+                    <div className="text-neutral-600">Loading reviews...</div>
                 </div>
             </div>
         );
@@ -42,10 +42,10 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
 
     if (!reviewsData || reviewsData.stats.totalReviews === 0) {
         return (
-            <div className="py-12 px-6 bg-charcoal-lighter/50">
+            <div className="py-12 px-6 bg-white/40">
                 <div className="max-w-6xl mx-auto text-center">
-                    <h2 className="text-2xl font-heading font-bold text-white mb-4">Ratings & Reviews</h2>
-                    <p className="text-gray-400">No reviews yet. Be the first to review this item!</p>
+                    <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">Ratings & Reviews</h2>
+                    <p className="text-neutral-600">No reviews yet. Be the first to review this item!</p>
                 </div>
             </div>
         );
@@ -54,19 +54,19 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
     const { reviews, stats } = reviewsData;
 
     return (
-        <div className="py-12 px-6 bg-charcoal-lighter/50">
+        <div className="py-12 px-6 bg-white/40">
             <div className="max-w-6xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-8">Ratings & Reviews</h2>
+                <h2 className="text-2xl md:text-3xl font-heading font-bold text-neutral-900 mb-8">Ratings & Reviews</h2>
 
                 {/* Rating Summary */}
-                <div className="bg-charcoal-lighter rounded-2xl p-6 md:p-8 mb-8 border border-white/5">
+                <div className="glass-card rounded-2xl p-6 md:p-8 mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Overall Rating */}
-                        <div className="text-center md:border-r border-white/10">
-                            <div className="text-5xl font-bold text-white mb-2">
+                        <div className="text-center md:border-r border-neutral-200">
+                            <div className="text-5xl font-bold text-neutral-900 mb-2">
                                 {stats.avgRating.toFixed(1)} <span className="text-accent">★</span>
                             </div>
-                            <div className="text-gray-400">
+                            <div className="text-neutral-600">
                                 {stats.totalReviews.toLocaleString()} Rating{stats.totalReviews !== 1 ? 's' : ''} & {stats.totalReviews} Review{stats.totalReviews !== 1 ? 's' : ''}
                             </div>
                         </div>
@@ -81,16 +81,16 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
                                 return (
                                     <div key={item.rating} className="flex items-center gap-3">
                                         <div className="flex items-center gap-1 w-12">
-                                            <span className="text-sm text-gray-300">{item.rating}</span>
+                                            <span className="text-sm text-neutral-700">{item.rating}</span>
                                             <FaStar className="text-accent" size={12} />
                                         </div>
-                                        <div className="flex-1 h-2 bg-charcoal rounded-full overflow-hidden">
+                                        <div className="flex-1 h-2 bg-neutral-200 rounded-full overflow-hidden">
                                             <div
                                                 className="h-full bg-gradient-to-r from-green-500 to-green-400"
                                                 style={{ width: `${percentage}%` }}
                                             />
                                         </div>
-                                        <div className="w-16 text-sm text-gray-400 text-right">
+                                        <div className="w-16 text-sm text-neutral-600 text-right">
                                             {item.count.toLocaleString()}
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
                 {/* Review Images Gallery */}
                 {reviews.some((r: any) => r.images && r.images.length > 0) && (
                     <div className="mb-8">
-                        <h3 className="text-lg font-semibold text-white mb-4">Customer Photos</h3>
+                        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Customer Photos</h3>
                         <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
                             {reviews
                                 .filter((r: any) => r.images && r.images.length > 0)
@@ -129,7 +129,7 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
                 {/* Individual Reviews */}
                 <div className="space-y-6">
                     {reviews.map((review: any) => (
-                        <div key={review.id} className="bg-charcoal-lighter rounded-xl p-6 border border-white/5">
+                        <div key={review.id} className="glass-card rounded-xl p-6">
                             {/* Rating */}
                             <div className="flex items-center gap-1 mb-3">
                                 {[...Array(5)].map((_, i) => (
@@ -146,7 +146,7 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
 
                             {/* Comment */}
                             {review.comment && (
-                                <p className="text-gray-300 mb-4 leading-relaxed">{review.comment}</p>
+                                <p className="text-neutral-700 mb-4 leading-relaxed">{review.comment}</p>
                             )}
 
                             {/* Review Images */}
@@ -170,12 +170,12 @@ export function ReviewsSection({ itemId }: ReviewsSectionProps) {
 
                             {/* User Info */}
                             <div className="flex items-center justify-between text-sm">
-                                <div className="text-gray-400">
-                                    <span className="font-medium text-gray-300">{review.user.name}</span>
+                                <div className="text-neutral-600">
+                                    <span className="font-medium text-neutral-900">{review.user.name}</span>
                                     <span className="mx-2">•</span>
-                                    <span className="text-green-400">✓ Verified Purchase</span>
+                                    <span className="text-green-600">✓ Verified Purchase</span>
                                 </div>
-                                <div className="text-gray-500">
+                                <div className="text-neutral-500">
                                     {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
                                 </div>
                             </div>
