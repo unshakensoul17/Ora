@@ -73,7 +73,8 @@ model Shop {
   bookings        Booking[] // Added as per instruction
   supportTickets  SupportTicket[] // Added as per instruction
   notificationPreference NotificationPreference? // Added as per instruction
-  notifications   Notification[] // Added as per instruction
+  notifications   Notification[]
+  customers       Customer[] // Added as per instruction
 
   @@index([ownerPhone])
   @@index([email])
@@ -441,4 +442,25 @@ enum NotificationType {
   PAYMENT_RECEIVED
   SYSTEM_UPDATE
   MARKETING
+}
+
+// ============================================
+// SHOP CUSTOMERS (CRM)
+// ============================================
+
+model Customer {
+  id            String    @id @default(uuid())
+  shopId        String
+  shop          Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  name          String
+  phone         String    @unique
+  email         String?
+  notes         String?
+  isBlacklisted Boolean   @default(false)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([shopId])
+  @@index([phone])
 }
