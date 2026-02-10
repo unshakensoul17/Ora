@@ -15,8 +15,8 @@ async function bootstrap() {
         : [
             'http://localhost:3001', // User web
             'http://localhost:3002', // Admin
-            'http://10.204.162.252:3000', // Local Network Access
-            'http://10.204.162.252:8081', // Expo Bundler
+            'http://10.206.206.252:3000', // Local Network Access
+            'http://10.206.206.252:8081', // Expo Bundler
         ];
 
     console.log('🌐 CORS enabled for origins:', corsOrigins);

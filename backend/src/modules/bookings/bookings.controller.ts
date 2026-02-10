@@ -86,7 +86,13 @@ export class BookingsController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all shop bookings (calendar)' })
     async getShopBookings(@Param('shopId') shopId: string) {
-        return this.bookingsService.getShopBookings(shopId);
+        try {
+            return await this.bookingsService.getShopBookings(shopId);
+        } catch (error) {
+            const fs = require('fs');
+            fs.appendFileSync('debug_error.log', `[${new Date().toISOString()}] Error in getShopBookings: ${error.message}\nStack: ${error.stack}\n`);
+            throw error;
+        }
     }
 
     @Patch(':bookingId/pickup')

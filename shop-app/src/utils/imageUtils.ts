@@ -1,4 +1,4 @@
-import { BASE_URL } from '../api/config';
+import { API_BASE_URL as BASE_URL } from '../api/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const IMAGE_CACHE_KEY = 'image_cache_map';

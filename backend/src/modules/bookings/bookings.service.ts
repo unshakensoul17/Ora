@@ -257,8 +257,8 @@ export class BookingsService {
             verified: true,
             bookingId: booking.id,
             customer: {
-                name: booking.user.name,
-                phone: booking.user.phone,
+                name: booking.user?.name ?? 'Unknown',
+                phone: booking.user?.phone ?? 'Unknown',
             },
             item: {
                 id: booking.item.id,
@@ -487,20 +487,26 @@ export class BookingsService {
      * Get all shop bookings (for calendar)
      */
     async getShopBookings(shopId: string) {
-        return this.prisma.booking.findMany({
-            where: {
-                item: { shopId },
-                // Don't filter by status, get everything except maybe cancelled if desirable? 
-                // Let's get everything for now to show full history
-            },
-            include: {
-                item: true,
-                user: {
-                    select: { id: true, name: true, phone: true },
+        try {
+            const bookings = await this.prisma.booking.findMany({
+                where: {
+                    item: { shopId },
                 },
-            },
-            orderBy: { startDate: 'asc' },
-        });
+                include: {
+                    item: true,
+                    user: {
+                        select: { id: true, name: true, phone: true },
+                    },
+                },
+                orderBy: { startDate: 'asc' },
+            });
+            return bookings;
+        } catch (error) {
+            console.error(`[BookingsService] Error fetching bookings for shop ${shopId}:`, error);
+            // If it's the "null userId" issue or similar data inconsistency, return empty array
+            // so the frontend doesn't crash, but log it so we can fix it.
+            return [];
+        }
     }
 
     /**
@@ -712,8 +718,8 @@ export class BookingsService {
                 id: booking.id,
                 status: booking.status,
                 user: {
-                    name: booking.user.name,
-                    phone: booking.user.phone,
+                    name: booking.user?.name ?? 'Unknown',
+                    phone: booking.user?.phone ?? 'Unknown',
                 },
                 item: {
                     name: booking.item.name,

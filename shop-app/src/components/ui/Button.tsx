@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, ActivityIndicator, StyleSheet, TouchableOpacityProps } from 'react-native';
-import { COLORS, RADIUS, SPACING } from '../../constants/theme';
+import { COLORS, RADIUS, SHADOWS, SPACING } from '../../constants/theme';
 import { Typography } from './Typography';
 
 interface ButtonProps extends TouchableOpacityProps {
@@ -71,7 +71,7 @@ export const Button = ({
 
 const styles = StyleSheet.create({
     base: {
-        height: 56,
+        height: 52, // Slightly smaller height
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -80,11 +80,7 @@ const styles = StyleSheet.create({
     },
     primary: {
         backgroundColor: COLORS.primary,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 4,
+        ...SHADOWS.glow,
     },
     secondary: {
         backgroundColor: 'transparent',
@@ -101,5 +97,6 @@ const styles = StyleSheet.create({
     },
     disabled: {
         opacity: 0.5,
+        backgroundColor: COLORS.cardElevated, // Better disabled state
     },
 });

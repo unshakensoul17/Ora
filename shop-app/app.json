@@ -1,43 +1,36 @@
 {
-  "expo": {
-    "name": "Fashcycle Shop",
-    "slug": "fashcycle-shop",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "userInterfaceStyle": "dark",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.fashcycle.shop",
-      "infoPlist": {
-        "NSCameraUsageDescription": "Fashcycle needs camera access to scan customer QR codes for booking verification."
-      }
-    },
-    "android": {
-      "package": "com.fashcycle.shop",
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ]
-    },
-    "web": {
-      "bundler": "metro"
-    },
-    "plugins": [
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow Fashcycle Shop to access your camera for QR code scanning."
-        }
-      ],
-      "expo-secure-store"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "a012ef47-ca0e-4d97-8866-f2bc6d816063"
-      }
+    "expo": {
+        "name": "Fashcycle Shop",
+        "slug": "fashcycle-shop",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "userInterfaceStyle": "dark",
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": false,
+            "bundleIdentifier": "com.fashcycle.shop",
+            "infoPlist": {
+                "NSCameraUsageDescription": "Fashcycle needs camera access to scan customer QR codes for booking verification."
+            }
+        },
+        "android": {
+            "package": "com.fashcycle.shop",
+            "permissions": [
+                "android.permission.CAMERA"
+            ]
+        },
+        "web": {
+            "bundler": "metro"
+        },
+        "plugins": [
+            [
+                "expo-camera",
+                {
+                    "cameraPermission": "Allow Fashcycle Shop to access your camera for QR code scanning."
+                }
+            ]
+        ]
     }
-  }
 }

@@ -12,16 +12,11 @@ import {
 import { useAuthStore } from '../../store/authStore';
 import { getShopCustomers, updateCustomer } from '../../api/endpoints';
 import { Customer } from '../../api/types';
-
-const COLORS = {
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
-    primary: '#1DB954',
-    textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    error: '#EF4444',
-};
+import { COLORS, SPACING, RADIUS } from '../../constants/theme';
+import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
+import { Typography } from '../../components/ui/Typography';
+import { Input } from '../../components/ui/Input';
+import { Card } from '../../components/ui/Card';
 
 export default function CustomerListScreen() {
     const shop = useAuthStore((state) => state.shop);
@@ -59,13 +54,13 @@ export default function CustomerListScreen() {
     };
 
     const renderItem = ({ item }: { item: Customer }) => (
-        <View style={styles.customerCard}>
+        <Card style={styles.customerCard}>
             <View style={styles.customerInfo}>
-                <Text style={styles.customerName}>{item.name}</Text>
-                <Text style={styles.customerPhone}>{item.phone}</Text>
+                <Typography variant="h3" style={styles.customerName}>{item.name}</Typography>
+                <Typography variant="body" style={styles.customerPhone}>{item.phone}</Typography>
                 {item.isBlacklisted && (
                     <View style={styles.blacklistBadge}>
-                        <Text style={styles.blacklistText}>BLACKLISTED</Text>
+                        <Typography style={styles.blacklistText}>BLACKLISTED</Typography>
                     </View>
                 )}
             </View>
@@ -73,88 +68,104 @@ export default function CustomerListScreen() {
                 style={[styles.actionButton, item.isBlacklisted ? styles.unblockButton : styles.blockButton]}
                 onPress={() => toggleBlacklist(item)}
             >
-                <Text style={styles.actionButtonText}>
+                <Typography style={styles.actionButtonText}>
                     {item.isBlacklisted ? 'Unblock' : 'Block'}
-                </Text>
+                </Typography>
             </TouchableOpacity>
-        </View>
+        </Card>
     );
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                style={styles.searchInput}
-                placeholder="Search by name or phone..."
-                placeholderTextColor="#666"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-            />
+        <ScreenWrapper withPadding={false}>
+            <View style={styles.header}>
+                <Typography variant="h1" style={styles.title}>Customers</Typography>
+                <Typography variant="caption" style={styles.count}>{customers.length} total</Typography>
+            </View>
+
+            <View style={styles.searchContainer}>
+                <Input
+                    label=""
+                    placeholder="Search by name or phone..."
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    containerStyle={{ marginBottom: 0 }}
+                />
+            </View>
 
             {loading ? (
-                <ActivityIndicator color={COLORS.primary} style={{ marginTop: 20 }} />
+                <View style={[styles.container, styles.center]}>
+                    <ActivityIndicator color={COLORS.primary} size="large" />
+                </View>
             ) : (
                 <FlatList
                     data={customers}
                     keyExtractor={(item) => item.id}
                     renderItem={renderItem}
                     ListEmptyComponent={
-                        <Text style={styles.emptyText}>No customers found</Text>
+                        <View style={styles.empty}>
+                            <Typography variant="h1" style={styles.emptyIcon}>busts_in_silhouette</Typography>
+                            <Typography variant="h3" style={styles.emptyText}>No customers found</Typography>
+                        </View>
                     }
                     contentContainerStyle={styles.listContent}
                 />
             )}
-        </View>
+        </ScreenWrapper>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
-        padding: 16,
     },
-    searchInput: {
-        backgroundColor: COLORS.card,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        borderRadius: 12,
-        padding: 16,
-        color: COLORS.textPrimary,
-        fontSize: 16,
-        marginBottom: 20,
+    center: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
     },
-    listContent: {
-        paddingBottom: 20,
-    },
-    customerCard: {
-        backgroundColor: COLORS.card,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        borderRadius: 12,
-        padding: 16,
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
+        padding: SPACING.l,
+        backgroundColor: COLORS.background,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
+    },
+    title: {
+        color: COLORS.primary,
+    },
+    count: {
+        color: COLORS.textSecondary,
+    },
+    searchContainer: {
+        padding: SPACING.m,
+    },
+    listContent: {
+        padding: SPACING.m,
+        paddingTop: 0,
+    },
+    customerCard: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: SPACING.m,
     },
     customerInfo: {
         flex: 1,
     },
     customerName: {
-        fontSize: 16,
-        fontWeight: '600',
         color: COLORS.textPrimary,
         marginBottom: 4,
     },
     customerPhone: {
-        fontSize: 14,
         color: COLORS.textSecondary,
     },
     blacklistBadge: {
         backgroundColor: 'rgba(239, 68, 68, 0.1)',
-        paddingHorizontal: 8,
+        paddingHorizontal: SPACING.s,
         paddingVertical: 4,
-        borderRadius: 4,
+        borderRadius: RADIUS.s,
         alignSelf: 'flex-start',
         marginTop: 8,
         borderWidth: 1,
@@ -166,9 +177,9 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     actionButton: {
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        borderRadius: 8,
+        paddingHorizontal: SPACING.m,
+        paddingVertical: SPACING.s,
+        borderRadius: RADIUS.s,
     },
     blockButton: {
         backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -185,9 +196,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: COLORS.textPrimary,
     },
+    empty: {
+        alignItems: 'center',
+        paddingTop: 60,
+    },
+    emptyIcon: {
+        fontSize: 48,
+        marginBottom: SPACING.m,
+    },
     emptyText: {
         color: COLORS.textSecondary,
-        textAlign: 'center',
-        marginTop: 40,
     },
 });

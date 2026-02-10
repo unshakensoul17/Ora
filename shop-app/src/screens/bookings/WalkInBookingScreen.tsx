@@ -32,7 +32,6 @@ import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
 import { Typography } from '../../components/ui/Typography';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Card } from '../../components/ui/Card';
 import { COLORS, SPACING, RADIUS } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -222,7 +221,7 @@ export default function WalkInBookingScreen({ navigation }: any) {
     return (
         <ScreenWrapper>
             <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
-                <Typography variant="label" style={styles.sectionTitle}>Item Details</Typography>
+                <Typography variant="body" style={styles.sectionTitle}>Item Details</Typography>
                 <TouchableOpacity
                     style={styles.pickerButton}
                     onPress={() => setShowItemPicker(true)}
@@ -244,7 +243,7 @@ export default function WalkInBookingScreen({ navigation }: any) {
                     </View>
                 )}
 
-                <Typography variant="label" style={styles.sectionTitle}>Rental Period</Typography>
+                <Typography variant="body" style={styles.sectionTitle}>Rental Period</Typography>
                 <View style={styles.row}>
                     <TouchableOpacity
                         style={[styles.flex1, styles.dateInput]}
@@ -264,7 +263,7 @@ export default function WalkInBookingScreen({ navigation }: any) {
                 </View>
                 <Typography variant="caption" style={styles.durationText}>{daysCount} Day{daysCount > 1 ? 's' : ''} Rental</Typography>
 
-                <Typography variant="label" style={styles.sectionTitle}>Customer Details</Typography>
+                <Typography variant="body" style={styles.sectionTitle}>Customer Details</Typography>
                 <Input
                     label=""
                     value={customerName}
@@ -289,7 +288,7 @@ export default function WalkInBookingScreen({ navigation }: any) {
                     style={{ height: 80, textAlignVertical: 'top' }}
                 />
 
-                <Typography variant="label" style={styles.sectionTitle}>Special Discount</Typography>
+                <Typography variant="body" style={styles.sectionTitle}>Special Discount</Typography>
                 <View style={styles.discountRow}>
                     <View style={styles.toggleContainer}>
                         <TouchableOpacity
@@ -317,11 +316,11 @@ export default function WalkInBookingScreen({ navigation }: any) {
 
                 {selectedItem && (
                     <>
-                        <Typography variant="label" style={styles.sectionTitle}>Bill Summary</Typography>
+                        <Typography variant="body" style={styles.sectionTitle}>Bill Summary</Typography>
                         <View style={styles.receipt}>
                             <View style={styles.receiptGlow} />
                             <View style={styles.receiptHeader}>
-                                <Typography style={styles.receiptTitle}>RECEIPT</Typography>
+                                <Typography variant="h3" style={styles.receiptTitle}>RECEIPT</Typography>
                                 <Typography variant="caption" style={styles.receiptDate}>{format(new Date(), 'dd/MM/yyyy')}</Typography>
                             </View>
 
@@ -541,7 +540,7 @@ const styles = StyleSheet.create({
         paddingBottom: SPACING.s,
     },
     receiptTitle: {
-        color: '#D4AF37', // Gold
+        color: COLORS.primary, // Changed to Primary as per theme
         fontSize: 16,
         fontWeight: '800',
         letterSpacing: 4,

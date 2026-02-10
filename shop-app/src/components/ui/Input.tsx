@@ -20,11 +20,14 @@ export const Input = ({
     containerStyle,
     ...props
 }: InputProps) => {
+    const [isFocused, setIsFocused] = React.useState(false);
+
     return (
         <View style={[styles.container, containerStyle]}>
             {label && <Typography variant="label">{label}</Typography>}
             <View style={[
                 styles.inputContainer,
+                isFocused && styles.focusedBorder,
                 error ? styles.errorBorder : null,
                 props.multiline && { height: 'auto', minHeight: 56, paddingVertical: 12, alignItems: 'flex-start' }
             ]}>
@@ -32,6 +35,8 @@ export const Input = ({
                     style={[styles.input, style]}
                     placeholderTextColor={COLORS.textTertiary}
                     cursorColor={COLORS.primary}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     {...props}
                 />
                 {rightIcon && (
@@ -74,5 +79,9 @@ const styles = StyleSheet.create({
     },
     errorBorder: {
         borderColor: COLORS.error,
+    },
+    focusedBorder: {
+        borderColor: COLORS.primary,
+        backgroundColor: COLORS.card, // Lighten background slightly on focus if desired, or keep as is.
     },
 });
