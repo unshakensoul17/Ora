@@ -213,7 +213,7 @@ export default function MyHoldsPage() {
                                                 <p className="text-neutral-600 text-sm mb-2">Your QR Code</p>
                                                 <div className="bg-white p-3 rounded-lg inline-block">
                                                     <QRCodeSVG
-                                                        value={`fashcycle://booking/${hold.id}?hash=${hold.qrCodeHash}`}
+                                                        value={`ora://booking/${hold.id}?hash=${hold.qrCodeHash}`}
                                                         size={120}
                                                         level="M"
                                                     />

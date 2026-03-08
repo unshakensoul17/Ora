@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
-import { CreateHoldDto, VerifyQRDto } from './dto/booking.dto';
+import { CreateHoldDto, VerifyQRDto, CreateWalkInBookingDto } from './dto/booking.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('bookings')
@@ -22,6 +22,20 @@ export class BookingsController {
     // ============================================
     // User Endpoints
     // ============================================
+
+    @Post('shop/:shopId/walk-in')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Create a walk-in booking' })
+    async createWalkInBooking(
+        @Param('shopId') shopId: string,
+        @Body() dto: CreateWalkInBookingDto,
+    ) {
+        return this.bookingsService.createWalkInBooking(shopId, {
+            ...dto,
+            startDate: new Date(dto.startDate),
+            endDate: new Date(dto.endDate),
+        });
+    }
 
     @Post('hold')
     @ApiBearerAuth()
@@ -128,6 +142,19 @@ export class BookingsController {
     @ApiOperation({ summary: 'Get currently active rentals' })
     async getShopActiveRentals(@Param('shopId') shopId: string) {
         return this.bookingsService.getShopActiveRentals(shopId);
+    }
+    @Get('shop/:shopId/today-pickups')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get shop bookings starting today' })
+    async getShopTodayPickups(@Param('shopId') shopId: string) {
+        return this.bookingsService.getShopTodayPickups(shopId);
+    }
+
+    @Get('shop/:shopId/today-returns')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get shop bookings ending today' })
+    async getShopTodayReturns(@Param('shopId') shopId: string) {
+        return this.bookingsService.getShopTodayReturns(shopId);
     }
 
     @Get('shop/:shopId/history')

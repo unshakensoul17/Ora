@@ -23,7 +23,7 @@ export function Footer() {
                         {/* Social Icons */}
                         <div className="flex gap-3">
                             <a
-                                href="https://instagram.com/fashcycle"
+                                href="https://instagram.com/ora"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-10 h-10 bg-white/80 border border-accent-muted/30 rounded-lg flex items-center justify-center hover:bg-accent hover:border-accent hover:shadow-pink-soft transition-all group"

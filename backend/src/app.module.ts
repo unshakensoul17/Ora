@@ -18,6 +18,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { SupportModule } from './modules/support/support.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
         AdminModule,
         ReviewsModule,
         SearchModule,     // Add search module
+        ReportsModule,
     ],
     providers: [
         // Enable global rate limiting

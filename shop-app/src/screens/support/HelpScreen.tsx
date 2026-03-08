@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
 
 const COLORS = {
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
-    primary: '#1DB954',
+    background: '#121212',
+    card: '#1C1C1E',
+    border: '#2C2C2E',
+    primary: '#D4AF37',
     textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    textTertiary: '#6B7280',
+    textSecondary: '#A1A1AA',
+    textTertiary: '#71717A',
 };
 
 const SPACING = {
@@ -83,7 +83,7 @@ export default function HelpScreen({ navigation }: any) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.linkRow}
-                    onPress={() => Linking.openURL('https://fashcycle.com/guide')}
+                    onPress={() => Linking.openURL('https://ora.com/guide')}
                     activeOpacity={0.7}
                 >
                     <Text style={styles.linkIcon}>📖</Text>

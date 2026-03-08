@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { ShopStatus, PricingTier } from '@prisma/client';
+import { ShopStatus, PricingTier, BookingStatus } from '@prisma/client';
+import { startOfMonth, endOfMonth, subMonths } from 'date-fns';
 
 @Injectable()
 export class ShopsService {
@@ -72,6 +73,13 @@ export class ShopsService {
      * Get shop dashboard stats
      */
     async getDashboardStats(shopId: string) {
+        const now = new Date();
+        const startOfThisMonth = startOfMonth(now);
+        const startOfLastMonth = startOfMonth(subMonths(now, 1));
+        const endOfLastMonth = endOfMonth(subMonths(now, 1));
+        const todayStart = new Date(now.setHours(0, 0, 0, 0));
+        const todayEnd = new Date(now.setHours(23, 59, 59, 999));
+
         const [
             totalItems,
             activeItems,
@@ -80,6 +88,11 @@ export class ShopsService {
             pendingPickups,
             activeRentals,
             verifiedLeads,
+            revenueThisMonth,
+            revenueLastMonth,
+            itemStats,
+            pickupsToday,
+            returnsToday
         ] = await Promise.all([
             this.prisma.inventoryItem.count({ where: { shopId } }),
             this.prisma.inventoryItem.count({
@@ -110,20 +123,88 @@ export class ShopsService {
             this.prisma.attributionEvent.count({
                 where: { shopId, billable: true },
             }),
+            // Revenue This Month
+            this.prisma.payment.aggregate({
+                where: {
+                    Booking: { shopId },
+                    status: 'SUCCESS', // Schema has SUCCESS and COMPLETED, let's check
+                    recordedAt: { gte: startOfThisMonth }
+                },
+                _sum: { amount: true }
+            }),
+            // Revenue Last Month
+            this.prisma.payment.aggregate({
+                where: {
+                    Booking: { shopId },
+                    status: 'SUCCESS',
+                    recordedAt: { gte: startOfLastMonth, lte: endOfLastMonth }
+                },
+                _sum: { amount: true }
+            }),
+            // Popular categories
+            this.prisma.inventoryItem.findMany({
+                where: { shopId },
+                select: { category: true, timesRented: true }
+            }),
+            // Pickups Today
+            this.prisma.booking.count({
+                where: {
+                    item: { shopId },
+                    status: { in: ['CONFIRMED', 'HOLD'] },
+                    startDate: { gte: todayStart, lte: todayEnd }
+                }
+            }),
+            // Returns Today
+            this.prisma.booking.count({
+                where: {
+                    item: { shopId },
+                    status: 'RENTED',
+                    endDate: { gte: todayStart, lte: todayEnd }
+                }
+            })
         ]);
+
+        // Aggregate category stats in JS
+        const categoryMap: Record<string, number> = {};
+        itemStats.forEach(item => {
+            categoryMap[item.category] = (categoryMap[item.category] || 0) + item.timesRented;
+        });
+        const topCategories = Object.entries(categoryMap)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 3);
+
+        const revThis = revenueThisMonth._sum.amount || 0;
+        const revLast = revenueLastMonth._sum.amount || 0;
+        const revenueGrowth = revLast > 0 ? ((revThis - revLast) / revLast) * 100 : 0;
 
         return {
             inventory: {
                 total: totalItems,
                 active: activeItems,
+                utilization: totalItems > 0 ? Math.round((activeRentals / totalItems) * 100) : 0
             },
             bookings: {
                 total: totalBookings,
                 activeHolds,
                 pendingPickups,
                 activeRentals,
+                pickupsToday,
+                returnsToday
             },
-            // Flatten for easier access in Shop App
+            revenue: {
+                thisMonth: revThis,
+                lastMonth: revLast,
+                growth: Math.round(revenueGrowth)
+            },
+            analysis: {
+                topCategories,
+                verifiedLeads,
+                efficiency: {
+                    avgRentalPrice: totalBookings > 0 ? Math.round(revThis / totalBookings) : 0
+                }
+            },
+            // Flatten for backward compatibility
             activeHolds,
             pendingPickups,
             activeRentals,

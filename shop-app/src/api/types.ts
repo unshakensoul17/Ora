@@ -53,16 +53,32 @@ export interface InventoryItem {
 export interface Booking {
     id: string;
     status: BookingStatus;
+    type?: 'ONLINE' | 'WALK_IN';
     startDate: string;
     endDate: string;
     holdExpiresAt?: string;
     qrCodeHash?: string;
-    user: {
+    userId?: string;
+    user?: {
         id: string;
         name: string;
         phone: string;
     };
-    inventoryItem: InventoryItem;
+    customerId?: string;
+    customer?: {
+        id: string;
+        name: string;
+        phone: string;
+    };
+    // Support both naming conventions for now
+    inventoryItem?: InventoryItem;
+    item?: InventoryItem;
+
+    // Financials
+    totalAmount?: number;
+    paidAmount?: number;
+    paymentStatus?: 'PENDING' | 'PARTIAL' | 'PAID' | 'REFUNDED';
+
     createdAt: string;
 }
 
@@ -89,9 +105,30 @@ export interface DashboardStats {
     activeRentals: number;
     totalItems: number;
     verifiedLeads: number;
+    inventory: {
+        total: number;
+        active: number;
+        utilization: number;
+    };
+    bookings: {
+        total: number;
+        activeHolds: number;
+        pendingPickups: number;
+        activeRentals: number;
+        pickupsToday: number;
+        returnsToday: number;
+    };
     revenue: {
         thisMonth: number;
         lastMonth: number;
+        growth: number;
+    };
+    analysis: {
+        topCategories: { name: string; count: number }[];
+        verifiedLeads: number;
+        efficiency: {
+            avgRentalPrice: number;
+        };
     };
 }
 
@@ -132,6 +169,10 @@ export interface CreateItemRequest {
     securityDeposit: number;
     retailPrice?: number;
     images?: string[];
+}
+
+export interface UpdateInventoryRequest extends Partial<CreateItemRequest> {
+    status?: ItemStatus;
 }
 
 export interface ScanQRRequest {

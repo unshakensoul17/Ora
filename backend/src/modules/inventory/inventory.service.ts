@@ -96,6 +96,7 @@ export class InventoryService {
         filters?: {
             category?: Category;
             status?: ItemStatus;
+            search?: string;
             page?: number;
             limit?: number;
         },
@@ -107,6 +108,12 @@ export class InventoryService {
         const where: any = { shopId };
         if (filters?.category) where.category = filters.category;
         if (filters?.status) where.status = filters.status;
+        if (filters?.search) {
+            where.name = {
+                contains: filters.search,
+                mode: 'insensitive',
+            };
+        }
 
         const [items, total] = await Promise.all([
             this.prisma.inventoryItem.findMany({
@@ -159,13 +166,9 @@ export class InventoryService {
         return item;
     }
 
-    /**
-     * Delete item (soft delete - mark as retired)
-     */
     async delete(itemId: string) {
-        const item = await this.prisma.inventoryItem.update({
+        const item = await this.prisma.inventoryItem.delete({
             where: { id: itemId },
-            data: { status: ItemStatus.RETIRED },
         });
 
         // Remove from search index

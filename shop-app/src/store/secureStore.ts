@@ -1,8 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
 import { Shop } from '../api/types';
 
-const TOKEN_KEY = 'fashcycle_shop_token';
-const SHOP_KEY = 'fashcycle_shop_data';
+const TOKEN_KEY = 'ora_shop_token';
+const SHOP_KEY = 'ora_shop_data';
 
 /**
  * Save authentication token securely

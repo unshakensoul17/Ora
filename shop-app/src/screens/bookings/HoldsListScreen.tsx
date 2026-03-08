@@ -137,7 +137,10 @@ export default function HoldsListScreen() {
                     </View>
                     {item.holdExpiresAt && item.status === 'HOLD' && (
                         <View style={styles.timerBadge}>
-                            <Text style={styles.timerText}>⏱ {getTimeRemaining(item.holdExpiresAt)}</Text>
+                            <View style={styles.iconTextRow}>
+                                <Ionicons name="time-outline" size={14} color="#eab308" style={{ marginRight: 4 }} />
+                                <Text style={styles.timerText}>{getTimeRemaining(item.holdExpiresAt)}</Text>
+                            </View>
                         </View>
                     )}
                 </View>
@@ -158,7 +161,10 @@ export default function HoldsListScreen() {
                             style={styles.actionButton}
                             onPress={() => handleCall(item.user?.phone || '')}
                         >
-                            <Text style={styles.actionText}>📞 Call</Text>
+                            <View style={styles.actionButtonContent}>
+                                <Ionicons name="call-outline" size={16} color="#fff" style={{ marginRight: 6 }} />
+                                <Text style={styles.actionText}>Call</Text>
+                            </View>
                         </TouchableOpacity>
 
                         {/* Allow pickup for both HOLD and CONFIRMED items */}
@@ -167,7 +173,10 @@ export default function HoldsListScreen() {
                                 style={[styles.actionButton, styles.actionButtonPrimary]}
                                 onPress={() => handlePickup(item.id)}
                             >
-                                <Text style={styles.actionTextPrimary}>✓ Pickup</Text>
+                                <View style={styles.actionButtonContent}>
+                                    <Ionicons name="checkmark" size={18} color="#000" style={{ marginRight: 6 }} />
+                                    <Text style={styles.actionTextPrimary}>Pickup</Text>
+                                </View>
                             </TouchableOpacity>
                         )}
 
@@ -176,7 +185,7 @@ export default function HoldsListScreen() {
                                 style={styles.actionButtonSmall}
                                 onPress={() => handleCancel(item.id)}
                             >
-                                <Text style={styles.cancelText}>✕</Text>
+                                <Ionicons name="close" size={20} color="#ef4444" />
                             </TouchableOpacity>
                         )}
 
@@ -185,7 +194,10 @@ export default function HoldsListScreen() {
                                 style={[styles.actionButton, styles.actionButtonPrimary]}
                                 onPress={() => handleReturn(item.id)}
                             >
-                                <Text style={styles.actionTextPrimary}>↩ Return</Text>
+                                <View style={styles.actionButtonContent}>
+                                    <Ionicons name="return-down-back" size={18} color="#000" style={{ marginRight: 6 }} />
+                                    <Text style={styles.actionTextPrimary}>Return</Text>
+                                </View>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -219,7 +231,7 @@ export default function HoldsListScreen() {
                 }
                 ListEmptyComponent={
                     <View style={styles.empty}>
-                        <Text style={styles.emptyIcon}>📋</Text>
+                        <Ionicons name="clipboard-outline" size={48} color="#D4AF37" style={{ marginBottom: 16 }} />
                         <Text style={styles.emptyText}>No bookings yet</Text>
                         <Text style={styles.emptySubtext}>When customers reserve items, they'll appear here</Text>
                     </View>
@@ -373,5 +385,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         marginTop: 8,
+    },
+    iconTextRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    actionButtonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

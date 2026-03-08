@@ -65,8 +65,8 @@ export default function QRCodeModal({ isOpen, onClose, bookingData }: QRCodeModa
     // Get QR code hash - check multiple possible locations
     const qrCodeHash = bookingData.qrCodeHash || booking.qrCodeHash || bookingData.qrCode || booking.qrCode;
 
-    // Generate QR code value matching backend format
-    const qrValue = `fashcycle://booking/${booking.id}?hash=${qrCodeHash}`;
+    // Construct the QR code value that the shop app expects
+    const qrValue = `ora://booking/${booking.id}?hash=${qrCodeHash}`;
 
     return (
         <div

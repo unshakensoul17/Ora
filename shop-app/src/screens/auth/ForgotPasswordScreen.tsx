@@ -11,6 +11,8 @@ import {
     Platform,
 } from 'react-native';
 import { forgotPassword, resetPassword } from '../../api/endpoints';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function ForgotPasswordScreen({ navigation }: any) {
     const [step, setStep] = useState<'phone' | 'otp' | 'password'>('phone');
@@ -209,21 +211,24 @@ export default function ForgotPasswordScreen({ navigation }: any) {
                                     placeholderTextColor="#6b7280"
                                     secureTextEntry={!showPassword}
                                 />
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                                    <Text style={styles.eyeIcon}>{showPassword ? '👁' : '👁‍🗨'}</Text>
+                                <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
+                                    <Ionicons name={showPassword ? 'eye-outline' : 'eye-off-outline'} size={20} color="#6b7280" />
                                 </TouchableOpacity>
                             </View>
 
                             <View style={styles.strengthIndicator}>
-                                <Text style={[styles.strengthItem, passwordStrength.hasLength && styles.strengthMet]}>
-                                    {passwordStrength.hasLength ? '✓' : '○'} 8+ characters
-                                </Text>
-                                <Text style={[styles.strengthItem, passwordStrength.hasNumber && styles.strengthMet]}>
-                                    {passwordStrength.hasNumber ? '✓' : '○'} 1 number
-                                </Text>
-                                <Text style={[styles.strengthItem, passwordStrength.hasSpecial && styles.strengthMet]}>
-                                    {passwordStrength.hasSpecial ? '✓' : '○'} 1 special char
-                                </Text>
+                                <View style={styles.strengthRow}>
+                                    <Ionicons name={passwordStrength.hasLength ? 'checkmark-circle' : 'ellipse-outline'} size={14} color={passwordStrength.hasLength ? '#4ade80' : '#6b7280'} />
+                                    <Text style={[styles.strengthItem, passwordStrength.hasLength && styles.strengthMet]}>8+ characters</Text>
+                                </View>
+                                <View style={styles.strengthRow}>
+                                    <Ionicons name={passwordStrength.hasNumber ? 'checkmark-circle' : 'ellipse-outline'} size={14} color={passwordStrength.hasNumber ? '#4ade80' : '#6b7280'} />
+                                    <Text style={[styles.strengthItem, passwordStrength.hasNumber && styles.strengthMet]}>1 number</Text>
+                                </View>
+                                <View style={styles.strengthRow}>
+                                    <Ionicons name={passwordStrength.hasSpecial ? 'checkmark-circle' : 'ellipse-outline'} size={14} color={passwordStrength.hasSpecial ? '#4ade80' : '#6b7280'} />
+                                    <Text style={[styles.strengthItem, passwordStrength.hasSpecial && styles.strengthMet]}>1 special char</Text>
+                                </View>
                             </View>
 
                             <Text style={styles.label}>Confirm Password</Text>
@@ -236,8 +241,8 @@ export default function ForgotPasswordScreen({ navigation }: any) {
                                     placeholderTextColor="#6b7280"
                                     secureTextEntry={!showConfirmPassword}
                                 />
-                                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                                    <Text style={styles.eyeIcon}>{showConfirmPassword ? '👁' : '👁‍🗨'}</Text>
+                                <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                    <Ionicons name={showConfirmPassword ? 'eye-outline' : 'eye-off-outline'} size={20} color="#6b7280" />
                                 </TouchableOpacity>
                             </View>
 
@@ -329,16 +334,20 @@ const styles = StyleSheet.create({
         color: '#e5e7eb',
     },
     eyeIcon: {
-        fontSize: 20,
-        paddingRight: 14,
+        padding: 14,
     },
     strengthIndicator: {
         marginBottom: 24,
+        gap: 4,
+    },
+    strengthRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
     },
     strengthItem: {
         fontSize: 12,
         color: '#6b7280',
-        marginBottom: 4,
     },
     strengthMet: {
         color: '#4ade80',

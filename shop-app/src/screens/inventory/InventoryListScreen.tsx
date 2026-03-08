@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator, RefreshControl, Alert } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator, RefreshControl, Alert, Switch, TextInput, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import { useAuthStore } from '../../store/authStore';
-import { getShopInventory, deleteInventoryItem } from '../../api/endpoints';
+import { getShopInventory, deleteInventoryItem, toggleInventoryStatus } from '../../api/endpoints';
 import { InventoryItem } from '../../api/types';
+import { Ionicons } from '@expo/vector-icons';
 
 const statusColors: Record<string, string> = {
     ACTIVE: '#4ade80',
@@ -11,6 +13,18 @@ const statusColors: Record<string, string> = {
     INACTIVE: '#6b7280',
 };
 
+const CATEGORIES = [
+    { label: 'All', value: 'ALL' },
+    { label: 'Lehenga', value: 'LEHENGA' },
+    { label: 'Sherwani', value: 'SHERWANI' },
+    { label: 'Saree', value: 'SAREE' },
+    { label: 'Anarkali', value: 'ANARKALI' },
+    { label: 'Indo-Western', value: 'INDO_WESTERN' },
+    { label: 'Gown', value: 'GOWN' },
+    { label: 'Suit', value: 'SUIT' },
+    { label: 'Other', value: 'OTHER' },
+];
+
 export default function InventoryListScreen({ navigation }: any) {
     const shop = useAuthStore((state) => state.shop);
     const [items, setItems] = useState<InventoryItem[]>([]);
@@ -18,11 +32,22 @@ export default function InventoryListScreen({ navigation }: any) {
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Filter states
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('ALL');
+
     const fetchInventory = async () => {
         if (!shop?.id) return;
+        // Don't show full screen loader on search/filter updates if we already have data
+        if (items.length === 0) setLoading(true);
         setError(null);
         try {
-            const data = await getShopInventory(shop.id);
+            const filters: any = {};
+            if (debouncedSearch.trim()) filters.search = debouncedSearch.trim();
+            if (selectedCategory !== 'ALL') filters.category = selectedCategory;
+
+            const data = await getShopInventory(shop.id, filters);
             setItems(data.items);
         } catch (err: any) {
             console.error('Failed to fetch inventory:', err);
@@ -33,9 +58,18 @@ export default function InventoryListScreen({ navigation }: any) {
         }
     };
 
+    // Debounce search query
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    // Fetch on filter change
     useEffect(() => {
         fetchInventory();
-    }, [shop?.id]);
+    }, [shop?.id, debouncedSearch, selectedCategory]);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -47,6 +81,19 @@ export default function InventoryListScreen({ navigation }: any) {
     const onRefresh = () => {
         setRefreshing(true);
         fetchInventory();
+    };
+
+    const handleToggleStatus = async (item: InventoryItem) => {
+        try {
+            await toggleInventoryStatus(item.id);
+            fetchInventory();
+        } catch (error: any) {
+            Alert.alert('Error', error.message || 'Failed to toggle status');
+        }
+    };
+
+    const handleEdit = (item: InventoryItem) => {
+        navigation.navigate('EditItem', { itemId: item.id });
     };
 
     const handleDelete = (item: InventoryItem) => {
@@ -73,26 +120,61 @@ export default function InventoryListScreen({ navigation }: any) {
 
     const formatPrice = (paise: number) => `₹${(paise / 100).toLocaleString('en-IN')}`;
 
-    const renderItem = ({ item }: { item: InventoryItem }) => (
-        <TouchableOpacity
-            style={styles.itemCard}
-            onLongPress={() => handleDelete(item)}
-        >
-            <View style={styles.itemInfo}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <View style={styles.itemMeta}>
-                    <Text style={styles.itemCategory}>{item.category}</Text>
-                    <Text style={styles.itemSize}>Size: {item.size}</Text>
+    const renderItem = ({ item }: { item: InventoryItem }) => {
+        const imageUrl = item.images && item.images.length > 0
+            ? (item.images[0].startsWith('http')
+                ? item.images[0]
+                : `https://zkmkapeuqbyvjxdkiljx.supabase.co/storage/v1/object/public/inventory-images/${item.images[0]}`)
+            : null;
+
+        return (
+            <TouchableOpacity
+                style={styles.itemCard}
+                onPress={() => handleEdit(item)}
+                onLongPress={() => handleDelete(item)}
+            >
+                <View style={styles.thumbnailContainer}>
+                    {imageUrl ? (
+                        <Image
+                            source={{ uri: imageUrl }}
+                            style={styles.thumbnail}
+                            contentFit="cover"
+                            cachePolicy="memory-disk"
+                            transition={200}
+                        />
+                    ) : (
+                        <View style={[styles.thumbnail, styles.placeholderThumbnail]}>
+                            <Text style={styles.placeholderText}>No Image</Text>
+                        </View>
+                    )}
                 </View>
-                <Text style={styles.itemPrice}>{formatPrice(item.rentalPrice)}/day</Text>
-            </View>
-            <View style={styles.itemRight}>
-                <View style={[styles.statusBadge, { backgroundColor: (statusColors[item.status] || '#6b7280') + '20' }]}>
-                    <Text style={[styles.statusText, { color: statusColors[item.status] || '#6b7280' }]}>{item.status}</Text>
+                <View style={styles.itemInfo}>
+                    <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+                    <View style={styles.itemMeta}>
+                        <Text style={styles.itemCategory}>{item.category}</Text>
+                        <Text style={styles.itemSize}>Size: {item.size}</Text>
+                    </View>
+                    <Text style={styles.itemPrice}>{formatPrice(item.rentalPrice)}/day</Text>
                 </View>
-            </View>
-        </TouchableOpacity>
-    );
+                <View style={styles.itemRight}>
+                    <View style={[styles.statusBadge, { backgroundColor: (statusColors[item.status] || '#6b7280') + '20', marginBottom: 8 }]}>
+                        <Text style={[styles.statusText, { color: statusColors[item.status] || '#6b7280' }]}>{item.status}</Text>
+                    </View>
+                    {item.status !== 'RENTED' && (
+                        <View style={styles.toggleContainer}>
+                            <Switch
+                                value={item.status === 'ACTIVE'}
+                                onValueChange={() => handleToggleStatus(item)}
+                                trackColor={{ false: '#2C2C2E', true: '#D4AF37' }}
+                                thumbColor={item.status === 'ACTIVE' ? '#121212' : '#f4f3f4'}
+                                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                            />
+                        </View>
+                    )}
+                </View>
+            </TouchableOpacity>
+        );
+    };
 
     if (loading) {
         return (
@@ -116,13 +198,54 @@ export default function InventoryListScreen({ navigation }: any) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.count}>{items.length} items</Text>
+                <View>
+                    <Text style={styles.title}>Inventory</Text>
+                    <Text style={styles.count}>{items.length} items</Text>
+                </View>
                 <TouchableOpacity
                     style={styles.addButton}
                     onPress={() => navigation.navigate('AddItem')}
                 >
                     <Text style={styles.addButtonText}>+ Add Item</Text>
                 </TouchableOpacity>
+            </View>
+
+            <View style={styles.filterSection}>
+                <View style={styles.searchContainer}>
+                    <Ionicons name="search" size={20} color="#666" style={{ marginRight: 8 }} />
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search products..."
+                        placeholderTextColor="#666"
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                        clearButtonMode="while-editing"
+                    />
+                </View>
+
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.categoryList}
+                >
+                    {CATEGORIES.map((cat) => (
+                        <TouchableOpacity
+                            key={cat.value}
+                            style={[
+                                styles.categoryTab,
+                                selectedCategory === cat.value && styles.activeCategoryTab
+                            ]}
+                            onPress={() => setSelectedCategory(cat.value)}
+                        >
+                            <Text style={[
+                                styles.categoryLabel,
+                                selectedCategory === cat.value && styles.activeCategoryLabel
+                            ]}>
+                                {cat.label}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
             </View>
 
             <FlatList
@@ -135,7 +258,7 @@ export default function InventoryListScreen({ navigation }: any) {
                 }
                 ListEmptyComponent={
                     <View style={styles.empty}>
-                        <Text style={styles.emptyIcon}>📦</Text>
+                        <Ionicons name="cube-outline" size={48} color="#D4AF37" style={{ marginBottom: 16 }} />
                         <Text style={styles.emptyText}>No items yet</Text>
                         <Text style={styles.emptySubtext}>Add your first item to get started</Text>
                         <TouchableOpacity
@@ -186,21 +309,78 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#2a2a2a',
+        paddingBottom: 8,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#fff',
     },
     count: {
         fontSize: 14,
         color: '#888',
+        marginTop: 2,
     },
     addButton: {
         backgroundColor: '#D4AF37',
         paddingHorizontal: 16,
-        paddingVertical: 8,
+        paddingVertical: 10,
         borderRadius: 8,
     },
     addButtonText: {
         color: '#022b1e',
+        fontWeight: '700',
+    },
+    filterSection: {
+        paddingTop: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#2a2a2a',
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#1a1a1a',
+        borderRadius: 10,
+        marginHorizontal: 16,
+        marginBottom: 12,
+        paddingHorizontal: 12,
+        height: 44,
+        borderWidth: 1,
+        borderColor: '#2a2a2a',
+    },
+    searchIcon: {
+        fontSize: 16,
+        marginRight: 8,
+    },
+    searchInput: {
+        flex: 1,
+        color: '#fff',
+        fontSize: 14,
+    },
+    categoryList: {
+        paddingHorizontal: 16,
+        paddingBottom: 12,
+        gap: 8,
+    },
+    categoryTab: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 20,
+        backgroundColor: '#1a1a1a',
+        borderWidth: 1,
+        borderColor: '#2a2a2a',
+    },
+    activeCategoryTab: {
+        backgroundColor: '#D4AF3720',
+        borderColor: '#D4AF37',
+    },
+    categoryLabel: {
+        color: '#888',
+        fontSize: 13,
+        fontWeight: '500',
+    },
+    activeCategoryLabel: {
+        color: '#D4AF37',
         fontWeight: '600',
     },
     list: {
@@ -209,15 +389,34 @@ const styles = StyleSheet.create({
     itemCard: {
         backgroundColor: '#1a1a1a',
         borderRadius: 12,
-        padding: 16,
+        padding: 12,
         marginBottom: 12,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: '#2a2a2a',
     },
+    thumbnailContainer: {
+        marginRight: 12,
+    },
+    thumbnail: {
+        width: 50,
+        height: 60,
+        borderRadius: 6,
+        backgroundColor: '#2a2a2a',
+    },
+    placeholderThumbnail: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    placeholderText: {
+        color: '#666',
+        fontSize: 8,
+        textAlign: 'center',
+    },
     itemInfo: {
         flex: 1,
+        marginRight: 8,
     },
     itemName: {
         fontSize: 16,
@@ -255,6 +454,10 @@ const styles = StyleSheet.create({
     statusText: {
         fontSize: 10,
         fontWeight: '600',
+    },
+    toggleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     empty: {
         alignItems: 'center',

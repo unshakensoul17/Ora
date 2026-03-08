@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { loginWithPassword, loginWithEmailOTP, sendEmailOTP } from '../../api/endpoints';
 import { useAuthStore } from '../../store/authStore';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen({ navigation }: any) {
     const [loginMethod, setLoginMethod] = useState<'password' | 'email'>('password');
@@ -105,7 +106,7 @@ export default function LoginScreen({ navigation }: any) {
         >
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.logo}>🏪</Text>
+                    <Ionicons name="storefront-outline" size={64} color="#D4AF37" style={{ marginBottom: 16 }} />
                     <Text style={styles.title}>Fashcycle Shop</Text>
                     <Text style={styles.subtitle}>Login to manage your inventory</Text>
                 </View>
@@ -135,8 +136,8 @@ export default function LoginScreen({ navigation }: any) {
                                     placeholderTextColor="#6b7280"
                                     secureTextEntry={!showPassword}
                                 />
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                                    <Text style={styles.eyeIcon}>{showPassword ? '👁' : '👁‍🗨'}</Text>
+                                <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
+                                    <Ionicons name={showPassword ? 'eye-outline' : 'eye-off-outline'} size={20} color="#6b7280" />
                                 </TouchableOpacity>
                             </View>
 
@@ -267,10 +268,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 40,
     },
-    logo: {
-        fontSize: 64,
-        marginBottom: 16,
-    },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
@@ -316,8 +313,7 @@ const styles = StyleSheet.create({
         color: '#e5e7eb',
     },
     eyeIcon: {
-        fontSize: 20,
-        paddingRight: 14,
+        padding: 14,
     },
     forgotPassword: {
         color: '#D4AF37',

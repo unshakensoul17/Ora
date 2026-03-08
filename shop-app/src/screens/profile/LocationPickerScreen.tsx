@@ -14,6 +14,7 @@ import {
 import * as Location from 'expo-location';
 import { useAuthStore } from '../../store/authStore';
 import { updateShopProfile } from '../../api/endpoints';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LocationPickerScreen({ navigation }: any) {
     const shop = useAuthStore((state) => state.shop);
@@ -130,9 +131,11 @@ export default function LocationPickerScreen({ navigation }: any) {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-            {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.title}>📍 Set Your Shop Location</Text>
+                <View style={styles.titleContainer}>
+                    <Ionicons name="location" size={24} color="#D4AF37" style={{ marginRight: 8 }} />
+                    <Text style={styles.title}>Set Your Shop Location</Text>
+                </View>
                 <Text style={styles.subtitle}>
                     Add your exact GPS coordinates so customers can easily find you
                 </Text>
@@ -152,7 +155,7 @@ export default function LocationPickerScreen({ navigation }: any) {
                         </>
                     ) : (
                         <>
-                            <Text style={styles.buttonIcon}>📍</Text>
+                            <Ionicons name="location-outline" size={20} color="#022b1e" style={{ marginRight: 4 }} />
                             <Text style={styles.currentLocationText}>Use My Current Location</Text>
                         </>
                     )}
@@ -195,10 +198,9 @@ export default function LocationPickerScreen({ navigation }: any) {
                 </View>
             </View>
 
-            {/* Verify in Maps */}
             {latitude && longitude && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude)) && (
                 <TouchableOpacity style={styles.verifyButton} onPress={handleOpenInMaps}>
-                    <Text style={styles.verifyButtonIcon}>🗺️</Text>
+                    <Ionicons name="map-outline" size={24} color="#fff" style={{ marginRight: 12 }} />
                     <View style={styles.verifyButtonContent}>
                         <Text style={styles.verifyButtonText}>Verify Location in Maps</Text>
                         <Text style={styles.verifyButtonHint}>Check if coordinates are correct</Text>
@@ -209,7 +211,10 @@ export default function LocationPickerScreen({ navigation }: any) {
 
             {/* Info Box */}
             <View style={styles.infoBox}>
-                <Text style={styles.infoTitle}>💡 How to find your coordinates:</Text>
+                <View style={styles.infoTitleContainer}>
+                    <Ionicons name="bulb-outline" size={16} color="#D4AF37" style={{ marginRight: 6 }} />
+                    <Text style={styles.infoTitle}>How to find your coordinates:</Text>
+                </View>
                 <Text style={styles.infoText}>
                     1. Go to Google Maps on your phone{'\n'}
                     2. Long press on your shop location{'\n'}
@@ -227,13 +232,19 @@ export default function LocationPickerScreen({ navigation }: any) {
                 {loading ? (
                     <ActivityIndicator color="#022b1e" />
                 ) : (
-                    <Text style={styles.saveButtonText}>✓ Save Shop Location</Text>
+                    <View style={styles.saveButtonContent}>
+                        <Ionicons name="checkmark" size={20} color="#022b1e" style={{ marginRight: 8 }} />
+                        <Text style={styles.saveButtonText}>Save Shop Location</Text>
+                    </View>
                 )}
             </TouchableOpacity>
 
-            <Text style={styles.warningText}>
-                ⚠️ This location will be shown to customers for navigation
-            </Text>
+            <View style={styles.warningContainer}>
+                <Ionicons name="warning-outline" size={14} color="#D4AF37" style={{ marginRight: 6 }} />
+                <Text style={styles.warningText}>
+                    This location will be shown to customers for navigation
+                </Text>
+            </View>
 
             <View style={{ height: 40 }} />
         </ScrollView>
@@ -251,11 +262,15 @@ const styles = StyleSheet.create({
     header: {
         marginBottom: 24,
     },
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
     title: {
         fontSize: 24,
         fontWeight: '700',
         color: '#D4AF37',
-        marginBottom: 8,
     },
     subtitle: {
         fontSize: 14,
@@ -376,11 +391,15 @@ const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 24,
     },
+    infoTitleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
     infoTitle: {
         color: '#D4AF37',
         fontSize: 14,
         fontWeight: '600',
-        marginBottom: 8,
     },
     infoText: {
         color: '#ccc',
@@ -394,10 +413,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 12,
     },
+    saveButtonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     saveButtonText: {
         color: '#022b1e',
         fontSize: 16,
         fontWeight: '700',
+    },
+    warningContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     warningText: {
         color: '#D4AF37',

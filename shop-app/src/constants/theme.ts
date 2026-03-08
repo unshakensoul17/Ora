@@ -1,36 +1,37 @@
 export const COLORS = {
     // Backgrounds
-    background: '#050B14',       // Deep Midnight
-    card: '#0C1526',             // Navy Slate
-    cardElevated: '#111C33',     // Elevated Surface
+    background: '#121212',       // Premium Dark Charcoal
+    card: '#1C1C1E',             // Elevated Charcoal
+    cardElevated: '#2C2C2E',     // Higher Elevation Charcoal
 
     // Accents
-    primary: '#3B82F6',          // Royal Blue (Main CTA)
-    secondary: '#06B6D4',        // Cyan Ice
-    accent: '#8B5CF6',           // Soft Purple
+    primary: '#D4AF37',          // Elegant Gold (Main CTA)
+    secondary: '#E6C27A',        // Soft Gold
+    accent: '#B8860B',           // Deep Gold
 
     // Text
-    textPrimary: '#F8FAFC',      // White-ish
-    textSecondary: '#9CA3AF',    // Gray
-    textTertiary: '#64748B',     // Darker Gray
-    textInverse: '#FFFFFF',
+    textPrimary: '#FFFFFF',      // White
+    textSecondary: '#A1A1AA',    // Soft Gray (Zinc-400)
+    textTertiary: '#71717A',     // Darker Gray (Zinc-500)
+    textInverse: '#121212',      // Inverse (for text on gold)
 
     // Status
-    success: '#22D3EE',          // Teal
-    warning: '#F59E0B',
-    error: '#EF4444',
+    success: '#10B981',          // Emerald Green
+    warning: '#F59E0B',          // Amber
+    error: '#EF4444',            // Red
+    info: '#3B82F6',             // Blue (Confirmed)
 
     // Borders & Dividers
-    border: '#1E293B',
-    divider: '#1E293B',
+    border: '#2C2C2E',           // Subtle Border
+    divider: '#2C2C2E',          // Subtle Divider
 
     // Overlays
-    overlay: 'rgba(5, 11, 20, 0.8)',
+    overlay: 'rgba(0, 0, 0, 0.7)',
 };
 
 export const GRADIENTS = {
-    primary: ['#3B82F6', '#06B6D4', '#8B5CF6'] as const, // Royal Blue -> Cyan -> Purple
-    scan: ['#3B82F6', '#8B5CF6'] as const, // Blue -> Purple
+    primary: ['#D4AF37', '#E6C27A', '#B8860B'] as const, // Subtle Gold Gradient
+    scan: ['#D4AF37', '#B8860B'] as const,               // Gold Scan Line
     glass: ['rgba(255,255,255,0.05)', 'rgba(255,255,255,0.02)'] as const,
 };
 
@@ -49,6 +50,7 @@ export const RADIUS = {
     s: 12,
     m: 20,
     l: 28,
+    xl: 32,
     full: 9999,
 };
 
@@ -61,9 +63,9 @@ export const SHADOWS = {
         elevation: 8,
     },
     glow: {
-        shadowColor: '#3B82F6',
+        shadowColor: '#D4AF37',
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.5,
+        shadowOpacity: 0.3,
         shadowRadius: 16,
         elevation: 10,
     },

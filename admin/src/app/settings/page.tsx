@@ -31,7 +31,7 @@ export default function SettingsPage() {
                             <label className="block text-sm text-zinc-400 mb-2">Support Email</label>
                             <input
                                 type="email"
-                                defaultValue="support@fashcycle.in"
+                                defaultValue="support@ora.com"
                                 className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-zinc-600"
                             />
                         </div>

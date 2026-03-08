@@ -29,7 +29,9 @@ export class CustomersService {
 
     async create(shopId: string, dto: CreateCustomerDto) {
         const existing = await this.prisma.customer.findUnique({
-            where: { phone: dto.phone },
+            where: {
+                phone: dto.phone,
+            },
         });
         if (existing) throw new ConflictException('Customer with this phone already exists');
 

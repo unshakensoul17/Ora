@@ -20,6 +20,7 @@ export const endpoints = {
     createItem: (shopId: string) => `/inventory/shop/${shopId}`,
     updateItem: (itemId: string) => `/inventory/${itemId}`,
     deleteItem: (itemId: string) => `/inventory/${itemId}`,
+    toggleItemStatus: (itemId: string) => `/inventory/${itemId}/toggle-status`,
 
     // Uploads
     uploadInventoryImage: (shopId: string) => `/uploads/inventory/${shopId}`,
@@ -36,4 +37,9 @@ export const endpoints = {
 
     // Calendar
     itemCalendar: (itemId: string) => `/calendar/${itemId}`,
+
+    // Reports
+    exportSales: '/reports/sales',
+    exportInventory: '/reports/inventory',
+    exportCustomers: '/reports/customers',
 };

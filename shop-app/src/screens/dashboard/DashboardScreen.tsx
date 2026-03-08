@@ -3,23 +3,26 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, A
 import { useAuthStore } from '../../store/authStore';
 import { getShopDashboard } from '../../api/endpoints';
 import { DashboardStats } from '../../api/types';
+import { ReportsIcon } from '../../components/Icons';
+import { Ionicons } from '@expo/vector-icons';
+
 
 // DESIGN TOKENS
 const COLORS = {
     // Background
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
+    background: '#121212',
+    card: '#1C1C1E',
+    border: '#2C2C2E',
 
-    // Brand Green
-    primary: '#1DB954',
-    primaryDark: '#0F2A1D',
-    primaryGlow: 'rgba(29, 185, 84, 0.15)',
+    // Brand Green -> Brand Gold
+    primary: '#D4AF37',
+    primaryDark: 'rgba(212, 175, 55, 0.15)',
+    primaryGlow: 'rgba(212, 175, 55, 0.15)',
 
     // Text
     textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    textTertiary: '#6B7280',
+    textSecondary: '#A1A1AA',
+    textTertiary: '#71717A',
 
     // Accent
     success: '#10B981',
@@ -147,7 +150,7 @@ export default function DashboardScreen({ navigation }: any) {
             >
                 {/* Header */}
                 <View style={styles.header}>
-                    <Text style={styles.greeting}>Welcome back 👋</Text>
+                    <Text style={styles.greeting}>Welcome back!</Text>
                     <Text style={styles.shopName}>{shop?.name || 'Shop Dashboard'}</Text>
                 </View>
 
@@ -160,7 +163,7 @@ export default function DashboardScreen({ navigation }: any) {
                     <View style={styles.primaryActionGlow} />
                     <View style={styles.primaryActionContent}>
                         <View style={styles.primaryActionIcon}>
-                            <Text style={styles.primaryActionIconText}>📷</Text>
+                            <Ionicons name="qr-code-outline" size={24} color="#000" />
                         </View>
                         <View style={styles.primaryActionTextContainer}>
                             <Text style={styles.primaryActionTitle}>Scan QR Code</Text>
@@ -174,10 +177,18 @@ export default function DashboardScreen({ navigation }: any) {
                 <View style={styles.secondaryActions}>
                     <TouchableOpacity
                         style={styles.secondaryAction}
+                        onPress={() => navigation.navigate('WalkInBooking')}
+                        activeOpacity={0.7}
+                    >
+                        <Ionicons name="bag-handle-outline" size={24} color="#D4AF37" style={{ marginBottom: 8 }} />
+                        <Text style={styles.secondaryActionText}>New Walk-In</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.secondaryAction}
                         onPress={() => navigation.navigate('AddItem')}
                         activeOpacity={0.7}
                     >
-                        <Text style={styles.secondaryActionIcon}>➕</Text>
+                        <Ionicons name="add-circle-outline" size={24} color="#D4AF37" style={{ marginBottom: 8 }} />
                         <Text style={styles.secondaryActionText}>Add Item</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -185,71 +196,140 @@ export default function DashboardScreen({ navigation }: any) {
                         onPress={() => navigation.navigate('Holds')}
                         activeOpacity={0.7}
                     >
-                        <Text style={styles.secondaryActionIcon}>⏳</Text>
+                        <Ionicons name="time-outline" size={24} color="#D4AF37" style={{ marginBottom: 8 }} />
                         <Text style={styles.secondaryActionText}>View Holds</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* KPI Section */}
-                <Text style={styles.sectionTitle}>Today's Overview</Text>
+                {/* KPI Section - Operational Highlights */}
+                <Text style={styles.sectionTitle}>Daily Operations</Text>
                 <View style={styles.kpiGrid}>
-                    {/* Active Holds - Green accent */}
-                    <View style={[styles.kpiCard, styles.kpiCardHighlight]}>
-                        <Text style={[styles.kpiNumber, { color: COLORS.primary }]}>{stats?.activeHolds ?? 0}</Text>
-                        <Text style={styles.kpiLabel}>Active Holds</Text>
-                    </View>
-
-                    <View style={styles.kpiCard}>
-                        <Text style={styles.kpiNumber}>{stats?.pendingPickups ?? 0}</Text>
-                        <Text style={styles.kpiLabel}>Pending Pickup</Text>
-                    </View>
-
-                    <View style={styles.kpiCard}>
-                        <Text style={styles.kpiNumber}>{stats?.activeRentals ?? 0}</Text>
-                        <Text style={styles.kpiLabel}>Active Rentals</Text>
-                    </View>
-
-                    <View style={styles.kpiCard}>
-                        <Text style={styles.kpiNumber}>{stats?.totalItems ?? 0}</Text>
-                        <Text style={styles.kpiLabel}>Total Items</Text>
-                    </View>
-                </View>
-
-                {/* Monthly Stats */}
-                <View style={styles.monthlyCard}>
-                    <Text style={styles.monthlyTitle}>📊 This Month</Text>
-                    <View style={styles.monthlyContent}>
-                        <Text style={styles.monthlyNumber}>{stats?.verifiedLeads ?? 0}</Text>
-                        <Text style={styles.monthlyLabel}>Verified Walk-ins</Text>
-                    </View>
-                    <View style={styles.monthlyFooter}>
-                        <Text style={styles.monthlyFooterText}>
-                            ₹{(stats?.verifiedLeads ?? 0) * 50} in lead charges
+                    <TouchableOpacity
+                        style={[styles.kpiCard, (stats?.bookings?.pickupsToday ?? 0) > 0 && styles.kpiCardHighlight]}
+                        onPress={() => navigation.navigate('Bookings', { initialTab: 'pending', todayOnly: true })}
+                    >
+                        <Text style={[styles.kpiNumber, (stats?.bookings?.pickupsToday ?? 0) > 0 && { color: COLORS.primary }]}>
+                            {stats?.bookings?.pickupsToday ?? 0}
                         </Text>
-                    </View>
+                        <Text style={styles.kpiLabel}>Pickups Today</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.kpiCard, (stats?.bookings?.returnsToday ?? 0) > 0 && styles.kpiCardHighlight]}
+                        onPress={() => navigation.navigate('Bookings', { initialTab: 'active', todayOnly: true })}
+                    >
+                        <Text style={[styles.kpiNumber, (stats?.bookings?.returnsToday ?? 0) > 0 && { color: COLORS.warning }]}>
+                            {stats?.bookings?.returnsToday ?? 0}
+                        </Text>
+                        <Text style={styles.kpiLabel}>Returns Today</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.kpiCard}
+                        onPress={() => navigation.navigate('Bookings', { initialTab: 'active', todayOnly: false })}
+                    >
+                        <Text style={styles.kpiNumber}>{stats?.activeRentals ?? 0}</Text>
+                        <Text style={styles.kpiLabel}>Items Out</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.kpiCard}
+                        onPress={() => navigation.navigate('Bookings', { initialTab: 'pending', todayOnly: false })}
+                    >
+                        <Text style={styles.kpiNumber}>{stats?.activeHolds ?? 0}</Text>
+                        <Text style={styles.kpiLabel}>Active Holds</Text>
+                    </TouchableOpacity>
                 </View>
 
-                {/* Revenue */}
-                {stats?.revenue && (
-                    <View style={styles.revenueCard}>
-                        <Text style={styles.revenueTitle}>💰 Revenue</Text>
-                        <View style={styles.revenueRow}>
-                            <View style={styles.revenueItem}>
-                                <Text style={styles.revenueLabel}>This Month</Text>
-                                <Text style={styles.revenueValue}>
-                                    ₹{(stats.revenue.thisMonth / 100).toLocaleString('en-IN')}
+                {/* Analysis Section */}
+                <Text style={styles.sectionTitle}>Shop Analysis</Text>
+
+                {/* Revenue & Growth */}
+                <View style={styles.analysisCard}>
+                    <View style={styles.cardHeader}>
+                        <Text style={styles.analysisTitle}>Financial Performance</Text>
+                        {stats?.revenue && (
+                            <View style={[styles.growthPill, { backgroundColor: stats.revenue.growth >= 0 ? 'rgba(29, 185, 84, 0.1)' : 'rgba(239, 68, 68, 0.1)' }]}>
+                                <Text style={[styles.growthText, { color: stats.revenue.growth >= 0 ? COLORS.primary : COLORS.error }]}>
+                                    {stats.revenue.growth >= 0 ? '↑' : '↓'} {Math.abs(stats.revenue.growth)}%
                                 </Text>
                             </View>
-                            <View style={styles.revenueDivider} />
-                            <View style={styles.revenueItem}>
-                                <Text style={styles.revenueLabel}>Last Month</Text>
-                                <Text style={styles.revenueValueSecondary}>
-                                    ₹{(stats.revenue.lastMonth / 100).toLocaleString('en-IN')}
-                                </Text>
-                            </View>
+                        )}
+                    </View>
+
+                    <View style={styles.revenueRow}>
+                        <View style={styles.revenueItem}>
+                            <Text style={styles.revenueLabel}>Month Revenue</Text>
+                            <Text style={styles.revenueValue}>₹{((stats?.revenue?.thisMonth ?? 0) / 100).toLocaleString('en-IN')}</Text>
+                        </View>
+                        <View style={styles.revenueDivider} />
+                        <View style={styles.revenueItem}>
+                            <Text style={styles.revenueLabel}>Avg Order</Text>
+                            <Text style={styles.revenueValueSecondary}>₹{((stats?.analysis?.efficiency?.avgRentalPrice ?? 0) / 100).toLocaleString('en-IN')}</Text>
                         </View>
                     </View>
-                )}
+                </View>
+
+                {/* Secondary Analysis Grid */}
+                <View style={styles.analysisGrid}>
+                    <View style={styles.smallAnalysisCard}>
+                        <Text style={styles.analysisTitleSmall}>Inventory Use</Text>
+                        <View style={styles.analysisMainRow}>
+                            <Text style={styles.analysisValueLarge}>{stats?.inventory?.utilization ?? 0}%</Text>
+                        </View>
+                        <View style={styles.progressBarBg}>
+                            <View style={[styles.progressBarFill, { width: `${stats?.inventory?.utilization ?? 0}%` }]} />
+                        </View>
+                    </View>
+
+                    {stats?.analysis?.topCategories?.[0] && (
+                        <View style={styles.smallAnalysisCard}>
+                            <Text style={styles.analysisTitleSmall}>Top Category</Text>
+                            <Text style={styles.analysisValueLarge} numberOfLines={1}>
+                                {stats.analysis.topCategories[0].name}
+                            </Text>
+                            <Text style={styles.analysisSubtext}>
+                                {stats.analysis.topCategories[0].count} rentals
+                            </Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Reports Flashcard */}
+                <TouchableOpacity
+                    style={[styles.analysisCard, { backgroundColor: '#022b1e', borderColor: COLORS.primary }]}
+                    onPress={() => navigation.navigate('Reports')}
+                >
+                    <View style={styles.reportsHeader}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={[styles.analysisTitle, { color: COLORS.primary }]}>Business Reports</Text>
+                            <Text style={styles.reportsSubtitle}>Export sales and inventory to Excel</Text>
+                        </View>
+                        <ReportsIcon color={COLORS.primary} size={32} focused />
+                    </View>
+                </TouchableOpacity>
+
+                {/* Categories Breakdown */}
+                <View style={styles.categoriesCard}>
+                    <Text style={styles.analysisTitle}>Popular Collections</Text>
+                    <View style={styles.categoryList}>
+                        {stats?.analysis?.topCategories?.map((cat, idx) => (
+                            <View key={cat.name} style={styles.categoryRow}>
+                                <View style={styles.categoryInfo}>
+                                    <Text style={styles.categoryRank}>{idx + 1}</Text>
+                                    <View>
+                                        <Text style={styles.categoryName}>{cat.name}</Text>
+                                        <Text style={styles.categorySubtext}>Performance leader</Text>
+                                    </View>
+                                </View>
+                                <Text style={styles.categoryCount}>{cat.count} rents</Text>
+                            </View>
+                        ))}
+                        {(!stats?.analysis?.topCategories || stats.analysis.topCategories.length === 0) && (
+                            <Text style={styles.emptyAnalysisText}>No rental data yet</Text>
+                        )}
+                    </View>
+                </View>
 
                 <View style={{ height: 32 }} />
             </Animated.View>
@@ -367,10 +447,6 @@ const styles = StyleSheet.create({
         borderColor: COLORS.border,
         padding: SPACING.lg,
         alignItems: 'center',
-    },
-    secondaryActionIcon: {
-        fontSize: 24,
-        marginBottom: SPACING.sm,
     },
     secondaryActionText: {
         fontSize: 13,
@@ -492,4 +568,136 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: COLORS.textSecondary,
     },
+
+    // Analysis UI
+    analysisCard: {
+        backgroundColor: COLORS.card,
+        borderRadius: 16,
+        padding: SPACING.xl,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        marginBottom: SPACING.lg,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: SPACING.lg,
+    },
+    analysisTitle: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: COLORS.textSecondary,
+    },
+    reportsHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    reportsSubtitle: {
+        color: '#888',
+        fontSize: 13,
+        marginTop: 4,
+    },
+    growthPill: {
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20,
+    },
+    growthText: {
+        fontSize: 12,
+        fontWeight: '700',
+    },
+    analysisGrid: {
+        flexDirection: 'row',
+        gap: SPACING.md,
+        marginBottom: SPACING.lg,
+    },
+    smallAnalysisCard: {
+        flex: 1,
+        backgroundColor: COLORS.card,
+        borderRadius: 16,
+        padding: SPACING.lg,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+    },
+    analysisTitleSmall: {
+        fontSize: 12,
+        color: COLORS.textTertiary,
+        marginBottom: SPACING.sm,
+        fontWeight: '600',
+        textTransform: 'uppercase',
+    },
+    analysisValueLarge: {
+        fontSize: 24,
+        fontWeight: '700',
+        color: COLORS.textPrimary,
+        marginBottom: SPACING.sm,
+    },
+    analysisMainRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+    },
+    progressBarBg: {
+        height: 6,
+        backgroundColor: COLORS.border,
+        borderRadius: 3,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: COLORS.primary,
+    },
+    analysisSubtext: {
+        fontSize: 12,
+        color: COLORS.textTertiary,
+    },
+    categoriesCard: {
+        backgroundColor: COLORS.card,
+        borderRadius: 16,
+        padding: SPACING.xl,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        marginBottom: SPACING.xl,
+    },
+    categoryList: {
+        marginTop: SPACING.lg,
+    },
+    categoryRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: SPACING.lg,
+    },
+    categoryInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: SPACING.md,
+    },
+    categoryRank: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: COLORS.textTertiary,
+        width: 20,
+    },
+    categoryName: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: COLORS.textPrimary,
+    },
+    categorySubtext: {
+        fontSize: 11,
+        color: COLORS.textTertiary,
+    },
+    categoryCount: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: COLORS.primary,
+    },
+    emptyAnalysisText: {
+        color: COLORS.textTertiary,
+        textAlign: 'center',
+        fontStyle: 'italic',
+        marginTop: SPACING.md,
+    }
 });

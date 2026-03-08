@@ -4,6 +4,8 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useAuthStore } from '../../store/authStore';
 import { scanBookingQR, markPickedUp, markReturned } from '../../api/endpoints';
 import { ScanResult } from '../../api/types';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function QRScannerScreen({ navigation }: any) {
     const shop = useAuthStore((state) => state.shop);
@@ -23,11 +25,11 @@ export default function QRScannerScreen({ navigation }: any) {
             console.log(`Scanned: ${data}`);
             let qrCodeHash = '';
 
-            if (data.startsWith('fashcycle://')) {
+            if (data.startsWith('ora://')) {
+                // Future handling for native app deep links
                 const urlParts = data.split('?');
                 const params = urlParts[1] || '';
 
-                // Extract hash from either ?hash=xxx or ?code=xxx format
                 const hashMatch = params.match(/(?:hash|code)=([a-f0-9]+)/);
                 if (hashMatch && hashMatch[1] && hashMatch[1] !== 'undefined') {
                     qrCodeHash = hashMatch[1];
@@ -37,7 +39,18 @@ export default function QRScannerScreen({ navigation }: any) {
                     return;
                 }
             } else {
-                Alert.alert('Invalid QR Code', 'This does not look like a Fashcycle QR code.');
+                // Handle web URLs
+                const match = data.split('?')[1]?.match(/(?:hash|code)=([a-f0-9]+)/);
+                if (!match || !match[1] || match[1] === 'undefined') {
+                    Alert.alert('Invalid QR Code', 'QR code is missing required information.');
+                    setLoading(false);
+                    return;
+                }
+                qrCodeHash = match[1];
+            }
+
+            if (!qrCodeHash) {
+                Alert.alert('Invalid QR Code', 'This does not look like an ORA QR code.');
                 setLoading(false);
                 return;
             }
@@ -46,7 +59,7 @@ export default function QRScannerScreen({ navigation }: any) {
             const response = await scanBookingQR(qrCodeHash, shop?.id || '');
 
             if (response) {
-                setVerifiedData(response);
+                setVerifiedData({ ...response, verified: true } as any);
             }
         } catch (error: any) {
             console.error(error);
@@ -142,9 +155,12 @@ export default function QRScannerScreen({ navigation }: any) {
                         styles.statusBadge,
                         canReturn ? styles.statusBadgeReturn : styles.statusBadgePickup
                     ]}>
-                        <Text style={styles.statusBadgeText}>
-                            {booking.status === 'RENTED' ? '🔄 RETURN' : '📦 PICKUP'}
-                        </Text>
+                        <View style={styles.iconTextRow}>
+                            <Ionicons name={booking.status === 'RENTED' ? 'return-down-back' : 'cube-outline'} size={14} color="#000" style={{ marginRight: 6 }} />
+                            <Text style={styles.statusBadgeText}>
+                                {booking.status === 'RENTED' ? 'RETURN' : 'PICKUP'}
+                            </Text>
+                        </View>
                     </View>
 
                     <View style={styles.detailsCard}>
@@ -181,7 +197,12 @@ export default function QRScannerScreen({ navigation }: any) {
                         </View>
                     </View>
 
-                    {!canReturn && <Text style={styles.billableNote}>💰 ₹50 lead fee applied to your account</Text>}
+                    {!canReturn && (
+                        <View style={styles.billableNoteContainer}>
+                            <Ionicons name="cash-outline" size={16} color="#d97706" style={{ marginRight: 6 }} />
+                            <Text style={styles.billableNoteText}>₹50 lead fee applied to your account</Text>
+                        </View>
+                    )}
 
                     <View style={styles.actionButtons}>
                         {canPickup && (
@@ -193,7 +214,10 @@ export default function QRScannerScreen({ navigation }: any) {
                                 {actionLoading ? (
                                     <ActivityIndicator color="#022b1e" />
                                 ) : (
-                                    <Text style={styles.primaryButtonText}>✓ Mark Picked Up</Text>
+                                    <View style={styles.actionButtonContent}>
+                                        <Ionicons name="checkmark" size={18} color="#022b1e" style={{ marginRight: 6 }} />
+                                        <Text style={styles.primaryButtonText}>Mark Picked Up</Text>
+                                    </View>
                                 )}
                             </TouchableOpacity>
                         )}
@@ -207,7 +231,10 @@ export default function QRScannerScreen({ navigation }: any) {
                                 {actionLoading ? (
                                     <ActivityIndicator color="#fff" />
                                 ) : (
-                                    <Text style={styles.returnButtonText}>🔄 Mark Returned</Text>
+                                    <View style={styles.actionButtonContent}>
+                                        <Ionicons name="checkmark" size={18} color="#fff" style={{ marginRight: 6 }} />
+                                        <Text style={styles.returnButtonText}>Mark Returned</Text>
+                                    </View>
                                 )}
                             </TouchableOpacity>
                         )}
@@ -248,7 +275,7 @@ export default function QRScannerScreen({ navigation }: any) {
                     <Text style={styles.icon}>📷</Text>
                     <Text style={styles.title}>Scan Customer QR</Text>
                     <Text style={styles.subtitle}>
-                        Ask the customer to show their QR code from the Fashcycle app
+                        Ask the customer to show their QR code from the ORA app
                     </Text>
                     <TouchableOpacity style={styles.scanButton} onPress={() => setIsScanning(true)}>
                         <Text style={styles.scanButtonText}>Start Camera</Text>
@@ -467,11 +494,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#2a2a2a',
         marginVertical: 8,
     },
-    billableNote: {
+    billableNoteContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 12,
+        marginBottom: 24,
+    },
+    billableNoteText: {
         color: '#D4AF37',
         fontSize: 14,
-        marginBottom: 24,
-        textAlign: 'center',
+        fontWeight: '600',
     },
     actionButtons: {
         width: '100%',

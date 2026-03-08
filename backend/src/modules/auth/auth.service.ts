@@ -254,7 +254,8 @@ export class AuthService {
                     shouldCreateUser: true, // Required for OTP emails
                     emailRedirectTo: undefined, // Don't send magic link, only OTP
                     data: {
-                        app: 'fashcycle',
+                        app: 'ora',
+                        role: 'SHOP_OWNER',
                     },
                 },
             });

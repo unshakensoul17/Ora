@@ -16,18 +16,36 @@ import {
     getShopBookingHistory,
     markPickedUp,
     markReturned,
+    getShopTodayPickups,
+    getShopTodayReturns,
 } from '../../api/endpoints';
 import { Booking } from '../../api/types';
+import { Ionicons } from '@expo/vector-icons';
 
 type TabType = 'pending' | 'active' | 'history';
 
-export default function BookingsScreen({ navigation }: any) {
+export default function BookingsScreen({ navigation, route }: any) {
     const shop = useAuthStore((state) => state.shop);
-    const [activeTab, setActiveTab] = useState<TabType>('pending');
+
+    // Support deep-linking from Dashboard
+    const initialTab = route?.params?.initialTab as TabType || 'pending';
+    const [activeTab, setActiveTab] = useState<TabType>(initialTab);
+    const [todayOnly, setTodayOnly] = useState<boolean>(route?.params?.todayOnly || false);
+
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+    // Sync tab when navigating from dashboard
+    useEffect(() => {
+        if (route?.params?.initialTab) {
+            setActiveTab(route.params.initialTab);
+        }
+        if (route?.params?.todayOnly !== undefined) {
+            setTodayOnly(route.params.todayOnly);
+        }
+    }, [route?.params]);
 
     const loadBookings = useCallback(async () => {
         if (!shop?.id) return;
@@ -38,10 +56,14 @@ export default function BookingsScreen({ navigation }: any) {
 
             switch (activeTab) {
                 case 'pending':
-                    data = await getShopPendingHolds(shop.id);
+                    data = todayOnly
+                        ? await getShopTodayPickups(shop.id)
+                        : await getShopPendingHolds(shop.id);
                     break;
                 case 'active':
-                    data = await getShopActiveRentals(shop.id);
+                    data = todayOnly
+                        ? await getShopTodayReturns(shop.id)
+                        : await getShopActiveRentals(shop.id);
                     break;
                 case 'history':
                     const response = await getShopBookingHistory(shop.id, 1, 20);
@@ -51,12 +73,13 @@ export default function BookingsScreen({ navigation }: any) {
 
             setBookings(Array.isArray(data) ? data : []);
         } catch (error: any) {
-            Alert.alert('Error', error.message || 'Failed to load bookings');
+            console.error('Failed to load bookings:', error);
+            Alert.alert('Error', error.response?.data?.message || 'Failed to load bookings');
             setBookings([]);
         } finally {
             setLoading(false);
         }
-    }, [shop?.id, activeTab]);
+    }, [shop?.id, activeTab, todayOnly]);
 
     useEffect(() => {
         loadBookings();
@@ -114,7 +137,10 @@ export default function BookingsScreen({ navigation }: any) {
                 {/* Header */}
                 <View style={styles.cardHeader}>
                     <View>
-                        <Text style={styles.customerName}>👤 {item.user?.name || 'Customer'}</Text>
+                        <View style={styles.iconTextRow}>
+                            <Ionicons name="person-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
+                            <Text style={styles.customerName}>{item.user?.name || 'Customer'}</Text>
+                        </View>
                         <Text style={styles.customerPhone}>{item.user?.phone}</Text>
                     </View>
                     <View style={[styles.statusBadge, getStatusStyle(item.status)]}>
@@ -124,7 +150,10 @@ export default function BookingsScreen({ navigation }: any) {
 
                 {/* Item Details */}
                 <View style={styles.itemSection}>
-                    <Text style={styles.itemName}>📦 {item.item?.name || 'Item'}</Text>
+                    <View style={styles.iconTextRow}>
+                        <Ionicons name="cube-outline" size={16} color="#D4AF37" style={{ marginRight: 6 }} />
+                        <Text style={styles.itemName}>{item.item?.name || 'Item'}</Text>
+                    </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>Dates:</Text>
                         <Text style={styles.detailValue}>
@@ -149,7 +178,10 @@ export default function BookingsScreen({ navigation }: any) {
                         {isProcessing ? (
                             <ActivityIndicator color="#022b1e" size="small" />
                         ) : (
-                            <Text style={styles.actionButtonText}>✓ Mark Picked Up</Text>
+                            <View style={styles.actionButtonContent}>
+                                <Ionicons name="checkmark" size={18} color="#022b1e" style={{ marginRight: 6 }} />
+                                <Text style={styles.actionButtonText}>Mark Picked Up</Text>
+                            </View>
                         )}
                     </TouchableOpacity>
                 )}
@@ -163,9 +195,10 @@ export default function BookingsScreen({ navigation }: any) {
                         {isProcessing ? (
                             <ActivityIndicator color="#fff" size="small" />
                         ) : (
-                            <Text style={[styles.actionButtonText, styles.returnButtonText]}>
-                                ✓ Mark Returned
-                            </Text>
+                            <View style={styles.actionButtonContent}>
+                                <Ionicons name="checkmark" size={18} color="#fff" style={{ marginRight: 6 }} />
+                                <Text style={[styles.actionButtonText, styles.returnButtonText]}>Mark Returned</Text>
+                            </View>
                         )}
                     </TouchableOpacity>
                 )}
@@ -175,9 +208,12 @@ export default function BookingsScreen({ navigation }: any) {
 
     const renderEmptyState = () => (
         <View style={styles.emptyState}>
-            <Text style={styles.emptyIcon}>
-                {activeTab === 'pending' ? '📋' : activeTab === 'active' ? '👜' : '📚'}
-            </Text>
+            <Ionicons
+                name={activeTab === 'pending' ? 'clipboard-outline' : activeTab === 'active' ? 'bag-handle-outline' : 'library-outline'}
+                size={48}
+                color="#D4AF37"
+                style={{ marginBottom: 16 }}
+            />
             <Text style={styles.emptyTitle}>
                 {activeTab === 'pending'
                     ? 'No Pending Pickups'
@@ -201,7 +237,10 @@ export default function BookingsScreen({ navigation }: any) {
             <View style={styles.tabContainer}>
                 <TouchableOpacity
                     style={[styles.tab, activeTab === 'pending' && styles.activeTab]}
-                    onPress={() => setActiveTab('pending')}
+                    onPress={() => {
+                        setActiveTab('pending');
+                        setTodayOnly(false); // Reset filter when switching tabs via UI
+                    }}
                 >
                     <Text style={[styles.tabText, activeTab === 'pending' && styles.activeTabText]}>
                         Pending
@@ -210,7 +249,10 @@ export default function BookingsScreen({ navigation }: any) {
 
                 <TouchableOpacity
                     style={[styles.tab, activeTab === 'active' && styles.activeTab]}
-                    onPress={() => setActiveTab('active')}
+                    onPress={() => {
+                        setActiveTab('active');
+                        setTodayOnly(false); // Reset filter when switching tabs via UI
+                    }}
                 >
                     <Text style={[styles.tabText, activeTab === 'active' && styles.activeTabText]}>
                         Active
@@ -219,13 +261,29 @@ export default function BookingsScreen({ navigation }: any) {
 
                 <TouchableOpacity
                     style={[styles.tab, activeTab === 'history' && styles.activeTab]}
-                    onPress={() => setActiveTab('history')}
+                    onPress={() => {
+                        setActiveTab('history');
+                        setTodayOnly(false);
+                    }}
                 >
                     <Text style={[styles.tabText, activeTab === 'history' && styles.activeTabText]}>
                         History
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            {/* Filter Header */}
+            {todayOnly && (
+                <View style={styles.filterHeader}>
+                    <View style={styles.iconTextRow}>
+                        <Ionicons name="calendar-outline" size={16} color="#D4AF37" style={{ marginRight: 6 }} />
+                        <Text style={styles.filterText}>Showing Today Only</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setTodayOnly(false)}>
+                        <Text style={styles.clearFilterText}>Show All</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
             {/* Content */}
             {loading ? (
@@ -284,6 +342,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#1a1a1a',
         borderBottomWidth: 1,
         borderBottomColor: '#2a2a2a',
+    },
+    filterHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#022b1e',
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#2a2a2a',
+    },
+    filterText: {
+        color: '#D4AF37',
+        fontSize: 13,
+        fontWeight: '600',
+    },
+    clearFilterText: {
+        color: '#fff',
+        fontSize: 13,
+        fontWeight: '700',
+        textDecorationLine: 'underline',
     },
     tab: {
         flex: 1,
@@ -417,5 +496,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         paddingHorizontal: 40,
+    },
+    iconTextRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+    actionButtonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

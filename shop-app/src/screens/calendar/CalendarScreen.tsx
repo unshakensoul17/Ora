@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal, TextInput, FlatList } from 'react-native';
+import { Image } from 'expo-image';
 import { useAuthStore } from '../../store/authStore';
 import { getShopInventory, getShopBookings } from '../../api/endpoints';
 import { InventoryItem, Booking } from '../../api/types';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, isSameDay, parseISO } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, isSameDay, isSameMonth, parseISO } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
+
+
+const CATEGORIES = [
+    { label: 'All', value: 'ALL' },
+    { label: 'Lehenga', value: 'LEHENGA' },
+    { label: 'Sherwani', value: 'SHERWANI' },
+    { label: 'Saree', value: 'SAREE' },
+    { label: 'Anarkali', value: 'ANARKALI' },
+    { label: 'Indo-Western', value: 'INDO_WESTERN' },
+    { label: 'Gown', value: 'GOWN' },
+    { label: 'Suit', value: 'SUIT' },
+    { label: 'Other', value: 'OTHER' },
+];
 
 interface CalendarDay {
     date: Date;
     bookings: Booking[];
 }
 
-export default function CalendarScreen() {
+export default function CalendarScreen({ navigation }: any) {
     const shop = useAuthStore((state) => state.shop);
     const [items, setItems] = useState<InventoryItem[]>([]);
     const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
@@ -20,10 +35,24 @@ export default function CalendarScreen() {
     const [loading, setLoading] = useState(true);
     const [selectedDay, setSelectedDay] = useState<CalendarDay | null>(null);
     const [showItemPicker, setShowItemPicker] = useState(false);
+    const [hasItems, setHasItems] = useState<boolean | null>(null); // null = unknown, false = truly empty
+
+    // Filter states
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('ALL');
+
+    // Debounce search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     useEffect(() => {
         loadData();
-    }, [shop?.id]);
+    }, [shop?.id, debouncedSearch, selectedCategory]);
 
     useEffect(() => {
         if (selectedItem && allBookings) {
@@ -35,18 +64,30 @@ export default function CalendarScreen() {
         if (!shop?.id) return;
         try {
             console.log('Loading calendar data for shop:', shop.id);
+            const inventoryFilters: any = {};
+            if (debouncedSearch.trim()) inventoryFilters.search = debouncedSearch.trim();
+            if (selectedCategory !== 'ALL') inventoryFilters.category = selectedCategory;
+
             const [inventoryData, bookingsData] = await Promise.all([
-                getShopInventory(shop.id),
+                getShopInventory(shop.id, inventoryFilters),
                 getShopBookings(shop.id),
             ]);
 
             console.log('Items loaded:', inventoryData.items.length);
-            console.log('Bookings loaded:', bookingsData.bookings?.length);
 
             setItems(inventoryData.items);
             setAllBookings(bookingsData.bookings || []);
 
-            if (inventoryData.items.length > 0) {
+            // Track if shop has ANY items (only on initial load or if not filtering)
+            if (selectedCategory === 'ALL' && !debouncedSearch.trim()) {
+                setHasItems(inventoryData.items.length > 0);
+            } else if (inventoryData.items.length > 0) {
+                // If we found items with filters, the shop definitely isn't empty
+                setHasItems(true);
+            }
+
+            // Only set default if one isn't already selected or current selection is gone
+            if (inventoryData.items.length > 0 && !selectedItem) {
                 setSelectedItem(inventoryData.items[0]);
             }
         } catch (error) {
@@ -149,11 +190,11 @@ export default function CalendarScreen() {
         );
     }
 
-    if (items.length === 0) {
+    if (hasItems === false) {
         return (
             <View style={[styles.container, styles.center]}>
-                <Text style={styles.emptyIcon}>📅</Text>
-                <Text style={styles.emptyText}>No items to show</Text>
+                <Ionicons name="calendar-outline" size={48} color="#D4AF37" style={{ marginBottom: 16 }} />
+                <Text style={styles.emptyText}>No items found</Text>
                 <Text style={styles.emptySubtext}>Add items to see their availability</Text>
             </View>
         );
@@ -162,6 +203,51 @@ export default function CalendarScreen() {
     const firstDay = startOfMonth(currentMonth);
     // 0 = Sunday, 1 = Monday. 
     const startingDayOfWeek = firstDay.getDay();
+
+    // Derive bookings for the selected item specifically for the current month
+    const itemBookings = allBookings.filter(booking => {
+        const bookingItemId = booking.inventoryItem?.id || (booking as any).itemId;
+        if (bookingItemId !== selectedItem?.id) return false;
+
+        const start = typeof booking.startDate === 'string' ? parseISO(booking.startDate) : new Date(booking.startDate);
+        const end = typeof booking.endDate === 'string' ? parseISO(booking.endDate) : new Date(booking.endDate);
+
+        // Show if either start or end falls in the current month
+        return isSameMonth(start, currentMonth) || isSameMonth(end, currentMonth);
+    }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+
+    const renderBookingItem = (booking: Booking) => (
+        <View key={booking.id} style={styles.persistentBookingCard}>
+            <View style={styles.bookingRow}>
+                <View style={styles.bookingMainInfo}>
+                    <View style={styles.iconTextRow}>
+                        <Ionicons name="person-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
+                        <Text style={styles.bookingPatientName}>
+                            {booking.user?.name || booking.customer?.name || 'Customer'}
+                        </Text>
+                    </View>
+                    <View style={styles.iconTextRow}>
+                        <Ionicons name="calendar-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
+                        <Text style={styles.bookingDateRange}>
+                            {formatDateSafe(booking.startDate)} - {formatDateSafe(booking.endDate)}
+                        </Text>
+                    </View>
+                </View>
+                <View style={[styles.statusTag, { backgroundColor: getStatusColor([booking]) + '33', borderColor: getStatusColor([booking]) }]}>
+                    <Text style={[styles.statusTagText, { color: getStatusColor([booking]) }]}>
+                        {booking.status}
+                    </Text>
+                </View>
+            </View>
+            <View style={styles.bookingFooter}>
+                <View style={styles.iconTextRow}>
+                    <Ionicons name="call-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
+                    <Text style={styles.bookingPhone}>{booking.user?.phone || booking.customer?.phone || 'N/A'}</Text>
+                </View>
+                <Text style={styles.bookingPrice}>₹{((booking.totalPrice || 0) / 100).toLocaleString()}</Text>
+            </View>
+        </View>
+    );
 
     return (
         <ScrollView style={styles.container}>
@@ -259,6 +345,37 @@ export default function CalendarScreen() {
                 </View>
             </View>
 
+            {/* Persistent Bookings List */}
+            <View style={styles.bookingsListSection}>
+                <View style={styles.sectionHeader}>
+                    <View style={styles.sectionTitleRow}>
+                        <Text style={styles.sectionTitle}>Bookings in {format(currentMonth, 'MMMM')}</Text>
+                        <View style={styles.badge}>
+                            <Text style={styles.badgeText}>{itemBookings.length}</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.allBookingsBtn}
+                        onPress={() => navigation.navigate('ItemBookings', {
+                            itemId: selectedItem?.id,
+                            itemName: selectedItem?.name
+                        })}
+                    >
+                        <Text style={styles.allBookingsBtnText}>All Bookings ›</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {itemBookings.length > 0 ? (
+                    itemBookings.map(renderBookingItem)
+                ) : (
+                    <View style={styles.noBookingsCard}>
+                        <Text style={styles.noBookingsText}>No bookings found for this item</Text>
+                    </View>
+                )}
+            </View>
+
+            <View style={{ height: 100 }} />
+
 
             {/* Item Picker Modal */}
             <Modal
@@ -272,13 +389,59 @@ export default function CalendarScreen() {
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalTitle}>Select Item</Text>
                             <TouchableOpacity onPress={() => setShowItemPicker(false)}>
-                                <Text style={styles.modalClose}>✕</Text>
+                                <Ionicons name="close" size={24} color="#A1A1AA" />
                             </TouchableOpacity>
                         </View>
-                        <ScrollView>
-                            {items.map((item) => (
+
+                        <View style={styles.filterSection}>
+                            <View style={styles.searchContainer}>
+                                <Text style={styles.searchIcon}>🔍</Text>
+                                <TextInput
+                                    style={styles.searchInput}
+                                    placeholder="Search products..."
+                                    placeholderTextColor="#666"
+                                    value={searchQuery}
+                                    onChangeText={setSearchQuery}
+                                    clearButtonMode="while-editing"
+                                />
+                            </View>
+
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={styles.categoryList}
+                            >
+                                {CATEGORIES.map((cat) => (
+                                    <TouchableOpacity
+                                        key={cat.value}
+                                        style={[
+                                            styles.categoryTab,
+                                            selectedCategory === cat.value && styles.activeCategoryTab
+                                        ]}
+                                        onPress={() => setSelectedCategory(cat.value)}
+                                    >
+                                        <Text style={[
+                                            styles.categoryLabel,
+                                            selectedCategory === cat.value && styles.activeCategoryLabel
+                                        ]}>
+                                            {cat.label}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        </View>
+
+                        <FlatList
+                            data={items}
+                            keyExtractor={(item) => item.id}
+                            contentContainerStyle={styles.modalList}
+                            ListEmptyComponent={
+                                <View style={styles.modalEmpty}>
+                                    <Text style={styles.emptyText}>No items found</Text>
+                                </View>
+                            }
+                            renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    key={item.id}
                                     style={[
                                         styles.itemOption,
                                         selectedItem?.id === item.id && styles.itemOptionSelected,
@@ -288,11 +451,34 @@ export default function CalendarScreen() {
                                         setShowItemPicker(false);
                                     }}
                                 >
-                                    <Text style={styles.itemOptionText}>{item.name}</Text>
-                                    <Text style={styles.itemOptionCategory}>{item.category}</Text>
+                                    <View style={styles.itemThumbnailContainer}>
+                                        {item.images && item.images.length > 0 ? (
+                                            <Image
+                                                source={{
+                                                    uri: item.images[0].startsWith('http')
+                                                        ? item.images[0]
+                                                        : `https://zkmkapeuqbyvjxdkiljx.supabase.co/storage/v1/object/public/inventory-images/${item.images[0]}`
+                                                }}
+                                                style={styles.thumbnail}
+                                                contentFit="cover"
+                                                cachePolicy="memory-disk"
+                                            />
+                                        ) : (
+                                            <View style={[styles.thumbnail, styles.placeholderThumbnail]}>
+                                                <Text style={styles.placeholderText}>No Image</Text>
+                                            </View>
+                                        )}
+                                    </View>
+                                    <View style={styles.itemInfo}>
+                                        <Text style={styles.itemOptionText}>{item.name}</Text>
+                                        <Text style={styles.itemOptionCategory}>{item.category} • Size {item.size}</Text>
+                                    </View>
+                                    {selectedItem?.id === item.id && (
+                                        <Ionicons name="checkmark" size={20} color="#4ade80" />
+                                    )}
                                 </TouchableOpacity>
-                            ))}
-                        </ScrollView>
+                            )}
+                        />
                     </View>
                 </View>
             </Modal>
@@ -310,8 +496,8 @@ export default function CalendarScreen() {
                             <Text style={styles.modalTitle}>
                                 {selectedDay && format(selectedDay.date, 'MMM d, yyyy')}
                             </Text>
-                            <TouchableOpacity onPress={() => setSelectedDay(null)}>
-                                <Text style={styles.modalClose}>✕</Text>
+                            <TouchableOpacity onPress={() => setSelectedDay(null)} style={styles.modalCloseButton}>
+                                <Ionicons name="close" size={24} color="#A1A1AA" />
                             </TouchableOpacity>
                         </View>
                         <ScrollView>
@@ -321,6 +507,37 @@ export default function CalendarScreen() {
                                         <Text style={styles.bookingStatus}>{booking.status}</Text>
                                     </View>
                                     <Text style={styles.bookingCustomer}>Booking #{booking.id.slice(0, 8)}</Text>
+
+                                    {/* User/Customer Details */}
+                                    <View style={styles.detailRow}>
+                                        <Text style={styles.detailLabel}>Name:</Text>
+                                        <Text style={styles.detailValue}>
+                                            {booking.user?.name || booking.customer?.name || 'Unknown User'}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.detailRow}>
+                                        <Text style={styles.detailLabel}>Phone:</Text>
+                                        <Text style={styles.detailValue}>
+                                            {booking.user?.phone || booking.customer?.phone || 'N/A'}
+                                        </Text>
+                                    </View>
+
+                                    {/* Item Details */}
+                                    <View style={styles.detailRow}>
+                                        <Text style={styles.detailLabel}>Item:</Text>
+                                        <Text style={styles.detailValue}>
+                                            {booking.item?.name || 'Unknown Item'}
+                                        </Text>
+                                    </View>
+
+                                    {booking.item?.images?.[0] && (
+                                        <Image
+                                            source={{ uri: booking.item.images[0] }}
+                                            style={styles.itemThumbnail}
+                                            resizeMode="cover"
+                                        />
+                                    )}
+
                                     <Text style={styles.bookingDates}>
                                         {formatDateSafe(booking.startDate)} - {formatDateSafe(booking.endDate)}
                                     </Text>
@@ -499,25 +716,116 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#888',
     },
-    itemOption: {
-        padding: 16,
+    filterSection: {
+        paddingTop: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#2a2a2a',
     },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#121212',
+        borderRadius: 10,
+        marginHorizontal: 16,
+        marginBottom: 12,
+        paddingHorizontal: 12,
+        height: 44,
+        borderWidth: 1,
+        borderColor: '#2a2a2a',
+    },
+    searchIcon: {
+        fontSize: 14,
+        marginRight: 8,
+    },
+    searchInput: {
+        flex: 1,
+        color: '#fff',
+        fontSize: 14,
+    },
+    categoryList: {
+        paddingHorizontal: 16,
+        paddingBottom: 12,
+        gap: 8,
+    },
+    categoryTab: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 16,
+        backgroundColor: '#121212',
+        borderWidth: 1,
+        borderColor: '#2a2a2a',
+    },
+    activeCategoryTab: {
+        backgroundColor: 'rgba(212, 175, 55, 0.15)',
+        borderColor: '#D4AF37',
+    },
+    categoryLabel: {
+        color: '#888',
+        fontSize: 12,
+        fontWeight: '500',
+    },
+    activeCategoryLabel: {
+        color: '#D4AF37',
+        fontWeight: '600',
+    },
+    modalList: {
+        paddingBottom: 20,
+    },
+    modalEmpty: {
+        padding: 40,
+        alignItems: 'center',
+    },
+    itemOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        marginHorizontal: 16,
+        marginTop: 8,
+        backgroundColor: '#222',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
     itemOptionSelected: {
         backgroundColor: 'rgba(212, 175, 55, 0.1)',
-        borderLeftWidth: 3,
-        borderLeftColor: '#D4AF37',
+        borderColor: 'rgba(212, 175, 55, 0.3)',
+    },
+    itemThumbnailContainer: {
+        marginRight: 12,
+    },
+    thumbnail: {
+        width: 40,
+        height: 50,
+        borderRadius: 6,
+        backgroundColor: '#333',
+    },
+    placeholderThumbnail: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    placeholderText: {
+        color: '#666',
+        fontSize: 8,
+        textAlign: 'center',
+    },
+    itemInfo: {
+        flex: 1,
     },
     itemOptionText: {
         color: '#fff',
-        fontSize: 16,
-        fontWeight: '500',
+        fontSize: 15,
+        fontWeight: '600',
     },
     itemOptionCategory: {
         color: '#888',
         fontSize: 12,
-        marginTop: 4,
+        marginTop: 2,
+    },
+    checkIcon: {
+        color: '#D4AF37',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginLeft: 8,
     },
     bookingCard: {
         padding: 16,
@@ -542,6 +850,139 @@ const styles = StyleSheet.create({
     },
     bookingDates: {
         color: '#888',
+        fontSize: 14,
+        marginTop: 8,
+    },
+    detailRow: {
+        flexDirection: 'row',
+        marginBottom: 4,
+    },
+    detailLabel: {
+        color: '#888',
+        width: 60,
+        fontSize: 14,
+    },
+    detailValue: {
+        color: '#fff',
+        flex: 1,
+        fontSize: 14,
+    },
+    itemThumbnail: {
+        width: '100%',
+        height: 120,
+        borderRadius: 8,
+        marginTop: 8,
+        backgroundColor: '#333',
+    },
+    bookingsListSection: {
+        padding: 16,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    sectionTitleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginRight: 8,
+    },
+    allBookingsBtn: {
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(212, 175, 55, 0.3)',
+    },
+    allBookingsBtnText: {
+        color: '#D4AF37',
+        fontSize: 12,
+        fontWeight: '600',
+    },
+    badge: {
+        backgroundColor: '#D4AF37',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 10,
+    },
+    badgeText: {
+        color: '#121212',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    persistentBookingCard: {
+        backgroundColor: '#1a1a1a',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 12,
+        borderWidth: 1,
+        borderColor: '#2a2a2a',
+    },
+    bookingRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    bookingMainInfo: {
+        flex: 1,
+    },
+    bookingPatientName: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 4,
+    },
+    bookingDateRange: {
+        color: '#aaa',
+        fontSize: 14,
+    },
+    statusTag: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+        borderWidth: 1,
+    },
+    statusTagText: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+    },
+    bookingFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 12,
+        paddingTop: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#2a2a2a',
+    },
+    bookingPhone: {
+        color: '#888',
+        fontSize: 13,
+    },
+    bookingPrice: {
+        color: '#D4AF37',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    noBookingsCard: {
+        backgroundColor: '#1a1a1a',
+        padding: 30,
+        borderRadius: 12,
+        alignItems: 'center',
+        borderStyle: 'dashed',
+        borderWidth: 1,
+        borderColor: '#333',
+    },
+    noBookingsText: {
+        color: '#666',
         fontSize: 14,
     },
 });

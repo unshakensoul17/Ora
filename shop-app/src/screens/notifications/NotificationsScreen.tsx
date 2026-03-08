@@ -9,15 +9,16 @@ import {
     markNotificationAsRead,
     markAllNotificationsAsRead,
 } from '../../api/support-notifications';
+import { Ionicons } from '@expo/vector-icons';
 
 const COLORS = {
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
-    primary: '#1DB954',
+    background: '#121212',
+    card: '#1C1C1E',
+    border: '#2C2C2E',
+    primary: '#D4AF37',
     textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    textTertiary: '#6B7280',
+    textSecondary: '#A1A1AA',
+    textTertiary: '#71717A',
 };
 
 const SPACING = {
@@ -322,7 +323,7 @@ export default function NotificationsScreen() {
 
             {/* Info Box */}
             <View style={styles.infoBox}>
-                <Text style={styles.infoIcon}>💡</Text>
+                <Ionicons name="bulb-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.infoText}>
                     Enable notifications to stay updated on bookings, pickups, and returns in real-time.
                 </Text>
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg,
         borderBottomWidth: 1,
         borderBottomColor: COLORS.border,
-        backgroundColor: 'rgba(29, 185, 84, 0.05)',
+        backgroundColor: 'rgba(212, 175, 55, 0.05)',
     },
     notificationItemRead: {
         backgroundColor: 'transparent',
@@ -468,15 +469,13 @@ const styles = StyleSheet.create({
     },
     infoBox: {
         flexDirection: 'row',
-        backgroundColor: 'rgba(29, 185, 84, 0.1)',
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
         borderRadius: 12,
         padding: SPACING.lg,
         borderWidth: 1,
-        borderColor: 'rgba(29, 185, 84, 0.3)',
+        borderColor: 'rgba(212, 175, 55, 0.3)',
         gap: SPACING.md,
-    },
-    infoIcon: {
-        fontSize: 20,
+        alignItems: 'center',
     },
     infoText: {
         flex: 1,

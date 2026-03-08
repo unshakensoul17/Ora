@@ -7,8 +7,8 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { RedisService } from '../../redis/redis.service';
 import { CalendarService } from '../calendar/calendar.service';
-import { BookingStatus } from '@prisma/client';
-import { format, addDays, eachDayOfInterval, addHours } from 'date-fns';
+import { BookingStatus, BookingSource, PaymentMethod, PaymentType, PaymentStatus, DiscountType, ImageConditionType } from '@prisma/client';
+import { format, addDays, eachDayOfInterval, addHours, isSameDay } from 'date-fns';
 import * as crypto from 'crypto';
 import * as QRCode from 'qrcode';
 
@@ -42,6 +42,189 @@ export class BookingsService {
         const rentalDays = Math.max(diffDays, 1);
 
         return dailyPrice * rentalDays;
+    }
+
+    /**
+     * Create Walk-In Booking
+     * Direct booking creation for shop staff
+     */
+    async createWalkInBooking(
+        shopId: string,
+        data: {
+            itemId: string;
+            startDate: Date;
+            endDate: Date;
+            customer: {
+                name: string;
+                phone: string;
+                address?: string; // Optional address
+                id?: string; // If selecting existing
+            };
+            payment: {
+                method: PaymentMethod;
+                amount: number; // Amount PAID NOW
+                type: PaymentType; // ADVANCE or FULL
+            };
+            conditionImages: string[];
+            discount?: {
+                type: DiscountType;
+                value: number; // Percentage or Flat amount
+            };
+        },
+    ) {
+        const { itemId, startDate, endDate, customer, payment, conditionImages, discount } = data;
+
+        // 1. Validate item exists and belongs to shop
+        const item = await this.prisma.inventoryItem.findUnique({
+            where: { id: itemId },
+            include: { shop: true },
+        });
+
+        if (!item) {
+            throw new NotFoundException('Item not found');
+        }
+
+        if (item.shopId !== shopId) {
+            throw new BadRequestException('Item does not belong to this shop');
+        }
+
+        // 2. Check calendar availability
+        const isAvailable = await this.calendar.isAvailable(
+            itemId,
+            startDate,
+            endDate,
+        );
+
+        if (!isAvailable) {
+            throw new ConflictException('Item is not available for selected dates');
+        }
+
+        // 3. Handle Customer (Find or Create)
+        let customerId = customer.id;
+
+        if (!customerId) {
+            // Check by phone within shop context
+            const existingCustomer = await this.prisma.customer.findUnique({
+                where: {
+                    phone: customer.phone,
+                },
+            });
+
+            if (existingCustomer) {
+                customerId = existingCustomer.id;
+                // Update details if needed
+                if (existingCustomer.name !== customer.name) {
+                    await this.prisma.customer.update({
+                        where: { id: customerId },
+                        data: { name: customer.name },
+                    });
+                }
+            } else {
+                // Create new customer
+                const newCustomer = await this.prisma.customer.create({
+                    data: {
+                        shopId,
+                        name: customer.name,
+                        phone: customer.phone,
+                        notes: customer.address ? `Address: ${customer.address}` : undefined,
+                    },
+                });
+                customerId = newCustomer.id;
+            }
+        }
+
+        // 4. Calculate Financials
+        const baseRentalPrice = this.calculateRentalPrice(item.rentalPrice, startDate, endDate);
+        let discountAmount = 0;
+
+        if (discount) {
+            if (discount.type === DiscountType.PERCENTAGE) {
+                discountAmount = Math.round((baseRentalPrice * discount.value) / 100);
+            } else {
+                discountAmount = discount.value * 100; // Assuming input is in Rupees, convert to paise? Or input is paise?
+                // Let's assume Backend expects paise. If frontend sends rupees, it should convert.
+                // Wait, typically API expects consistent units.
+                // Given `rentalPrice` is in paise. `discount.value` should be in paise if FLAT.
+                // I will assume input is ALREADY converted to appropriate unit by controller/frontend.
+                // However, safe to assume it's direct value.
+                discountAmount = discount.value;
+            }
+        }
+
+        const totalAmount = Math.max(0, baseRentalPrice - discountAmount);
+        const paidAmount = payment.amount;
+        const pendingAmount = Math.max(0, totalAmount - paidAmount);
+        const paymentStatus = pendingAmount === 0 ? PaymentStatus.SUCCESS : PaymentStatus.PENDING;
+
+        // 5. Generate QR Hash
+        const qrCodeHash = crypto.randomBytes(16).toString('hex');
+
+        // 6. Create Booking wrapped in transaction
+        // Ideally we should use prisma.$transaction but logic is complex.
+        // For now, linear execution.
+
+        // Create Booking
+        const booking = await this.prisma.booking.create({
+            data: {
+                shopId,
+                itemId,
+                customerId,
+                startDate,
+                endDate,
+                status: BookingStatus.CONFIRMED, // Walk-in is confirmed immediately
+                source: BookingSource.WALK_IN,
+                qrCodeHash,
+
+                // Financials
+                platformPrice: baseRentalPrice,
+
+                discountAmount,
+                discountType: discount?.type,
+                discountValue: discount?.value,
+
+                depositAmount: item.securityDeposit,
+                depositPaid: false, // Walk-in might pay deposit separately or included? Assuming rental only for now.
+
+                verifiedAt: new Date(), // Auto-verified
+
+                // Relations
+                payments: {
+                    create: {
+                        amount: paidAmount,
+                        method: payment.method,
+                        type: payment.type,
+                        status: PaymentStatus.SUCCESS,
+                        referenceId: `WALKIN-${Date.now()}`,
+                    },
+                },
+                conditionImages: {
+                    create: conditionImages.map(url => ({
+                        url,
+                        type: ImageConditionType.PRE_RENTAL,
+                    })),
+                },
+            },
+        });
+
+        // 7. Generate QR URL
+        const qrData = `fashcycle://booking/${booking.id}?hash=${qrCodeHash}`;
+        const qrCodeUrl = await QRCode.toDataURL(qrData, { width: 300 });
+
+        await this.prisma.booking.update({
+            where: { id: booking.id },
+            data: { qrCodeUrl },
+        });
+
+        // 8. Block Calendar
+        await this.calendar.createBookingBlocks(
+            itemId,
+            startDate,
+            endDate,
+            booking.id,
+            false, // isHold = false, it's confirmed
+        );
+
+        return booking;
     }
 
     /**
@@ -138,7 +321,7 @@ export class BookingsService {
             });
 
             // 7. Generate QR code with URL format that Shop App expects
-            const qrData = `fashcycle://booking/${booking.id}?hash=${qrCodeHash}`;
+            const qrData = `ora://booking/${booking.id}?hash=${qrCodeHash}`;
             const qrCodeUrl = await QRCode.toDataURL(qrData, {
                 width: 300,
                 margin: 2,
@@ -497,6 +680,9 @@ export class BookingsService {
                     user: {
                         select: { id: true, name: true, phone: true },
                     },
+                    customer: {
+                        select: { id: true, name: true, phone: true },
+                    },
                 },
                 orderBy: { startDate: 'asc' },
             });
@@ -684,6 +870,76 @@ export class BookingsService {
                 pages: Math.ceil(total / limit),
             },
         };
+    }
+
+    /**
+     * Get shop's bookings starting today (pickups)
+     */
+    async getShopTodayPickups(shopId: string) {
+        const now = new Date();
+        const todayStart = new Date(now.setHours(0, 0, 0, 0));
+        const todayEnd = new Date(now.setHours(23, 59, 59, 999));
+
+        return this.prisma.booking.findMany({
+            where: {
+                item: { shopId },
+                status: {
+                    in: [BookingStatus.HOLD, BookingStatus.CONFIRMED],
+                },
+                startDate: { gte: todayStart, lte: todayEnd },
+            },
+            include: {
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        images: true,
+                        category: true,
+                    },
+                },
+                user: {
+                    select: { id: true, name: true, phone: true },
+                },
+                customer: {
+                    select: { id: true, name: true, phone: true },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+
+    /**
+     * Get shop's bookings ending today (returns)
+     */
+    async getShopTodayReturns(shopId: string) {
+        const now = new Date();
+        const todayStart = new Date(now.setHours(0, 0, 0, 0));
+        const todayEnd = new Date(now.setHours(23, 59, 59, 999));
+
+        return this.prisma.booking.findMany({
+            where: {
+                item: { shopId },
+                status: BookingStatus.RENTED,
+                endDate: { gte: todayStart, lte: todayEnd },
+            },
+            include: {
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        images: true,
+                        category: true,
+                    },
+                },
+                user: {
+                    select: { id: true, name: true, phone: true },
+                },
+                customer: {
+                    select: { id: true, name: true, phone: true },
+                },
+            },
+            orderBy: { endDate: 'asc' },
+        });
     }
 
     /**

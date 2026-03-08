@@ -8,6 +8,7 @@ import {
     PaginatedResponse,
     ScanResult,
     CreateItemRequest,
+    UpdateInventoryRequest,
     ScanQRRequest,
     LoginResponse,
 } from './types';
@@ -141,11 +142,15 @@ export async function updateShopProfile(shopId: string, data: Partial<Shop>): Pr
  */
 export async function getShopInventory(
     shopId: string,
-    page = 1,
-    limit = 20
+    filters?: {
+        search?: string;
+        category?: string;
+        page?: number;
+        limit?: number;
+    }
 ): Promise<PaginatedResponse<InventoryItem>> {
     const response = await apiClient.get(endpoints.shopInventory(shopId), {
-        params: { page, limit }
+        params: filters
     });
     return response.data;
 }
@@ -174,7 +179,7 @@ export async function createInventoryItem(
  */
 export async function updateInventoryItem(
     itemId: string,
-    data: Partial<CreateItemRequest>
+    data: UpdateInventoryRequest
 ): Promise<InventoryItem> {
     const response = await apiClient.patch(endpoints.updateItem(itemId), data);
     return response.data;
@@ -317,6 +322,21 @@ export async function getShopActiveRentals(shopId: string): Promise<Booking[]> {
     const response = await apiClient.get(`/bookings/shop/${shopId}/active-rentals`);
     return response.data;
 }
+/**
+ * Get shop's bookings starting today (pickups)
+ */
+export async function getShopTodayPickups(shopId: string): Promise<Booking[]> {
+    const response = await apiClient.get(`/bookings/shop/${shopId}/today-pickups`);
+    return response.data;
+}
+
+/**
+ * Get shop's bookings ending today (returns)
+ */
+export async function getShopTodayReturns(shopId: string): Promise<Booking[]> {
+    const response = await apiClient.get(`/bookings/shop/${shopId}/today-returns`);
+    return response.data;
+}
 
 /**
  * Get shop's booking history (completed/cancelled)
@@ -355,7 +375,7 @@ export async function scanBookingQR(qrCodeHash: string, shopId: string): Promise
  * Toggle inventory item status (ACTIVE <-> INACTIVE)
  */
 export async function toggleInventoryStatus(itemId: string): Promise<InventoryItem> {
-    const response = await apiClient.patch(`/inventory/${itemId}/toggle-status`);
+    const response = await apiClient.patch(endpoints.toggleItemStatus(itemId));
     return response.data;
 }
 
@@ -375,5 +395,36 @@ export async function changeShopPassword(
         currentPassword,
         newPassword,
     });
+    return response.data;
+}
+
+// ============================================
+// NEW: Walk-In Booking
+// ============================================
+
+export async function createWalkInBooking(data: {
+    shopId: string;
+    itemId: string;
+    startDate: string;
+    endDate: string;
+    customer: {
+        name: string;
+        phone: string;
+        address?: string;
+        id?: string;
+    };
+    payment: {
+        method: 'CASH' | 'UPI' | 'CARD' | 'OTHER';
+        amount: number; // In paise
+        type: 'ADVANCE' | 'FULL' | 'BALANCE';
+    };
+    conditionImages: string[];
+    discount?: {
+        type: 'PERCENTAGE' | 'FLAT';
+        value: number;
+    };
+}): Promise<Booking> {
+    const { shopId, ...payload } = data;
+    const response = await apiClient.post(`/bookings/shop/${shopId}/walk-in`, payload);
     return response.data;
 }

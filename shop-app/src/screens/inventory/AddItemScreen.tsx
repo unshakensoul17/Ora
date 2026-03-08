@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useAuthStore } from '../../store/authStore';
 import { createInventoryItem, uploadInventoryImage } from '../../api/endpoints';
 import { Category } from '../../api/types';
+import { Ionicons } from '@expo/vector-icons';
 
 const categories: Category[] = ['LEHENGA', 'SHERWANI', 'SAREE', 'ANARKALI', 'INDO_WESTERN', 'GOWN'];
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free'];
@@ -133,12 +134,12 @@ export default function AddItemScreen({ navigation }: any) {
                                     style={styles.removeImageBtn}
                                     onPress={() => removeImage(index)}
                                 >
-                                    <Text style={styles.removeImageText}>✕</Text>
+                                    <Ionicons name="close" size={14} color="#fff" />
                                 </TouchableOpacity>
                             </View>
                         ))}
                         <TouchableOpacity style={styles.addImageBtn} onPress={handleAddImage}>
-                            <Text style={styles.addImageIcon}>📷</Text>
+                            <Ionicons name="camera-outline" size={32} color="#D4AF37" style={{ marginBottom: 8 }} />
                             <Text style={styles.addImageText}>Add Photo</Text>
                         </TouchableOpacity>
                     </ScrollView>

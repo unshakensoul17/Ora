@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, Linking } from 'react-native';
 import { useAuthStore } from '../../store/authStore';
 import { createSupportTicket } from '../../api/support-notifications';
+import { Ionicons } from '@expo/vector-icons';
 
 const COLORS = {
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
-    primary: '#1DB954',
+    background: '#121212',
+    card: '#1C1C1E',
+    border: '#2C2C2E',
+    primary: '#D4AF37',
     textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    textTertiary: '#6B7280',
+    textSecondary: '#A1A1AA',
+    textTertiary: '#71717A',
 };
 
 const SPACING = {
@@ -66,7 +67,7 @@ export default function SupportScreen({ navigation }: any) {
 
     const ContactMethod = ({ icon, title, subtitle, onPress }: any) => (
         <TouchableOpacity style={styles.contactMethod} onPress={onPress} activeOpacity={0.7}>
-            <Text style={styles.contactIcon}>{icon}</Text>
+            <View style={styles.contactIcon}>{icon}</View>
             <View style={styles.contactInfo}>
                 <Text style={styles.contactTitle}>{title}</Text>
                 <Text style={styles.contactSubtitle}>{subtitle}</Text>
@@ -99,19 +100,19 @@ export default function SupportScreen({ navigation }: any) {
             <View style={styles.card}>
                 <Text style={styles.cardTitle}>Quick Contact</Text>
                 <ContactMethod
-                    icon="📧"
+                    icon={<Ionicons name="mail" size={24} color={COLORS.textSecondary} />}
                     title="Email Support"
-                    subtitle="support@fashcycle.com"
-                    onPress={() => Linking.openURL('mailto:support@fashcycle.com')}
+                    subtitle="support@ora.com"
+                    onPress={() => Linking.openURL('mailto:support@ora.com')}
                 />
                 <ContactMethod
-                    icon="📞"
+                    icon={<Ionicons name="call" size={24} color={COLORS.textSecondary} />}
                     title="Call Us"
                     subtitle="+91 9876543210"
                     onPress={() => Linking.openURL('tel:+919876543210')}
                 />
                 <ContactMethod
-                    icon="💬"
+                    icon={<Ionicons name="logo-whatsapp" size={24} color={COLORS.textSecondary} />}
                     title="WhatsApp"
                     subtitle="Chat with us instantly"
                     onPress={() => Linking.openURL('https://wa.me/919876543210')}
@@ -165,9 +166,10 @@ export default function SupportScreen({ navigation }: any) {
                     </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.responseTime}>
-                    💡 Average response time: 2-4 hours
-                </Text>
+                <View style={styles.responseTime}>
+                    <Ionicons name="bulb" size={16} color={COLORS.primary} style={{ marginRight: 6 }} />
+                    <Text style={styles.responseTimeText}>Average response time: 2-4 hours</Text>
+                </View>
             </View>
 
             {/* Office Hours */}
@@ -241,7 +243,6 @@ const styles = StyleSheet.create({
         borderBottomColor: COLORS.border,
     },
     contactIcon: {
-        fontSize: 24,
         marginRight: SPACING.md,
     },
     contactInfo: {
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
         borderColor: COLORS.border,
     },
     chipActive: {
-        backgroundColor: 'rgba(29, 185, 84, 0.15)',
+        backgroundColor: 'rgba(212, 175, 55, 0.15)',
         borderColor: COLORS.primary,
     },
     chipText: {
@@ -325,10 +326,14 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     responseTime: {
-        fontSize: 12,
-        color: COLORS.textSecondary,
-        textAlign: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: SPACING.md,
+    },
+    responseTimeText: {
+        fontSize: 13,
+        color: COLORS.textSecondary,
     },
     hoursRow: {
         flexDirection: 'row',

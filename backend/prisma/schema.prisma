@@ -1,7 +1,3 @@
-// Fashcycle Database Schema
-// PostgreSQL with Prisma ORM
-// Supports Supabase (production) and local Docker PostgreSQL (development)
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,21 +8,17 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// ============================================
-// USERS
-// ============================================
-
 model User {
   id            String    @id @default(uuid())
   phone         String    @unique
   name          String?
-  email         String?   @unique  // Optional for migration, validated at app level
-  passwordHash  String?    // Optional for migration
-  emailVerified Boolean   @default(false)
-  city          String?    // User's city for profile
-  isVerified    Boolean   @default(false)  // Legacy phone verification
+  email         String?   @unique
+  isVerified    Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  city          String?
+  emailVerified Boolean   @default(false)
+  passwordHash  String?
   bookings      Booking[]
   reviews       Review[]
 
@@ -34,53 +26,319 @@ model User {
   @@index([email])
 }
 
-// ============================================
-// SHOPS (Rental Boutiques)
-// ============================================
-
 model Shop {
-  id              String       @id @default(uuid())
-  name            String
-  ownerName       String
-  ownerPhone      String       @unique
-  email           String       @unique  // Required for password recovery
-  passwordHash    String       // bcrypt hash
-  emailVerified   Boolean      @default(false)
-  address         String
-  locality        String       // e.g., "Vijay Nagar", "Sapna Sangeeta"
-  city            String       @default("Indore")
-  pincode         String
-  lat             Float
-  lng             Float
-  status          ShopStatus   @default(PENDING)
-  tier            PricingTier  @default(STARTER)
-  description     String?
-  images          String[]     // Shop photos
-  operatingHours  Json?        // { mon: { open: "10:00", close: "20:00" }, ... }
-  
-  // Security tracking
-  lastLoginAt     DateTime?
-  passwordChangedAt DateTime?
-  
-  verifiedAt      DateTime?
-  suspendedAt     DateTime?
-  suspendReason   String?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  inventoryItems  InventoryItem[]
-  attributions    AttributionEvent[]
-  reviews         Review[]
-  bookings        Booking[] // Added as per instruction
-  supportTickets  SupportTicket[] // Added as per instruction
-  notificationPreference NotificationPreference? // Added as per instruction
-  notifications   Notification[]
-  customers       Customer[] // Added as per instruction
+  id                     String                  @id @default(uuid())
+  name                   String
+  ownerName              String
+  ownerPhone             String                  @unique
+  email                  String                  @unique
+  address                String
+  locality               String
+  city                   String                  @default("Indore")
+  pincode                String
+  lat                    Float
+  lng                    Float
+  status                 ShopStatus              @default(PENDING)
+  tier                   PricingTier             @default(STARTER)
+  description            String?
+  images                 String[]
+  operatingHours         Json?
+  verifiedAt             DateTime?
+  suspendedAt            DateTime?
+  suspendReason          String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  emailVerified          Boolean                 @default(false)
+  lastLoginAt            DateTime?
+  passwordChangedAt      DateTime?
+  passwordHash           String
+  attributions           AttributionEvent[]
+  bookings               Booking[]
+  inventoryItems         InventoryItem[]
+  notifications          Notification[]
+  notificationPreference NotificationPreference?
+  reviews                Review[]
+  supportTickets         SupportTicket[]
 
   @@index([ownerPhone])
   @@index([email])
   @@index([status])
-  @@index([locality]) // Added as per instruction
+  @@index([locality])
   @@index([city, locality])
+}
+
+model InventoryItem {
+  id              String              @id @default(uuid())
+  shopId          String
+  sku             String?
+  name            String
+  description     String?
+  category        Category
+  subcategory     String?
+  color           String?
+  size            String
+  sizeDetails     Json?
+  rentalPrice     Int
+  retailPrice     Int?
+  securityDeposit Int
+  images          String[]
+  occasion        String[]
+  brand           String?
+  status          ItemStatus          @default(ACTIVE)
+  condition       ItemCondition       @default(EXCELLENT)
+  timesRented     Int                 @default(0)
+  lastRentedAt    DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  blocks          AvailabilityBlock[]
+  bookings        Booking[]
+  shop            Shop                @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  reviews         Review[]
+
+  @@index([shopId])
+  @@index([category])
+  @@index([status])
+  @@index([size])
+  @@index([shopId, category])
+  @@index([rentalPrice])
+  @@index([timesRented])
+}
+
+model AvailabilityBlock {
+  id        String        @id @default(uuid())
+  itemId    String
+  date      DateTime      @db.Date
+  reason    BlockReason
+  bookingId String?
+  notes     String?
+  createdAt DateTime      @default(now())
+  booking   Booking?      @relation(fields: [bookingId], references: [id])
+  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, date])
+  @@index([itemId, date])
+  @@index([bookingId])
+}
+
+model Booking {
+  id             String              @id @default(uuid())
+  userId         String?
+  itemId         String
+  startDate      DateTime            @db.Date
+  endDate        DateTime            @db.Date
+  status         BookingStatus       @default(HOLD)
+  qrCodeHash     String?             @unique
+  qrCodeUrl      String?
+  platformPrice  Int?
+  depositAmount  Int?
+  depositPaid    Boolean             @default(false)
+  holdExpiresAt  DateTime?
+  verifiedAt     DateTime?
+  pickedUpAt     DateTime?
+  returnedAt     DateTime?
+  cancelledAt    DateTime?
+  cancelReason   String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  shopId         String
+  customerName   String?
+  customerPhone  String?
+  source         BookingSource       @default(WEB_LEAD)
+  customerId     String?
+  discountAmount Int                 @default(0)
+  attribution    AttributionEvent?
+  blocks         AvailabilityBlock[]
+  customer       Customer?           @relation(fields: [customerId], references: [id])
+  item           InventoryItem       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  shop           Shop                @relation(fields: [shopId], references: [id])
+  user           User?               @relation(fields: [userId], references: [id])
+  payments       Payment[]
+  review         Review?
+  discountType   DiscountType?
+  discountValue  Int?
+  conditionImages ItemConditionImage[]
+
+  @@index([userId])
+  @@index([customerId])
+  @@index([itemId])
+  @@index([shopId])
+  @@index([status])
+  @@index([qrCodeHash])
+  @@index([holdExpiresAt])
+  @@index([startDate, endDate])
+  @@index([shopId, status])
+}
+
+model AttributionEvent {
+  id           String    @id @default(uuid())
+  bookingId    String    @unique
+  shopId       String
+  scannedAt    DateTime  @default(now())
+  scannedBy    String?
+  deviceInfo   String?
+  billable     Boolean   @default(true)
+  billedAt     DateTime?
+  billedAmount Int?
+  booking      Booking   @relation(fields: [bookingId], references: [id])
+  shop         Shop      @relation(fields: [shopId], references: [id])
+
+  @@index([shopId])
+  @@index([billable])
+  @@index([scannedAt])
+}
+
+model ShopBilling {
+  id                String      @id @default(uuid())
+  shopId            String      @unique
+  currentTier       PricingTier @default(STARTER)
+  subscriptionStart DateTime?
+  subscriptionEnd   DateTime?
+  razorpaySubId     String?
+  totalLeads        Int         @default(0)
+  billedLeads       Int         @default(0)
+  pendingAmount     Int         @default(0)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  entityType String
+  entityId   String
+  action     String
+  actorType  String
+  actorId    String?
+  changes    Json?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+}
+
+model Review {
+  id        String        @id @default(uuid())
+  rating    Int
+  comment   String?
+  userId    String
+  shopId    String
+  itemId    String
+  bookingId String        @unique
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  images    String[]
+  booking   Booking       @relation(fields: [bookingId], references: [id])
+  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  shop      Shop          @relation(fields: [shopId], references: [id])
+  user      User          @relation(fields: [userId], references: [id])
+
+  @@index([shopId])
+  @@index([itemId])
+  @@index([userId])
+}
+
+model SupportTicket {
+  id         String          @id @default(uuid())
+  shopId     String
+  category   SupportCategory @default(GENERAL)
+  subject    String
+  message    String
+  status     TicketStatus    @default(OPEN)
+  priority   TicketPriority  @default(NORMAL)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  resolvedAt DateTime?
+  shop       Shop            @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+  @@index([status])
+}
+
+model NotificationPreference {
+  id           String   @id @default(uuid())
+  shopId       String   @unique
+  pushEnabled  Boolean  @default(true)
+  emailEnabled Boolean  @default(true)
+  smsEnabled   Boolean  @default(false)
+  newHolds     Boolean  @default(true)
+  pickups      Boolean  @default(true)
+  returns      Boolean  @default(true)
+  marketing    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  shop         Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  shopId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  shop      Shop             @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+  @@index([shopId, isRead])
+}
+
+model Customer {
+  id            String    @id @default(uuid())
+  shopId        String
+  name          String
+  phone         String    @unique
+  email         String?
+  notes         String?
+  isBlacklisted Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  address       String?
+  bookings      Booking[]
+
+  @@index([shopId])
+  @@index([phone])
+}
+
+model Payment {
+  id         String        @id @default(uuid())
+  bookingId  String
+  amount     Int
+  type       PaymentType
+  method     PaymentMethod
+  status     PaymentStatus @default(COMPLETED)
+  referenceId String?      // Added
+  notes      String?
+  recordedAt DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  Booking    Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@map("PaymentRecord")
+}
+
+model ItemConditionImage {
+  id          String             @id @default(uuid())
+  bookingId   String
+  booking     Booking            @relation(fields: [bookingId], references: [id])
+  url         String
+  type        ImageConditionType
+  capturedAt  DateTime           @default(now())
+
+  @@index([bookingId])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+enum ImageConditionType {
+  PRE_RENTAL
+  POST_RENTAL
 }
 
 enum ShopStatus {
@@ -90,49 +348,8 @@ enum ShopStatus {
 }
 
 enum PricingTier {
-  STARTER    // Free, ≤50 items
-  PRO        // ₹299/month
-}
-
-// ============================================
-// INVENTORY ITEMS
-// ============================================
-
-model InventoryItem {
-  id              String            @id @default(uuid())
-  shopId          String
-  shop            Shop              @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  sku             String?           // Shop's internal code
-  name            String
-  description     String?
-  category        Category
-  subcategory     String?           // e.g., "Bridal", "Reception", "Sangeet"
-  color           String?
-  size            String
-  sizeDetails     Json?             // { bust: 36, waist: 30, length: 42 }
-  rentalPrice     Int               // In paise (e.g., 350000 = ₹3,500)
-  retailPrice     Int?              // Original MRP in paise
-  securityDeposit Int               // In paise
-  images          String[]          // S3 URLs
-  occasion        String[]          // ["wedding", "reception", "sangeet"]
-  brand           String?           // e.g., "Sabyasachi Replica"
-  status          ItemStatus        @default(ACTIVE)
-  condition       ItemCondition     @default(EXCELLENT)
-  timesRented     Int               @default(0)
-  lastRentedAt    DateTime?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  bookings        Booking[]
-  blocks          AvailabilityBlock[]
-  reviews         Review[]
-
-  @@index([shopId])
-  @@index([category])
-  @@index([status])
-  @@index([size])
-  @@index([shopId, category])    // Shop catalogue filtering
-  @@index([rentalPrice])         // Price range filtering
-  @@index([timesRented])         // Popularity sorting
+  STARTER
+  PRO
 }
 
 enum Category {
@@ -158,216 +375,27 @@ enum ItemCondition {
   FAIR
 }
 
-// ============================================
-// AVAILABILITY BLOCKS
-// Core Rule: If date exists in blocks, item is UNAVAILABLE
-// ============================================
-
-model AvailabilityBlock {
-  id        String      @id @default(uuid())
-  itemId    String
-  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  date      DateTime    @db.Date
-  reason    BlockReason
-  bookingId String?
-  booking   Booking?    @relation(fields: [bookingId], references: [id], onDelete: SetNull)
-  notes     String?     // For maintenance blocks
-  createdAt DateTime    @default(now())
-
-  @@unique([itemId, date])
-  @@index([itemId, date])
-  @@index([bookingId])
-}
-
 enum BlockReason {
-  RENTAL       // Active rental period
-  PICKUP       // D-1 buffer for pickup preparation
-  RETURN       // D+1 buffer for return/laundry
-  MAINTENANCE  // Shop-marked unavailable
-  HOLD         // Temporary hold (pre-verification)
-}
-
-// ============================================
-// BOOKINGS
-// ============================================
-
-model Booking {
-  id              String         @id @default(uuid())
-  userId          String
-  user            User           @relation(fields: [userId], references: [id])
-  itemId          String
-  item            InventoryItem  @relation(fields: [itemId], references: [id])
-  
-  shopId          String
-  shop            Shop           @relation(fields: [shopId], references: [id])
-  
-  startDate       DateTime       @db.Date
-  endDate         DateTime       @db.Date
-  status          BookingStatus  @default(HOLD)
-  qrCodeHash      String         @unique
-  qrCodeUrl       String?        // Generated QR image URL
-  
-  // Pricing (set after QR verification)
-  platformPrice   Int?           // Final rental price in paise
-  depositAmount   Int?           // Security deposit in paise
-  depositPaid     Boolean        @default(false)
-  
-  // Timestamps
-  holdExpiresAt   DateTime?      // When hold expires (4 hours)
-  verifiedAt      DateTime?      // QR scan timestamp
-  pickedUpAt      DateTime?      // Item picked up
-  returnedAt      DateTime?      // Item returned
-  cancelledAt     DateTime?
-  cancelReason    String?
-  
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  
-  blocks          AvailabilityBlock[]
-  attribution     AttributionEvent?
-  review          Review?
-
-  @@index([userId])
-  @@index([itemId])
-  @@index([shopId])
-  @@index([status])
-  @@index([qrCodeHash])
-  @@index([holdExpiresAt])
-  @@index([startDate, endDate])  // Calendar/schedule queries
-  @@index([shopId, status])      // Shop booking status filtering
+  RENTAL
+  PICKUP
+  RETURN
+  MAINTENANCE
+  HOLD
 }
 
 enum BookingStatus {
-  HOLD          // 4-hour temporary hold
-  CONFIRMED     // Post QR verification
-  RENTED        // Item picked up
-  RETURNED      // Completed successfully
-  CANCELLED     // Expired/cancelled hold
-  DISPUTED      // Damage or issue reported
-}
-
-// ============================================
-// ATTRIBUTION EVENTS
-// Billable lead tracking
-// ============================================
-
-model AttributionEvent {
-  id          String    @id @default(uuid())
-  bookingId   String    @unique
-  booking     Booking   @relation(fields: [bookingId], references: [id])
-  shopId      String
-  shop        Shop      @relation(fields: [shopId], references: [id])
-  scannedAt   DateTime  @default(now())
-  scannedBy   String?   // Shop user who scanned
-  deviceInfo  String?   // Device metadata
-  billable    Boolean   @default(true)
-  billedAt    DateTime?
-  billedAmount Int?     // ₹50 per verified lead in paise
-
-  @@index([shopId])
-  @@index([billable])
-  @@index([scannedAt])
-}
-
-// ============================================
-// SHOP BILLING & SUBSCRIPTIONS
-// ============================================
-
-model ShopBilling {
-  id              String    @id @default(uuid())
-  shopId          String    @unique
-  currentTier     PricingTier @default(STARTER)
-  
-  // Subscription
-  subscriptionStart DateTime?
-  subscriptionEnd   DateTime?
-  razorpaySubId     String?
-  
-  // Lead billing
-  totalLeads        Int       @default(0)
-  billedLeads       Int       @default(0)
-  pendingAmount     Int       @default(0) // In paise
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-}
-
-// ============================================
-// AUDIT LOG
-// ============================================
-
-model AuditLog {
-  id          String    @id @default(uuid())
-  entityType  String    // "Booking", "Shop", etc.
-  entityId    String
-  action      String    // "CREATE", "UPDATE", "DELETE"
-  actorType   String    // "user", "shop", "admin", "system"
-  actorId     String?
-  changes     Json?     // { field: { old: x, new: y } }
-  metadata    Json?
-  createdAt   DateTime  @default(now())
-
-  @@index([entityType, entityId])
-  @@index([actorId])
-  @@index([createdAt])
-}
-
-// ============================================
-// REVIEWS & RATINGS
-// ============================================
-
-model Review {
-  id          String    @id @default(uuid())
-  rating      Int       // 1 to 5 stars
-  comment     String?
-  images      String[]  // URLs of uploaded images
-  
-  // Relations
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  
-  shopId      String
-  shop        Shop      @relation(fields: [shopId], references: [id])
-  
-  itemId      String
-  item        InventoryItem @relation(fields: [itemId], references: [id])
-  
-  bookingId   String    @unique // One review per booking
-  booking     Booking   @relation(fields: [bookingId], references: [id])
-  
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@index([shopId])
-  @@index([itemId])
-  @@index([userId])
+  HOLD
+  CONFIRMED
+  RENTED
+  RETURNED
+  CANCELLED
+  DISPUTED
 }
 
 enum ReviewStatus {
   PENDING
   APPROVED
   REJECTED
-}
-
-// ============================================
-// SUPPORT TICKETS
-// ============================================
-
-model SupportTicket {
-  id          String            @id @default(uuid())
-  shopId      String
-  shop        Shop              @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  category    SupportCategory   @default(GENERAL)
-  subject     String
-  message     String            @db.Text
-  status      TicketStatus      @default(OPEN)
-  priority    TicketPriority    @default(NORMAL)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  resolvedAt  DateTime?
-
-  @@index([shopId])
-  @@index([status])
 }
 
 enum SupportCategory {
@@ -391,50 +419,6 @@ enum TicketPriority {
   URGENT
 }
 
-// ============================================
-// NOTIFICATION PREFERENCES
-// ============================================
-
-model NotificationPreference {
-  id          String   @id @default(uuid())
-  shopId      String   @unique
-  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  
-  // Channels
-  pushEnabled Boolean  @default(true)
-  emailEnabled Boolean @default(true)
-  smsEnabled  Boolean  @default(false)
-  
-  // Event Types
-  newHolds    Boolean  @default(true)
-  pickups     Boolean  @default(true)
-  returns     Boolean  @default(true)
-  marketing   Boolean  @default(false)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([shopId])
-}
-
-// ============================================
-// NOTIFICATION HISTORY
-// ============================================
-
-model Notification {
-  id        String           @id @default(uuid())
-  shopId    String
-  shop      Shop             @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  type      NotificationType
-  title     String
-  message   String           @db.Text
-  isRead    Boolean          @default(false)
-  createdAt DateTime         @default(now())
-
-  @@index([shopId])
-  @@index([shopId, isRead])
-}
-
 enum NotificationType {
   NEW_HOLD
   PICKUP_REMINDER
@@ -444,23 +428,36 @@ enum NotificationType {
   MARKETING
 }
 
-// ============================================
-// SHOP CUSTOMERS (CRM)
-// ============================================
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  BANK_TRANSFER
+  OTHER
+}
 
-model Customer {
-  id            String    @id @default(uuid())
-  shopId        String
-  shop          Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  name          String
-  phone         String    @unique
-  email         String?
-  notes         String?
-  isBlacklisted Boolean   @default(false)
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+enum PaymentType {
+  DEPOSIT
+  RENTAL
+  LATE_FEE
+  DAMAGE_FEE
+  REFUND
+  ADVANCE
+  FULL
+  BALANCE
+}
 
-  @@index([shopId])
-  @@index([phone])
+enum BookingSource {
+  WEB_LEAD
+  WALK_IN
+  PHONE
+  ONLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  SUCCESS
 }

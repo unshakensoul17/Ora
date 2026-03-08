@@ -92,12 +92,14 @@ export class InventoryController {
         @Param('shopId') shopId: string,
         @Query('category') category?: Category,
         @Query('status') status?: ItemStatus,
+        @Query('search') search?: string,
         @Query('page') page?: number,
         @Query('limit') limit?: number,
     ) {
         return this.inventoryService.getShopInventory(shopId, {
             category,
             status,
+            search,
             page,
             limit,
         });

@@ -15,8 +15,13 @@ import ForgotPasswordScreen from './src/screens/auth/ForgotPasswordScreen';
 import DashboardScreen from './src/screens/dashboard/DashboardScreen';
 import InventoryListScreen from './src/screens/inventory/InventoryListScreen';
 import AddItemScreen from './src/screens/inventory/AddItemScreen';
+import EditItemScreen from './src/screens/inventory/EditItemScreen';
 import CalendarScreen from './src/screens/calendar/CalendarScreen';
 import HoldsListScreen from './src/screens/bookings/HoldsListScreen';
+import BookingsScreen from './src/screens/bookings/BookingsScreen';
+import ReportsScreen from './src/screens/reports/ReportsScreen';
+import WalkInBookingScreen from './src/screens/bookings/WalkInBookingScreen';
+import ItemBookingsScreen from './src/screens/bookings/ItemBookingsScreen';
 import QRScannerScreen from './src/screens/scanner/QRScannerScreen';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import EditProfileScreen from './src/screens/profile/EditProfileScreen';
@@ -32,7 +37,8 @@ import {
     CalendarIcon,
     HoldsIcon,
     ScannerIcon,
-    ProfileIcon
+    ProfileIcon,
+    ReportsIcon
 } from './src/components/Icons';
 
 const Stack = createNativeStackNavigator();
@@ -45,8 +51,8 @@ function MainTabs() {
         <Tab.Navigator
             screenOptions={{
                 tabBarStyle: {
-                    backgroundColor: '#0B0F0D',
-                    borderTopColor: '#1F2A23',
+                    backgroundColor: '#121212',
+                    borderTopColor: '#2C2C2E',
                     borderTopWidth: 1,
                     height: 70,
                     paddingBottom: 12,
@@ -54,16 +60,16 @@ function MainTabs() {
                     elevation: 0,
                     shadowOpacity: 0,
                 },
-                tabBarActiveTintColor: '#1DB954',
-                tabBarInactiveTintColor: '#6B7280',
+                tabBarActiveTintColor: '#D4AF37',
+                tabBarInactiveTintColor: '#A1A1AA',
                 headerStyle: {
-                    backgroundColor: '#0B0F0D',
+                    backgroundColor: '#121212',
                     elevation: 0,
                     shadowOpacity: 0,
                     borderBottomWidth: 1,
-                    borderBottomColor: '#1F2A23',
+                    borderBottomColor: '#2C2C2E',
                 },
-                headerTintColor: '#1DB954',
+                headerTintColor: '#D4AF37',
                 tabBarLabelStyle: {
                     fontSize: 11,
                     fontWeight: '600',
@@ -79,7 +85,7 @@ function MainTabs() {
                 component={DashboardScreen}
                 options={{
                     tabBarLabel: 'Home',
-                    title: 'Fashcycle Shop',
+                    title: 'ORA Shop',
                     tabBarIcon: ({ color, focused }) => <HomeIcon color={color} size={24} focused={focused} />
                 }}
             />
@@ -101,14 +107,14 @@ function MainTabs() {
                             width: 56,
                             height: 56,
                             borderRadius: 28,
-                            backgroundColor: focused ? '#1DB954' : '#0F2A1D',
+                            backgroundColor: focused ? '#D4AF37' : 'rgba(212, 175, 55, 0.1)',
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginTop: -20,
                             borderWidth: 3,
-                            borderColor: '#0B0F0D',
+                            borderColor: '#121212',
                         }}>
-                            <ScannerIcon color={focused ? '#FFFFFF' : '#1DB954'} size={28} focused={focused} />
+                            <ScannerIcon color={focused ? '#121212' : '#D4AF37'} size={28} focused={focused} />
                         </View>
                     ),
                 }}
@@ -157,11 +163,10 @@ function AppNavigator() {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#0B0F0D',
-                    elevation: 0,
-                    shadowOpacity: 0,
+                    backgroundColor: '#121212',
                 },
-                headerTintColor: '#1DB954',
+                headerShadowVisible: false,
+                headerTintColor: '#D4AF37',
                 animation: 'slide_from_right',
                 presentation: 'card',
                 gestureEnabled: true,
@@ -182,6 +187,11 @@ function AppNavigator() {
                         options={{ title: 'Add Item' }}
                     />
                     <Stack.Screen
+                        name="EditItem"
+                        component={EditItemScreen}
+                        options={{ title: 'Edit Item' }}
+                    />
+                    <Stack.Screen
                         name="EditProfile"
                         component={EditProfileScreen}
                         options={{ title: 'Edit Profile' }}
@@ -195,6 +205,26 @@ function AppNavigator() {
                         name="Holds"
                         component={HoldsListScreen}
                         options={{ title: 'Pending Holds' }}
+                    />
+                    <Stack.Screen
+                        name="Bookings"
+                        component={BookingsScreen}
+                        options={{ title: 'Shop Bookings' }}
+                    />
+                    <Stack.Screen
+                        name="Reports"
+                        component={ReportsScreen}
+                        options={{ title: 'Reports', headerStyle: { backgroundColor: '#0B0F0D' } }}
+                    />
+                    <Stack.Screen
+                        name="WalkInBooking"
+                        component={WalkInBookingScreen}
+                        options={{ title: 'New Walk-In Order', headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="ItemBookings"
+                        component={ItemBookingsScreen}
+                        options={{ title: 'Booking History' }}
                     />
                     <Stack.Screen
                         name="Help"
@@ -224,7 +254,7 @@ function AppNavigator() {
                         component={RegisterScreen}
                         options={{
                             title: 'Register',
-                            headerStyle: { backgroundColor: '#022b1e' },
+                            headerStyle: { backgroundColor: '#121212' },
                             headerTintColor: '#D4AF37',
                         }}
                     />
@@ -233,7 +263,7 @@ function AppNavigator() {
                         component={ForgotPasswordScreen}
                         options={{
                             title: 'Reset Password',
-                            headerStyle: { backgroundColor: '#022b1e' },
+                            headerStyle: { backgroundColor: '#121212' },
                             headerTintColor: '#D4AF37',
                         }}
                     />

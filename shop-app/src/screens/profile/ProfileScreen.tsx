@@ -3,17 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Clipboard,
 import { useAuthStore } from '../../store/authStore';
 import { useFocusEffect } from '@react-navigation/native';
 import { getShopProfile } from '../../api/endpoints';
+import { Ionicons } from '@expo/vector-icons';
 
 // DESIGN TOKENS (matching Dashboard)
 const COLORS = {
-    background: '#0B0F0D',
-    card: '#101814',
-    border: '#1F2A23',
-    primary: '#1DB954',
-    primaryDark: '#0F2A1D',
+    background: '#121212',
+    card: '#1C1C1E',
+    border: '#2C2C2E',
+    primary: '#D4AF37',
+    primaryDark: 'rgba(212, 175, 55, 0.15)',
     textPrimary: '#FFFFFF',
-    textSecondary: '#9CA3AF',
-    textTertiary: '#6B7280',
+    textSecondary: '#A1A1AA',
+    textTertiary: '#71717A',
     success: '#10B981',
     error: '#EF4444',
 };
@@ -109,7 +110,7 @@ export default function ProfileScreen({ navigation }: any) {
         onPress,
         isLink = false,
     }: {
-        icon: string;
+        icon: React.ReactNode;
         label: string;
         value?: string;
         onPress?: () => void;
@@ -122,7 +123,7 @@ export default function ProfileScreen({ navigation }: any) {
             activeOpacity={onPress ? 0.7 : 1}
         >
             <View style={styles.detailLeft}>
-                <Text style={styles.detailIcon}>{icon}</Text>
+                {icon}
                 <Text style={styles.detailLabel}>{label}</Text>
             </View>
             <View style={styles.detailRight}>
@@ -142,7 +143,7 @@ export default function ProfileScreen({ navigation }: any) {
     );
 
     const ActionRow = ({ icon, label, onPress, variant = 'default' }: {
-        icon: string;
+        icon: React.ReactNode;
         label: string;
         onPress: () => void;
         variant?: 'default' | 'danger';
@@ -152,7 +153,7 @@ export default function ProfileScreen({ navigation }: any) {
             onPress={onPress}
             activeOpacity={0.7}
         >
-            <Text style={styles.actionIcon}>{icon}</Text>
+            {icon}
             <Text style={[
                 styles.actionLabel,
                 variant === 'danger' && styles.actionLabelDanger
@@ -204,7 +205,8 @@ export default function ProfileScreen({ navigation }: any) {
                     onPress={handleEditProfile}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.editButtonText}>✏️ Edit Profile</Text>
+                    <Ionicons name="pencil" size={15} color={COLORS.textPrimary} style={{ marginRight: 8 }} />
+                    <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
             </View>
 
@@ -212,28 +214,28 @@ export default function ProfileScreen({ navigation }: any) {
             <SectionHeader title="BUSINESS DETAILS" />
             <View style={styles.card}>
                 <DetailRow
-                    icon="👤"
+                    icon={<Ionicons name="person-outline" size={18} color={COLORS.textSecondary} />}
                     label="Owner Name"
                     value={shop?.ownerName}
                     onPress={handleEditProfile}
                     isLink
                 />
                 <DetailRow
-                    icon="📞"
+                    icon={<Ionicons name="call-outline" size={18} color={COLORS.textSecondary} />}
                     label="Phone"
                     value={shop?.phone}
                     onPress={handleEditProfile}
                     isLink
                 />
                 <DetailRow
-                    icon="📍"
+                    icon={<Ionicons name="location-outline" size={18} color={COLORS.textSecondary} />}
                     label="Locality"
                     value={shop?.locality}
                     onPress={handleEditProfile}
                     isLink
                 />
                 <DetailRow
-                    icon="🏠"
+                    icon={<Ionicons name="home-outline" size={18} color={COLORS.textSecondary} />}
                     label="Address"
                     value={shop?.address}
                     onPress={handleEditProfile}
@@ -245,7 +247,7 @@ export default function ProfileScreen({ navigation }: any) {
                     activeOpacity={0.7}
                 >
                     <View style={styles.detailLeft}>
-                        <Text style={styles.detailIcon}>📍</Text>
+                        <Ionicons name="navigate-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />
                         <View style={{ flex: 1 }}>
                             <Text style={styles.detailLabel}>Exact Location (GPS)</Text>
                             <Text style={styles.locationSubtext}>
@@ -258,7 +260,10 @@ export default function ProfileScreen({ navigation }: any) {
                     <View style={styles.detailRight}>
                         {shop?.lat && shop?.lng ? (
                             <View style={styles.verifiedBadge}>
-                                <Text style={styles.verifiedText}>✓ Set</Text>
+                                <View style={styles.iconTextRow}>
+                                    <Ionicons name="checkmark" size={14} color="#4ade80" style={{ marginRight: 4 }} />
+                                    <Text style={styles.verifiedText}>Set</Text>
+                                </View>
                             </View>
                         ) : (
                             <View style={styles.addButton}>
@@ -279,7 +284,7 @@ export default function ProfileScreen({ navigation }: any) {
                     activeOpacity={0.7}
                 >
                     <View style={styles.detailLeft}>
-                        <Text style={styles.detailIcon}>🆔</Text>
+                        <Ionicons name="id-card-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />
                         <Text style={styles.detailLabel}>Shop ID</Text>
                     </View>
                     <View style={styles.detailRight}>
@@ -287,13 +292,14 @@ export default function ProfileScreen({ navigation }: any) {
                             {shop?.id?.slice(0, 8) || 'N/A'}...
                         </Text>
                         <View style={styles.copyIconContainer}>
-                            <Text style={styles.copyIcon}>{copiedShopId ? '✓' : '📋'}</Text>
+                            <Ionicons name={copiedShopId ? 'checkmark-outline' : 'copy-outline'} size={16} color={copiedShopId ? COLORS.success : COLORS.textTertiary} />
                         </View>
                     </View>
                 </TouchableOpacity>
                 {copiedShopId && (
                     <View style={styles.copiedToast}>
-                        <Text style={styles.copiedToastText}>✓ Copied to clipboard</Text>
+                        <Ionicons name="checkmark-circle" size={16} color={COLORS.success} style={{ marginRight: 6 }} />
+                        <Text style={styles.copiedToastText}>Copied to clipboard</Text>
                     </View>
                 )}
             </View>
@@ -302,17 +308,17 @@ export default function ProfileScreen({ navigation }: any) {
             <SectionHeader title="SHOP" />
             <View style={styles.card}>
                 <ActionRow
-                    icon="🏪"
+                    icon={<Ionicons name="cube-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Manage Inventory"
                     onPress={() => handleQuickAction('Manage Inventory')}
                 />
                 <ActionRow
-                    icon="📊"
+                    icon={<Ionicons name="bar-chart-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Business Analytics"
                     onPress={() => handleQuickAction('Analytics')}
                 />
                 <ActionRow
-                    icon="⚙️"
+                    icon={<Ionicons name="settings-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Shop Settings"
                     onPress={() => handleQuickAction('Settings')}
                 />
@@ -322,12 +328,12 @@ export default function ProfileScreen({ navigation }: any) {
             <SectionHeader title="BILLING" />
             <View style={styles.card}>
                 <ActionRow
-                    icon="💳"
+                    icon={<Ionicons name="card-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Subscription & Plans"
                     onPress={() => handleQuickAction('Subscription')}
                 />
                 <ActionRow
-                    icon="💰"
+                    icon={<Ionicons name="wallet-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Payment Methods"
                     onPress={() => handleQuickAction('Payment')}
                 />
@@ -337,17 +343,17 @@ export default function ProfileScreen({ navigation }: any) {
             <SectionHeader title="SUPPORT" />
             <View style={styles.card}>
                 <ActionRow
-                    icon="❓"
+                    icon={<Ionicons name="help-circle-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Help & FAQ"
                     onPress={() => handleQuickAction('Help')}
                 />
                 <ActionRow
-                    icon="📧"
+                    icon={<Ionicons name="mail-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Contact Support"
                     onPress={() => handleQuickAction('Contact')}
                 />
                 <ActionRow
-                    icon="🔔"
+                    icon={<Ionicons name="notifications-outline" size={18} color={COLORS.textSecondary} style={{ marginRight: SPACING.md }} />}
                     label="Notifications"
                     onPress={() => handleQuickAction('Notifications')}
                 />
@@ -360,7 +366,7 @@ export default function ProfileScreen({ navigation }: any) {
                     onPress={handleLogout}
                     activeOpacity={0.7}
                 >
-                    <Text style={styles.logoutIcon}>🚪</Text>
+                    <Ionicons name="log-out-outline" size={18} color={COLORS.error} style={{ marginRight: SPACING.md }} />
                     <Text style={styles.logoutLabel}>Logout</Text>
                 </TouchableOpacity>
             </View>
@@ -460,6 +466,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg,
         borderRadius: 10,
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     editButtonText: {
         color: COLORS.textPrimary,
@@ -522,7 +530,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     addButton: {
-        backgroundColor: 'rgba(29, 185, 84, 0.15)',
+        backgroundColor: 'rgba(212, 175, 55, 0.15)',
         paddingHorizontal: SPACING.md,
         paddingVertical: 6,
         borderRadius: 6,
@@ -542,7 +550,7 @@ const styles = StyleSheet.create({
 
     // Location Row
     locationRow: {
-        backgroundColor: 'rgba(29, 185, 84, 0.05)',
+        backgroundColor: 'rgba(212, 175, 55, 0.05)',
         borderBottomWidth: 0,
     },
     locationSubtext: {
@@ -583,6 +591,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg,
         borderTopWidth: 1,
         borderTopColor: COLORS.primary,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     copiedToastText: {
         color: COLORS.success,

@@ -6,11 +6,11 @@ import {
     ScrollView,
     TouchableOpacity,
     TextInput,
-    Image,
     Alert,
     ActivityIndicator,
     Switch,
 } from 'react-native';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuthStore } from '../../store/authStore';
 import {
@@ -193,6 +193,9 @@ export default function EditItemScreen({ route, navigation }: any) {
                             <Image
                                 source={{ uri: img.startsWith('http') ? img : `https://zkmkapeuqbyvjxdkiljx.supabase.co/storage/v1/object/public/inventory-images/${img}` }}
                                 style={styles.image}
+                                contentFit="cover"
+                                cachePolicy="memory-disk"
+                                transition={200}
                             />
                             <TouchableOpacity
                                 style={styles.removeImageButton}
