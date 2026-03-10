@@ -518,7 +518,7 @@ export class BookingsService {
             );
         }
 
-        return this.prisma.booking.update({
+        const updatedBooking = await this.prisma.booking.update({
             where: { id: bookingId },
             data: {
                 status: BookingStatus.RENTED,
@@ -527,6 +527,11 @@ export class BookingsService {
                 verifiedAt: booking.verifiedAt || new Date(), // Set verifiedAt if not already set
             },
         });
+
+        // Ensure calendar blocks are confirmed as RENTAL
+        await this.calendar.confirmHoldBlocks(bookingId);
+
+        return updatedBooking;
     }
 
     /**
@@ -589,8 +594,20 @@ export class BookingsService {
             where: { id: bookingId },
             data: {
                 status: BookingStatus.CANCELLED,
+                cancelledAt: new Date(),
             },
         });
+
+        // 2. Remove availability blocks
+        await this.calendar.removeBookingBlocks(bookingId);
+
+        // 3. Release Redis lock
+        const allDates = this.getDateStrings(
+            booking.startDate,
+            booking.endDate,
+            true,
+        );
+        await this.redis.releaseHoldLock(booking.itemId, allDates);
 
         return updatedBooking;
     }
@@ -652,7 +669,7 @@ export class BookingsService {
     async getShopHolds(shopId: string) {
         return this.prisma.booking.findMany({
             where: {
-                item: { shopId },
+                shopId,
                 status: BookingStatus.HOLD,
                 holdExpiresAt: { gt: new Date() },
             },
@@ -673,7 +690,7 @@ export class BookingsService {
         try {
             const bookings = await this.prisma.booking.findMany({
                 where: {
-                    item: { shopId },
+                    shopId,
                 },
                 include: {
                     item: true,
@@ -772,7 +789,7 @@ export class BookingsService {
     async getShopPendingHolds(shopId: string) {
         return this.prisma.booking.findMany({
             where: {
-                item: { shopId },
+                shopId,
                 status: {
                     in: [BookingStatus.HOLD, BookingStatus.CONFIRMED],
                 },
@@ -800,7 +817,7 @@ export class BookingsService {
     async getShopActiveRentals(shopId: string) {
         return this.prisma.booking.findMany({
             where: {
-                item: { shopId },
+                shopId,
                 status: BookingStatus.RENTED,
             },
             include: {
@@ -829,7 +846,7 @@ export class BookingsService {
         const [bookings, total] = await Promise.all([
             this.prisma.booking.findMany({
                 where: {
-                    item: { shopId },
+                    shopId,
                     status: {
                         in: [BookingStatus.RETURNED, BookingStatus.CANCELLED],
                     },
@@ -853,7 +870,7 @@ export class BookingsService {
             }),
             this.prisma.booking.count({
                 where: {
-                    item: { shopId },
+                    shopId,
                     status: {
                         in: [BookingStatus.RETURNED, BookingStatus.CANCELLED],
                     },
@@ -882,7 +899,7 @@ export class BookingsService {
 
         return this.prisma.booking.findMany({
             where: {
-                item: { shopId },
+                shopId,
                 status: {
                     in: [BookingStatus.HOLD, BookingStatus.CONFIRMED],
                 },
@@ -918,7 +935,7 @@ export class BookingsService {
 
         return this.prisma.booking.findMany({
             where: {
-                item: { shopId },
+                shopId,
                 status: BookingStatus.RENTED,
                 endDate: { gte: todayStart, lte: todayEnd },
             },

@@ -81,58 +81,66 @@ export class ShopsService {
         const todayEnd = new Date(now.setHours(23, 59, 59, 999));
 
         const [
-            totalItems,
-            activeItems,
-            totalBookings,
+            inventoryStats,
+            bookingStats,
             activeHolds,
-            pendingPickups,
-            activeRentals,
+            pickupsToday,
+            returnsToday,
             verifiedLeads,
             revenueThisMonth,
             revenueLastMonth,
-            itemStats,
-            pickupsToday,
-            returnsToday
+            categoryStats
         ] = await Promise.all([
-            this.prisma.inventoryItem.count({ where: { shopId } }),
-            this.prisma.inventoryItem.count({
-                where: { shopId, status: 'ACTIVE' },
+            // 1. Inventory stats by status
+            this.prisma.inventoryItem.groupBy({
+                by: ['status'],
+                where: { shopId },
+                _count: { _all: true }
             }),
-            this.prisma.booking.count({
-                where: { item: { shopId } },
+            // 2. Booking stats by status
+            this.prisma.booking.groupBy({
+                by: ['status'],
+                where: { shopId },
+                _count: { _all: true }
             }),
+            // 3. Active holds
             this.prisma.booking.count({
                 where: {
-                    item: { shopId },
+                    shopId,
                     status: 'HOLD',
                     holdExpiresAt: { gt: new Date() },
                 },
             }),
+            // 4. Pickups Today
             this.prisma.booking.count({
                 where: {
-                    item: { shopId },
-                    status: 'CONFIRMED',
-                },
+                    shopId,
+                    status: { in: ['CONFIRMED', 'HOLD'] },
+                    startDate: { gte: todayStart, lte: todayEnd }
+                }
             }),
+            // 5. Returns Today
             this.prisma.booking.count({
                 where: {
-                    item: { shopId },
+                    shopId,
                     status: 'RENTED',
-                },
+                    endDate: { gte: todayStart, lte: todayEnd }
+                }
             }),
+            // 6. Verified leads
             this.prisma.attributionEvent.count({
                 where: { shopId, billable: true },
             }),
-            // Revenue This Month
+            // 7. Revenue This Month
             this.prisma.payment.aggregate({
                 where: {
                     Booking: { shopId },
-                    status: 'SUCCESS', // Schema has SUCCESS and COMPLETED, let's check
+                    status: 'SUCCESS', // Schema has SUCCESS and COMPLETED
                     recordedAt: { gte: startOfThisMonth }
                 },
                 _sum: { amount: true }
             }),
-            // Revenue Last Month
+            // 8. Revenue Last Month
             this.prisma.payment.aggregate({
                 where: {
                     Booking: { shopId },
@@ -141,36 +149,24 @@ export class ShopsService {
                 },
                 _sum: { amount: true }
             }),
-            // Popular categories
-            this.prisma.inventoryItem.findMany({
+            // 9. Popular categories
+            this.prisma.inventoryItem.groupBy({
+                by: ['category'],
                 where: { shopId },
-                select: { category: true, timesRented: true }
-            }),
-            // Pickups Today
-            this.prisma.booking.count({
-                where: {
-                    item: { shopId },
-                    status: { in: ['CONFIRMED', 'HOLD'] },
-                    startDate: { gte: todayStart, lte: todayEnd }
-                }
-            }),
-            // Returns Today
-            this.prisma.booking.count({
-                where: {
-                    item: { shopId },
-                    status: 'RENTED',
-                    endDate: { gte: todayStart, lte: todayEnd }
-                }
+                _sum: { timesRented: true }
             })
         ]);
 
-        // Aggregate category stats in JS
-        const categoryMap: Record<string, number> = {};
-        itemStats.forEach(item => {
-            categoryMap[item.category] = (categoryMap[item.category] || 0) + item.timesRented;
-        });
-        const topCategories = Object.entries(categoryMap)
-            .map(([name, count]) => ({ name, count }))
+        const totalItems = inventoryStats.reduce((sum, g) => sum + g._count._all, 0);
+        const activeItems = inventoryStats.find(g => g.status === 'ACTIVE')?._count._all || 0;
+
+        const totalBookings = bookingStats.reduce((sum, g) => sum + g._count._all, 0);
+        const pendingPickups = bookingStats.find(g => g.status === 'CONFIRMED')?._count._all || 0;
+        const activeRentals = bookingStats.find(g => g.status === 'RENTED')?._count._all || 0;
+
+        const topCategories = categoryStats
+            .filter(g => g._sum.timesRented && g._sum.timesRented > 0)
+            .map(g => ({ name: g.category, count: g._sum.timesRented! }))
             .sort((a, b) => b.count - a.count)
             .slice(0, 3);
 

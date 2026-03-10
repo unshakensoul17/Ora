@@ -85,13 +85,13 @@ export default function BookingsScreen({ navigation, route }: any) {
         loadBookings();
     }, [loadBookings]);
 
-    const handleRefresh = async () => {
+    const handleRefresh = useCallback(async () => {
         setRefreshing(true);
         await loadBookings();
         setRefreshing(false);
-    };
+    }, [loadBookings]);
 
-    const handleMarkPickup = async (bookingId: string) => {
+    const handleMarkPickup = useCallback(async (bookingId: string) => {
         setActionLoading(bookingId);
         try {
             await markPickedUp(bookingId);
@@ -102,9 +102,9 @@ export default function BookingsScreen({ navigation, route }: any) {
         } finally {
             setActionLoading(null);
         }
-    };
+    }, [loadBookings]);
 
-    const handleMarkReturn = async (bookingId: string) => {
+    const handleMarkReturn = useCallback(async (bookingId: string) => {
         Alert.alert(
             'Confirm Return',
             'Mark this item as returned?',
@@ -127,84 +127,19 @@ export default function BookingsScreen({ navigation, route }: any) {
                 },
             ]
         );
-    };
+    }, [loadBookings]);
 
-    const renderBookingCard = ({ item }: { item: Booking }) => {
-        const isProcessing = actionLoading === item.id;
-
+    const renderBookingCard = useCallback(({ item }: { item: Booking }) => {
         return (
-            <View style={styles.bookingCard}>
-                {/* Header */}
-                <View style={styles.cardHeader}>
-                    <View>
-                        <View style={styles.iconTextRow}>
-                            <Ionicons name="person-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
-                            <Text style={styles.customerName}>{item.user?.name || 'Customer'}</Text>
-                        </View>
-                        <Text style={styles.customerPhone}>{item.user?.phone}</Text>
-                    </View>
-                    <View style={[styles.statusBadge, getStatusStyle(item.status)]}>
-                        <Text style={styles.statusText}>{item.status}</Text>
-                    </View>
-                </View>
-
-                {/* Item Details */}
-                <View style={styles.itemSection}>
-                    <View style={styles.iconTextRow}>
-                        <Ionicons name="cube-outline" size={16} color="#D4AF37" style={{ marginRight: 6 }} />
-                        <Text style={styles.itemName}>{item.item?.name || 'Item'}</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Dates:</Text>
-                        <Text style={styles.detailValue}>
-                            {formatDate(item.startDate)} - {formatDate(item.endDate)}
-                        </Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Price:</Text>
-                        <Text style={styles.priceValue}>
-                            ₹{((item.platformPrice || 0) / 100).toLocaleString('en-IN')}
-                        </Text>
-                    </View>
-                </View>
-
-                {/* Actions */}
-                {activeTab === 'pending' && (
-                    <TouchableOpacity
-                        style={[styles.actionButton, isProcessing && styles.buttonDisabled]}
-                        onPress={() => handleMarkPickup(item.id)}
-                        disabled={isProcessing}
-                    >
-                        {isProcessing ? (
-                            <ActivityIndicator color="#022b1e" size="small" />
-                        ) : (
-                            <View style={styles.actionButtonContent}>
-                                <Ionicons name="checkmark" size={18} color="#022b1e" style={{ marginRight: 6 }} />
-                                <Text style={styles.actionButtonText}>Mark Picked Up</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                )}
-
-                {activeTab === 'active' && (
-                    <TouchableOpacity
-                        style={[styles.actionButton, styles.returnButton, isProcessing && styles.buttonDisabled]}
-                        onPress={() => handleMarkReturn(item.id)}
-                        disabled={isProcessing}
-                    >
-                        {isProcessing ? (
-                            <ActivityIndicator color="#fff" size="small" />
-                        ) : (
-                            <View style={styles.actionButtonContent}>
-                                <Ionicons name="checkmark" size={18} color="#fff" style={{ marginRight: 6 }} />
-                                <Text style={[styles.actionButtonText, styles.returnButtonText]}>Mark Returned</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                )}
-            </View>
+            <BookingCard
+                item={item}
+                activeTab={activeTab}
+                isProcessing={actionLoading === item.id}
+                onMarkPickup={handleMarkPickup}
+                onMarkReturn={handleMarkReturn}
+            />
         );
-    };
+    }, [activeTab, actionLoading, handleMarkPickup, handleMarkReturn]);
 
     const renderEmptyState = () => (
         <View style={styles.emptyState}>
@@ -304,11 +239,102 @@ export default function BookingsScreen({ navigation, route }: any) {
                             tintColor="#D4AF37"
                         />
                     }
+                    initialNumToRender={8}
+                    maxToRenderPerBatch={10}
+                    windowSize={5}
+                    removeClippedSubviews={true}
                 />
             )}
         </View>
     );
 }
+
+const BookingCard = React.memo(({
+    item,
+    activeTab,
+    isProcessing,
+    onMarkPickup,
+    onMarkReturn
+}: {
+    item: Booking;
+    activeTab: TabType;
+    isProcessing: boolean;
+    onMarkPickup: (id: string) => void;
+    onMarkReturn: (id: string) => void;
+}) => {
+    return (
+        <View style={styles.bookingCard}>
+            {/* Header */}
+            <View style={styles.cardHeader}>
+                <View>
+                    <View style={styles.iconTextRow}>
+                        <Ionicons name="person-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
+                        <Text style={styles.customerName}>{item.user?.name || item.customer?.name || 'Customer'}</Text>
+                    </View>
+                    <Text style={styles.customerPhone}>{item.user?.phone || item.customer?.phone}</Text>
+                </View>
+                <View style={[styles.statusBadge, getStatusStyle(item.status)]}>
+                    <Text style={styles.statusText}>{item.status}</Text>
+                </View>
+            </View>
+
+            {/* Item Details */}
+            <View style={styles.itemSection}>
+                <View style={styles.iconTextRow}>
+                    <Ionicons name="cube-outline" size={16} color="#D4AF37" style={{ marginRight: 6 }} />
+                    <Text style={styles.itemName}>{item.item?.name || 'Item'}</Text>
+                </View>
+                <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Dates:</Text>
+                    <Text style={styles.detailValue}>
+                        {formatDate(item.startDate)} - {formatDate(item.endDate)}
+                    </Text>
+                </View>
+                <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Price:</Text>
+                    <Text style={styles.priceValue}>
+                        ₹{((item.platformPrice || 0) / 100).toLocaleString('en-IN')}
+                    </Text>
+                </View>
+            </View>
+
+            {/* Actions */}
+            {activeTab === 'pending' && (
+                <TouchableOpacity
+                    style={[styles.actionButton, isProcessing && styles.buttonDisabled]}
+                    onPress={() => onMarkPickup(item.id)}
+                    disabled={isProcessing}
+                >
+                    {isProcessing ? (
+                        <ActivityIndicator color="#022b1e" size="small" />
+                    ) : (
+                        <View style={styles.actionButtonContent}>
+                            <Ionicons name="checkmark" size={18} color="#022b1e" style={{ marginRight: 6 }} />
+                            <Text style={styles.actionButtonText}>Mark Picked Up</Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+            )}
+
+            {activeTab === 'active' && (
+                <TouchableOpacity
+                    style={[styles.actionButton, styles.returnButton, isProcessing && styles.buttonDisabled]}
+                    onPress={() => onMarkReturn(item.id)}
+                    disabled={isProcessing}
+                >
+                    {isProcessing ? (
+                        <ActivityIndicator color="#fff" size="small" />
+                    ) : (
+                        <View style={styles.actionButtonContent}>
+                            <Ionicons name="checkmark" size={18} color="#fff" style={{ marginRight: 6 }} />
+                            <Text style={[styles.actionButtonText, styles.returnButtonText]}>Mark Returned</Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+            )}
+        </View>
+    );
+});
 
 // Helper functions
 function formatDate(dateString: string | Date): string {

@@ -257,7 +257,7 @@ export async function getBookingDetails(bookingId: string): Promise<Booking> {
  * Scan QR code to verify booking
  */
 export async function scanQRCode(data: ScanQRRequest): Promise<ScanResult> {
-    const response = await apiClient.post(endpoints.scan, data);
+    const response = await apiClient.post(endpoints.verifyQR, data);
     return response.data;
 }
 

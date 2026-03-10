@@ -5,6 +5,7 @@ import { getShopHolds, markPickedUp, markReturned, cancelBooking } from '../../a
 import { Booking } from '../../api/types';
 import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function HoldsListScreen() {
     const shop = useAuthStore((state) => state.shop);

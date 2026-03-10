@@ -1,4 +1,4 @@
-package com.fashcycle.shop
+package com.ora.shop
 
 import android.os.Build
 import android.os.Bundle

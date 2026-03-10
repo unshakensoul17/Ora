@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator, RefreshControl, Alert, Switch, TextInput, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useAuthStore } from '../../store/authStore';
 import { getShopInventory, deleteInventoryItem, toggleInventoryStatus } from '../../api/endpoints';
@@ -66,37 +67,31 @@ export default function InventoryListScreen({ navigation }: any) {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    // Fetch on filter change
-    useEffect(() => {
-        fetchInventory();
-    }, [shop?.id, debouncedSearch, selectedCategory]);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useFocusEffect(
+        React.useCallback(() => {
             fetchInventory();
-        });
-        return unsubscribe;
-    }, [navigation]);
+        }, [shop?.id, debouncedSearch, selectedCategory])
+    );
 
     const onRefresh = () => {
         setRefreshing(true);
         fetchInventory();
     };
 
-    const handleToggleStatus = async (item: InventoryItem) => {
+    const handleToggleStatus = useCallback(async (item: InventoryItem) => {
         try {
             await toggleInventoryStatus(item.id);
             fetchInventory();
         } catch (error: any) {
             Alert.alert('Error', error.message || 'Failed to toggle status');
         }
-    };
+    }, [shop?.id, debouncedSearch, selectedCategory]);
 
-    const handleEdit = (item: InventoryItem) => {
+    const handleEdit = useCallback((item: InventoryItem) => {
         navigation.navigate('EditItem', { itemId: item.id });
-    };
+    }, [navigation]);
 
-    const handleDelete = (item: InventoryItem) => {
+    const handleDelete = useCallback((item: InventoryItem) => {
         Alert.alert(
             'Delete Item',
             `Are you sure you want to delete "${item.name}"?`,
@@ -116,65 +111,16 @@ export default function InventoryListScreen({ navigation }: any) {
                 },
             ]
         );
-    };
+    }, [shop?.id, debouncedSearch, selectedCategory]);
 
-    const formatPrice = (paise: number) => `₹${(paise / 100).toLocaleString('en-IN')}`;
-
-    const renderItem = ({ item }: { item: InventoryItem }) => {
-        const imageUrl = item.images && item.images.length > 0
-            ? (item.images[0].startsWith('http')
-                ? item.images[0]
-                : `https://zkmkapeuqbyvjxdkiljx.supabase.co/storage/v1/object/public/inventory-images/${item.images[0]}`)
-            : null;
-
-        return (
-            <TouchableOpacity
-                style={styles.itemCard}
-                onPress={() => handleEdit(item)}
-                onLongPress={() => handleDelete(item)}
-            >
-                <View style={styles.thumbnailContainer}>
-                    {imageUrl ? (
-                        <Image
-                            source={{ uri: imageUrl }}
-                            style={styles.thumbnail}
-                            contentFit="cover"
-                            cachePolicy="memory-disk"
-                            transition={200}
-                        />
-                    ) : (
-                        <View style={[styles.thumbnail, styles.placeholderThumbnail]}>
-                            <Text style={styles.placeholderText}>No Image</Text>
-                        </View>
-                    )}
-                </View>
-                <View style={styles.itemInfo}>
-                    <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
-                    <View style={styles.itemMeta}>
-                        <Text style={styles.itemCategory}>{item.category}</Text>
-                        <Text style={styles.itemSize}>Size: {item.size}</Text>
-                    </View>
-                    <Text style={styles.itemPrice}>{formatPrice(item.rentalPrice)}/day</Text>
-                </View>
-                <View style={styles.itemRight}>
-                    <View style={[styles.statusBadge, { backgroundColor: (statusColors[item.status] || '#6b7280') + '20', marginBottom: 8 }]}>
-                        <Text style={[styles.statusText, { color: statusColors[item.status] || '#6b7280' }]}>{item.status}</Text>
-                    </View>
-                    {item.status !== 'RENTED' && (
-                        <View style={styles.toggleContainer}>
-                            <Switch
-                                value={item.status === 'ACTIVE'}
-                                onValueChange={() => handleToggleStatus(item)}
-                                trackColor={{ false: '#2C2C2E', true: '#D4AF37' }}
-                                thumbColor={item.status === 'ACTIVE' ? '#121212' : '#f4f3f4'}
-                                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-                            />
-                        </View>
-                    )}
-                </View>
-            </TouchableOpacity>
-        );
-    };
+    const renderItem = useCallback(({ item }: { item: InventoryItem }) => (
+        <InventoryItemCard
+            item={item}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onToggleStatus={handleToggleStatus}
+        />
+    ), [handleEdit, handleDelete, handleToggleStatus]);
 
     if (loading) {
         return (
@@ -274,10 +220,82 @@ export default function InventoryListScreen({ navigation }: any) {
                         <Text style={styles.hint}>Long press an item to delete</Text>
                     ) : null
                 }
+                initialNumToRender={10}
+                maxToRenderPerBatch={10}
+                windowSize={5}
+                removeClippedSubviews={true}
             />
         </View>
     );
 }
+
+const formatPrice = (paise: number) => `₹${(paise / 100).toLocaleString('en-IN')}`;
+
+const InventoryItemCard = React.memo(({
+    item,
+    onEdit,
+    onDelete,
+    onToggleStatus
+}: {
+    item: InventoryItem;
+    onEdit: (item: InventoryItem) => void;
+    onDelete: (item: InventoryItem) => void;
+    onToggleStatus: (item: InventoryItem) => void;
+}) => {
+    const imageUrl = item.images && item.images.length > 0
+        ? (item.images[0].startsWith('http')
+            ? item.images[0]
+            : `https://zkmkapeuqbyvjxdkiljx.supabase.co/storage/v1/object/public/inventory-images/${item.images[0]}`)
+        : null;
+
+    return (
+        <TouchableOpacity
+            style={styles.itemCard}
+            onPress={() => onEdit(item)}
+            onLongPress={() => onDelete(item)}
+        >
+            <View style={styles.thumbnailContainer}>
+                {imageUrl ? (
+                    <Image
+                        source={{ uri: imageUrl }}
+                        style={styles.thumbnail}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
+                        transition={200}
+                    />
+                ) : (
+                    <View style={[styles.thumbnail, styles.placeholderThumbnail]}>
+                        <Text style={styles.placeholderText}>No Image</Text>
+                    </View>
+                )}
+            </View>
+            <View style={styles.itemInfo}>
+                <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+                <View style={styles.itemMeta}>
+                    <Text style={styles.itemCategory}>{item.category}</Text>
+                    <Text style={styles.itemSize}>Size: {item.size}</Text>
+                </View>
+                <Text style={styles.itemPrice}>{formatPrice(item.rentalPrice)}/day</Text>
+            </View>
+            <View style={styles.itemRight}>
+                <View style={[styles.statusBadge, { backgroundColor: (statusColors[item.status] || '#6b7280') + '20', marginBottom: 8 }]}>
+                    <Text style={[styles.statusText, { color: statusColors[item.status] || '#6b7280' }]}>{item.status}</Text>
+                </View>
+                {item.status !== 'RENTED' && (
+                    <View style={styles.toggleContainer}>
+                        <Switch
+                            value={item.status === 'ACTIVE'}
+                            onValueChange={() => onToggleStatus(item)}
+                            trackColor={{ false: '#2C2C2E', true: '#D4AF37' }}
+                            thumbColor={item.status === 'ACTIVE' ? '#121212' : '#f4f3f4'}
+                            style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                        />
+                    </View>
+                )}
+            </View>
+        </TouchableOpacity>
+    );
+});
 
 const styles = StyleSheet.create({
     container: {

@@ -107,7 +107,7 @@ export default function LoginScreen({ navigation }: any) {
             <View style={styles.content}>
                 <View style={styles.header}>
                     <Ionicons name="storefront-outline" size={64} color="#D4AF37" style={{ marginBottom: 16 }} />
-                    <Text style={styles.title}>Fashcycle Shop</Text>
+                    <Text style={styles.title}>ORA SHOP</Text>
                     <Text style={styles.subtitle}>Login to manage your inventory</Text>
                 </View>
 

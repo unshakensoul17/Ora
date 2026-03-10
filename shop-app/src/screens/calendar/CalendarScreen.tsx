@@ -51,7 +51,16 @@ export default function CalendarScreen({ navigation }: any) {
     }, [searchQuery]);
 
     useEffect(() => {
-        loadData();
+        if (shop?.id) {
+            setLoading(true);
+            loadBookings();
+        }
+    }, [shop?.id]);
+
+    useEffect(() => {
+        if (shop?.id) {
+            loadInventory();
+        }
     }, [shop?.id, debouncedSearch, selectedCategory]);
 
     useEffect(() => {
@@ -60,40 +69,39 @@ export default function CalendarScreen({ navigation }: any) {
         }
     }, [selectedItem, currentMonth, allBookings]);
 
-    const loadData = async () => {
+    const loadBookings = async () => {
         if (!shop?.id) return;
         try {
-            console.log('Loading calendar data for shop:', shop.id);
+            const bookingsData = await getShopBookings(shop.id);
+            setAllBookings(bookingsData.bookings || []);
+        } catch (err) {
+            console.error('Failed to load bookings:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadInventory = async () => {
+        if (!shop?.id) return;
+        try {
             const inventoryFilters: any = {};
             if (debouncedSearch.trim()) inventoryFilters.search = debouncedSearch.trim();
             if (selectedCategory !== 'ALL') inventoryFilters.category = selectedCategory;
 
-            const [inventoryData, bookingsData] = await Promise.all([
-                getShopInventory(shop.id, inventoryFilters),
-                getShopBookings(shop.id),
-            ]);
-
-            console.log('Items loaded:', inventoryData.items.length);
-
+            const inventoryData = await getShopInventory(shop.id, inventoryFilters);
             setItems(inventoryData.items);
-            setAllBookings(bookingsData.bookings || []);
 
-            // Track if shop has ANY items (only on initial load or if not filtering)
             if (selectedCategory === 'ALL' && !debouncedSearch.trim()) {
                 setHasItems(inventoryData.items.length > 0);
             } else if (inventoryData.items.length > 0) {
-                // If we found items with filters, the shop definitely isn't empty
                 setHasItems(true);
             }
 
-            // Only set default if one isn't already selected or current selection is gone
             if (inventoryData.items.length > 0 && !selectedItem) {
                 setSelectedItem(inventoryData.items[0]);
             }
         } catch (error) {
-            console.error('Failed to load data:', error);
-        } finally {
-            setLoading(false);
+            console.error('Failed to load inventory:', error);
         }
     };
 

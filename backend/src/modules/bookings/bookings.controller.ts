@@ -16,6 +16,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('bookings')
 @Controller('bookings')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class BookingsController {
     constructor(private bookingsService: BookingsService) { }
 
@@ -123,8 +125,7 @@ export class BookingsController {
         return this.bookingsService.markReturned(bookingId);
     }
 
-    @Post(':bookingId/cancel')
-    @ApiBearerAuth()
+    @Patch(':bookingId/cancel')
     @ApiOperation({ summary: 'Cancel a booking/hold' })
     async cancelBooking(@Param('bookingId') bookingId: string) {
         return this.bookingsService.cancelBooking(bookingId);

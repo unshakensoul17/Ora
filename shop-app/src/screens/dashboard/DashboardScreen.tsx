@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, ActivityIndicator, Animated } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuthStore } from '../../store/authStore';
 import { getShopDashboard } from '../../api/endpoints';
 import { DashboardStats } from '../../api/types';
@@ -96,16 +97,11 @@ export default function DashboardScreen({ navigation }: any) {
         }
     };
 
-    useEffect(() => {
-        fetchDashboard();
-    }, [shop?.id]);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useFocusEffect(
+        React.useCallback(() => {
             fetchDashboard();
-        });
-        return unsubscribe;
-    }, [navigation]);
+        }, [shop?.id])
+    );
 
     const onRefresh = () => {
         setRefreshing(true);

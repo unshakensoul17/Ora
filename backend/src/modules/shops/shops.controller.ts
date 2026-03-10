@@ -7,10 +7,12 @@ import {
     Body,
     Query,
     ParseUUIDPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { ShopsService } from './shops.service';
+import { AuthGuard } from '@nestjs/passport';
 import { ShopStatus } from '@prisma/client';
 import {
     CreateShopDto,
@@ -48,6 +50,7 @@ export class ShopsController {
      * Get shop dashboard stats
      */
     @Get(':id/dashboard')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get shop dashboard stats' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })
@@ -59,6 +62,7 @@ export class ShopsController {
      * Update shop profile
      */
     @Patch(':id')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Update shop profile' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })
@@ -74,6 +78,7 @@ export class ShopsController {
      */
     @Post(':id/change-password')
     @Throttle({ default: { limit: 3, ttl: 60000 } })
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Change shop password' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })

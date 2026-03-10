@@ -7,10 +7,13 @@ import {
     Param,
     Body,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InventoryService } from './inventory.service';
+import { AuthGuard } from '@nestjs/passport';
 import { Category, ItemStatus } from '@prisma/client';
+import { CreateItemDto, UpdateInventoryDto } from './dto/inventory.dto';
 
 @ApiTags('inventory')
 @Controller('inventory')
@@ -65,6 +68,7 @@ export class InventoryController {
     // ============================================
 
     @Get('admin/list')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: List all inventory' })
     async listInventory(
@@ -79,13 +83,15 @@ export class InventoryController {
     // ============================================
 
     @Post('shop/:shopId')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Add inventory item' })
-    async create(@Param('shopId') shopId: string, @Body() data: any) {
+    async create(@Param('shopId') shopId: string, @Body() data: CreateItemDto) {
         return this.inventoryService.create(shopId, data);
     }
 
     @Get('shop/:shopId')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get shop inventory' })
     async getShopInventory(
@@ -106,13 +112,15 @@ export class InventoryController {
     }
 
     @Patch(':id')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Update inventory item' })
-    async update(@Param('id') id: string, @Body() data: any) {
+    async update(@Param('id') id: string, @Body() data: UpdateInventoryDto) {
         return this.inventoryService.update(id, data);
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Delete inventory item' })
     async delete(@Param('id') id: string) {
@@ -120,6 +128,7 @@ export class InventoryController {
     }
 
     @Patch(':id/toggle-status')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Toggle item availability (ACTIVE/INACTIVE)' })
     async toggleStatus(@Param('id') id: string) {
