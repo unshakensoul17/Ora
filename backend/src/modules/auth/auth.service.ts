@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, BadRequestException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RedisService } from '../../redis/redis.service';
@@ -220,7 +220,13 @@ export class AuthService {
             passwordHash,
             password: undefined, // Remove plain password
         };
-        await this.redis.set(registrationKey, JSON.stringify(registrationData), 1800); // 30 min
+
+        try {
+            await this.redis.set(registrationKey, JSON.stringify(registrationData), 1800); // 30 min
+        } catch (error) {
+            console.error('❌ Redis error during shop registration:', error.message);
+            throw new InternalServerErrorException('System is temporarily unable to process shop registrations. Please try again later.');
+        }
 
         // Send email verification OTP
         await this.sendEmailOTP(data.email);
@@ -713,7 +719,13 @@ export class AuthService {
             passwordHash,
             password: undefined, // Remove plain password
         };
-        await this.redis.set(registrationKey, JSON.stringify(registrationData), 1800); // 30 min
+
+        try {
+            await this.redis.set(registrationKey, JSON.stringify(registrationData), 1800); // 30 min
+        } catch (error) {
+            console.error('❌ Redis error during registration:', error.message);
+            throw new InternalServerErrorException('System is temporarily unable to process registrations. Please try again later.');
+        }
 
         // Send email verification OTP
         await this.sendEmailOTP(data.email);

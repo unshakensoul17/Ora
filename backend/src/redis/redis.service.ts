@@ -5,17 +5,28 @@ import { Redis } from '@upstash/redis';
 export class RedisService implements OnModuleInit {
     private redis: Redis | null = null;
 
-    onModuleInit() {
-        const url = process.env.UPSTASH_REDIS_REST_URL;
-        const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    async onModuleInit() {
+        const url = process.env.UPSTASH_REDIS_REST_URL?.trim();
+        const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
 
         if (!url || !token) {
-            console.warn('Upstash Redis credentials not configured. Caching/locking features will use fallback.');
+            console.warn('⚠️ Upstash Redis credentials not configured. Caching/locking features will use fallback.');
             return;
         }
 
-        this.redis = new Redis({ url, token });
-        console.log('✅ Upstash Redis client initialized');
+        try {
+            this.redis = new Redis({ url, token });
+
+            // Test connection immediately
+            const result = await this.redis.ping();
+            if (result) {
+                console.log('✅ Upstash Redis connection verified');
+            }
+        } catch (error) {
+            console.error('❌ Upstash Redis initialization failed:', error.message);
+            console.error('💡 Hint: Check if Render can reach the Upstash REST URL and if your Token is correct.');
+            // We don't null it here, because it might be a transient network issue
+        }
     }
 
     isConfigured(): boolean {
@@ -33,12 +44,17 @@ export class RedisService implements OnModuleInit {
     async acquireItemLock(itemId: string, userId: string, ttlSeconds = 30): Promise<boolean> {
         if (!this.redis) return true; // Allow if Redis not configured
 
-        const lockKey = `lock:item:${itemId}`;
-        const result = await this.redis.set(lockKey, userId, {
-            nx: true, // Only set if not exists
-            ex: ttlSeconds,
-        });
-        return result === 'OK';
+        try {
+            const lockKey = `lock:item:${itemId}`;
+            const result = await this.redis.set(lockKey, userId, {
+                nx: true, // Only set if not exists
+                ex: ttlSeconds,
+            });
+            return result === 'OK';
+        } catch (error) {
+            console.error(`❌ Redis acquireItemLock failed [${itemId}]:`, error.message);
+            return true; // Don't block if Redis fails
+        }
     }
 
     /**
@@ -47,10 +63,14 @@ export class RedisService implements OnModuleInit {
     async releaseItemLock(itemId: string, userId: string): Promise<void> {
         if (!this.redis) return;
 
-        const lockKey = `lock:item:${itemId}`;
-        const currentHolder = await this.redis.get(lockKey);
-        if (currentHolder === userId) {
-            await this.redis.del(lockKey);
+        try {
+            const lockKey = `lock:item:${itemId}`;
+            const currentHolder = await this.redis.get(lockKey);
+            if (currentHolder === userId) {
+                await this.redis.del(lockKey);
+            }
+        } catch (error) {
+            console.error(`❌ Redis releaseItemLock failed [${itemId}]:`, error.message);
         }
     }
 
@@ -66,20 +86,25 @@ export class RedisService implements OnModuleInit {
     ): Promise<boolean> {
         if (!this.redis) return true; // Allow if Redis not configured
 
-        // Try to lock all dates
-        for (const date of dates) {
-            const lockKey = `hold:${itemId}:${date}`;
-            const result = await this.redis.set(lockKey, userId, {
-                nx: true,
-                ex: ttlSeconds,
-            });
-            if (result !== 'OK') {
-                // Failed to acquire - release any locks we got
-                await this.releaseHoldLock(itemId, dates.slice(0, dates.indexOf(date)));
-                return false;
+        try {
+            // Try to lock all dates
+            for (const date of dates) {
+                const lockKey = `hold:${itemId}:${date}`;
+                const result = await this.redis.set(lockKey, userId, {
+                    nx: true,
+                    ex: ttlSeconds,
+                });
+                if (result !== 'OK') {
+                    // Failed to acquire - release any locks we got
+                    await this.releaseHoldLock(itemId, dates.slice(0, dates.indexOf(date)));
+                    return false;
+                }
             }
+            return true;
+        } catch (error) {
+            console.error(`❌ Redis acquireHoldLock failed [${itemId}]:`, error.message);
+            return true;
         }
-        return true;
     }
 
     /**
@@ -88,9 +113,13 @@ export class RedisService implements OnModuleInit {
     async releaseHoldLock(itemId: string, dates: string[]): Promise<void> {
         if (!this.redis) return;
 
-        for (const date of dates) {
-            const lockKey = `hold:${itemId}:${date}`;
-            await this.redis.del(lockKey);
+        try {
+            for (const date of dates) {
+                const lockKey = `hold:${itemId}:${date}`;
+                await this.redis.del(lockKey);
+            }
+        } catch (error) {
+            console.error(`❌ Redis releaseHoldLock failed [${itemId}]:`, error.message);
         }
     }
 
@@ -104,8 +133,12 @@ export class RedisService implements OnModuleInit {
     async setHoldExpiry(bookingId: string, expiresAt: Date): Promise<void> {
         if (!this.redis) return;
 
-        const ttl = Math.max(1, Math.floor((expiresAt.getTime() - Date.now()) / 1000));
-        await this.redis.set(`hold:${bookingId}`, 'active', { ex: ttl });
+        try {
+            const ttl = Math.max(1, Math.floor((expiresAt.getTime() - Date.now()) / 1000));
+            await this.redis.set(`hold:${bookingId}`, 'active', { ex: ttl });
+        } catch (error) {
+            console.error(`❌ Redis setHoldExpiry failed [${bookingId}]:`, error.message);
+        }
     }
 
     /**
@@ -114,8 +147,13 @@ export class RedisService implements OnModuleInit {
     async isHoldActive(bookingId: string): Promise<boolean> {
         if (!this.redis) return true; // Assume active if Redis not configured
 
-        const result = await this.redis.get(`hold:${bookingId}`);
-        return result === 'active';
+        try {
+            const result = await this.redis.get(`hold:${bookingId}`);
+            return result === 'active';
+        } catch (error) {
+            console.error(`❌ Redis isHoldActive failed [${bookingId}]:`, error.message);
+            return true;
+        }
     }
 
     /**
@@ -123,7 +161,11 @@ export class RedisService implements OnModuleInit {
      */
     async expireHold(bookingId: string): Promise<void> {
         if (!this.redis) return;
-        await this.redis.del(`hold:${bookingId}`);
+        try {
+            await this.redis.del(`hold:${bookingId}`);
+        } catch (error) {
+            console.error(`❌ Redis expireHold failed [${bookingId}]:`, error.message);
+        }
     }
 
     // ============================================
@@ -141,14 +183,19 @@ export class RedisService implements OnModuleInit {
     ): Promise<boolean> {
         if (!this.redis) return true; // Allow if Redis not configured
 
-        const fullKey = `ratelimit:${key}`;
-        const current = await this.redis.incr(fullKey);
+        try {
+            const fullKey = `ratelimit:${key}`;
+            const current = await this.redis.incr(fullKey);
 
-        if (current === 1) {
-            await this.redis.expire(fullKey, windowSeconds);
+            if (current === 1) {
+                await this.redis.expire(fullKey, windowSeconds);
+            }
+
+            return current <= maxRequests;
+        } catch (error) {
+            console.error(`❌ Redis rate limit check failed [${key}]:`, error.message);
+            return true; // Don't block user if Redis fails
         }
-
-        return current <= maxRequests;
     }
 
     // ============================================
@@ -157,21 +204,35 @@ export class RedisService implements OnModuleInit {
 
     async get<T>(key: string): Promise<T | null> {
         if (!this.redis) return null;
-        return await this.redis.get(key) as T | null;
+        try {
+            return await this.redis.get(key) as T | null;
+        } catch (error) {
+            console.error(`❌ Redis GET failed [${key}]:`, error.message);
+            return null;
+        }
     }
 
     async set(key: string, value: any, ttlSeconds?: number): Promise<void> {
         if (!this.redis) return;
 
-        if (ttlSeconds) {
-            await this.redis.set(key, value, { ex: ttlSeconds });
-        } else {
-            await this.redis.set(key, value);
+        try {
+            if (ttlSeconds) {
+                await this.redis.set(key, value, { ex: ttlSeconds });
+            } else {
+                await this.redis.set(key, value);
+            }
+        } catch (error) {
+            console.error(`❌ Redis SET failed [${key}]:`, error.message);
+            // Optionally throw if it's a critical operation, but base set shouldn't crash
         }
     }
 
     async del(key: string): Promise<void> {
         if (!this.redis) return;
-        await this.redis.del(key);
+        try {
+            await this.redis.del(key);
+        } catch (error) {
+            console.error(`❌ Redis DEL failed [${key}]:`, error.message);
+        }
     }
 }
