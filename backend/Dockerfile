@@ -1,8 +1,8 @@
 # Multi-stage build for production
 FROM node:22-alpine AS builder
 
-# Install OpenSSL (required by Prisma)
-RUN apk add --no-cache openssl
+# Install build dependencies for native modules and Prisma
+RUN apk add --no-cache openssl libc6-compat python3 make g++
 
 WORKDIR /app
 
@@ -10,8 +10,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install dependencies (including dev dependencies for build)
-RUN npm ci
+# Install all dependencies
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -25,8 +25,8 @@ RUN npm run build
 # Production stage
 FROM node:22-alpine
 
-# Install OpenSSL (required by Prisma)
-RUN apk add --no-cache openssl
+# Install OpenSSL and libc6-compat (required by Prisma)
+RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /app
 
@@ -35,7 +35,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install only production dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy Prisma schema and generate client
 RUN npx prisma generate
@@ -47,4 +47,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE ${PORT:-10000}
 
 # Start command (migrations + start)
-CMD sh -c "ls -la dist && ls -la dist/src && npx prisma migrate deploy && node dist/src/main.js"
+CMD sh -c "npx prisma migrate deploy && node dist/src/main.js"
