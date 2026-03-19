@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: Ping Backend
         run: |
-          echo "Pinging Fashcycle backend..."
-          curl -f https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list || true
+          echo "Pinging ORA backend..."
+          curl -f https://ora-backend-5608.onrender.com/api/v1/shops/admin/list || true
           echo "Ping completed at $(date)"

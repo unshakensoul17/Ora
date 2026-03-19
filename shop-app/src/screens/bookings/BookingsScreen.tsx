@@ -67,7 +67,7 @@ export default function BookingsScreen({ navigation, route }: any) {
                     break;
                 case 'history':
                     const response = await getShopBookingHistory(shop.id, 1, 20);
-                    data = response.bookings || response;
+                    data = response.items || response;
                     break;
             }
 
@@ -293,7 +293,7 @@ const BookingCard = React.memo(({
                 <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Price:</Text>
                     <Text style={styles.priceValue}>
-                        ₹{((item.platformPrice || 0) / 100).toLocaleString('en-IN')}
+                        ₹{((item.totalAmount || 0) / 100).toLocaleString('en-IN')}
                     </Text>
                 </View>
             </View>

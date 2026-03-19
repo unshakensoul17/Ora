@@ -11,7 +11,7 @@ echo ""
 
 # Check if backend is accessible
 echo "✓ Testing backend connectivity..."
-curl -I https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list 2>&1 | head -5
+curl -I https://ora-backend.onrender.com/api/v1/shops/admin/list 2>&1 | head -5
 echo ""
 
 # Check package.json

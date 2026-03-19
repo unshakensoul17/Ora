@@ -39,7 +39,7 @@ export default function LoginScreen({ navigation }: any) {
         setLoading(true);
         try {
             const result = await loginWithPassword(phone, password);
-            await login(result.shop, result.token);
+            await login(result.shop, result.token!);
         } catch (error: any) {
             console.error('Login error:', error);
             Alert.alert('Error', error.response?.data?.message || 'Invalid phone or password');
@@ -76,7 +76,7 @@ export default function LoginScreen({ navigation }: any) {
         setLoading(true);
         try {
             const result = await loginWithEmailOTP(email, otp);
-            await login(result.shop, result.token);
+            await login(result.shop, result.token!);
         } catch (error: any) {
             console.error('OTP Login error:', error);
             Alert.alert('Error', error.response?.data?.message || 'Invalid or expired OTP');

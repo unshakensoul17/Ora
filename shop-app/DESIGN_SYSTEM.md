@@ -1,4 +1,4 @@
-# Fashcycle Shop App - Design System Documentation
+# ORA Shop App - Design System Documentation
 
 ## Overview
 Modern, premium, minimal design with **green as the primary brand color**. The design emphasizes clarity, hierarchy, and usability while maintaining a sophisticated dark aesthetic.

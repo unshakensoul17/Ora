@@ -12,7 +12,7 @@ const nextConfig = {
                 pathname: '/storage/v1/object/public/**',
             },
         ],
-        domains: ['localhost', 'fashcycle.s3.amazonaws.com'],
+        domains: ['localhost', 'ora.s3.amazonaws.com'],
     },
     async rewrites() {
         return [

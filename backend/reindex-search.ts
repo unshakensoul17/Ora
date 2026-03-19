@@ -9,7 +9,7 @@ async function main() {
     // Connect to Meilisearch
     const client = new MeiliSearch({
         host: process.env.MEILISEARCH_URL || 'http://localhost:7700',
-        apiKey: process.env.MEILISEARCH_API_KEY || 'fashcycle-dev-key',
+        apiKey: process.env.MEILISEARCH_API_KEY || 'ora-dev-key',
     });
 
     const itemsIndex = client.index('items');

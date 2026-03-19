@@ -11,6 +11,7 @@ import {
     UpdateInventoryRequest,
     ScanQRRequest,
     LoginResponse,
+    Customer,
 } from './types';
 
 // ============================================
@@ -130,6 +131,20 @@ export async function getShopProfile(shopId: string): Promise<Shop> {
  */
 export async function updateShopProfile(shopId: string, data: Partial<Shop>): Promise<Shop> {
     const response = await apiClient.patch(endpoints.shopProfile(shopId), data);
+    return response.data;
+}
+
+// ============================================
+// Customers
+// ============================================
+
+export async function getShopCustomers(shopId: string, search?: string): Promise<Customer[]> {
+    const response = await apiClient.get(`/shops/${shopId}/customers`, { params: { search } });
+    return response.data;
+}
+
+export async function updateCustomer(customerId: string, shopId: string, data: Partial<Customer>): Promise<Customer> {
+    const response = await apiClient.patch(`/shops/${shopId}/customers/${customerId}`, data);
     return response.data;
 }
 

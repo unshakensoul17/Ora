@@ -1,8 +1,8 @@
 {
-    "name": "fashcycle-backend",
+    "name": "ora-backend",
     "version": "1.0.0",
-    "description": "Fashcycle Vertical SaaS + O2O Marketplace Backend",
-    "author": "Fashcycle",
+    "description": "ORA Vertical SaaS + O2O Marketplace Backend",
+    "author": "ORA",
     "private": true,
     "license": "UNLICENSED",
     "scripts": {

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fashcycle-backend
+    name: ora-backend
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend

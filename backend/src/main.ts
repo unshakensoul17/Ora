@@ -18,7 +18,7 @@ async function bootstrap() {
             'http://localhost:3001', // User web
             'http://localhost:3002', // Admin
             'https://ora-user-web.vercel.app', // Production User Web
-            'https://fashcycle-admin.vercel.app', // Production Admin
+            'https://ora-admin.vercel.app', // Production Admin
             'http://10.206.206.252:3000', // Local Network Access
             'http://10.206.206.252:8081', // Expo Bundler
         ];
@@ -44,7 +44,7 @@ async function bootstrap() {
 
     // Swagger API documentation
     const config = new DocumentBuilder()
-        .setTitle('Fashcycle API')
+        .setTitle('ORA API')
         .setDescription('Vertical SaaS + O2O Marketplace for Fashion Rental')
         .setVersion('1.0')
         .addBearerAuth()
@@ -61,7 +61,7 @@ async function bootstrap() {
     const port = process.env.PORT || 3000;
     await app.listen(port, '0.0.0.0');
 
-    console.log(`🚀 Fashcycle API running on http://localhost:${port}`);
+    console.log(`🚀 ORA API running on http://localhost:${port}`);
     console.log(`📚 API Docs available at http://localhost:${port}/api/docs`);
 }
 

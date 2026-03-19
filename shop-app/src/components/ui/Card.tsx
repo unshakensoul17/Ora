@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     elevated: {
         backgroundColor: COLORS.cardElevated,
-        ...SHADOWS.medium,
+        ...SHADOWS.glow,
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.05)',
     },

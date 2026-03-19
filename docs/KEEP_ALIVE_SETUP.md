@@ -30,8 +30,8 @@ Once logged in:
 
    ```
    Monitor Type: HTTP(s)
-   Friendly Name: Fashcycle Backend
-   URL (or IP): https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list
+   Friendly Name: ORA Backend
+   URL (or IP): https://ora-backend-5608.onrender.com/api/v1/shops/admin/list
    Monitoring Interval: Every 5 minutes
    Monitor Timeout: 30 seconds
    ```
@@ -68,7 +68,7 @@ The workflow file is already created at:
 
 ### Enable GitHub Actions (If Not Already Enabled)
 
-1. Go to your GitHub repository: [https://github.com/unshakensoul17/Fashcycle-](https://github.com/unshakensoul17/Fashcycle-)
+1. Go to your GitHub repository: [https://github.com/unshakensoul17/ORA-](https://github.com/unshakensoul17/ORA-)
 2. Click **Actions** tab
 3. If you see "Workflows disabled", click **"I understand my workflows, go ahead and enable them"**
 4. You should see **"Keep Backend Alive"** workflow
@@ -107,7 +107,7 @@ You can manually trigger the workflow:
   - Last check time (should be within last 5 minutes)
 
 ### GitHub Actions Dashboard
-- **URL:** [https://github.com/unshakensoul17/Fashcycle-/actions](https://github.com/unshakensoul17/Fashcycle-/actions)
+- **URL:** [https://github.com/unshakensoul17/ORA-/actions](https://github.com/unshakensoul17/ORA-/actions)
 - **What to check:**
   - Workflow runs (should be every 5 minutes)
   - Status (should be green checkmarks)
@@ -145,7 +145,7 @@ User Request → Backend (already warm) → Instant response (<500ms)
 
 **Check 1: Is the URL correct?**
 ```bash
-curl -I https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list
+curl -I https://ora-backend-5608.onrender.com/api/v1/shops/admin/list
 ```
 Should return: `HTTP/2 200`
 

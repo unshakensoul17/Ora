@@ -1,8 +1,8 @@
-# Fashcycle Production Deployment - Complete Overview
+# ORA Production Deployment - Complete Overview
 
 ## 📱 What We're Deploying
 
-The Fashcycle platform consists of **4 applications**:
+The ORA platform consists of **4 applications**:
 
 1. **Backend API** (NestJS) → Railway
 2. **User Web** (Next.js) → Vercel
@@ -311,8 +311,8 @@ The Fashcycle platform consists of **4 applications**:
 - Expo Discord: [expo.dev/discord](https://expo.dev/discord)
 - Stack Overflow: Tag `expo` or `react-native`
 
-### Fashcycle Team
-- Email: support@fashcycle.app
+### ORA Team
+- Email: support@ora.app
 - Docs: `/docs/` folder
 
 ---

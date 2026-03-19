@@ -151,7 +151,7 @@ export default function CalendarScreen({ navigation }: any) {
     const getStatusColor = (bookings: Booking[], date?: Date) => {
         if (bookings.length === 0) {
             // If date is provided and is today or future, show green tint
-            if (date && date >= new Date().setHours(0, 0, 0, 0)) {
+            if (date && date.getTime() >= new Date().setHours(0, 0, 0, 0)) {
                 return 'rgba(74, 222, 128, 0.1)';
             }
             return '#1a1a1a';
@@ -252,7 +252,7 @@ export default function CalendarScreen({ navigation }: any) {
                     <Ionicons name="call-outline" size={14} color="#A1A1AA" style={{ marginRight: 6 }} />
                     <Text style={styles.bookingPhone}>{booking.user?.phone || booking.customer?.phone || 'N/A'}</Text>
                 </View>
-                <Text style={styles.bookingPrice}>₹{((booking.totalPrice || 0) / 100).toLocaleString()}</Text>
+                <Text style={styles.bookingPrice}>₹{((booking.totalAmount || 0) / 100).toLocaleString()}</Text>
             </View>
         </View>
     );
@@ -340,7 +340,7 @@ export default function CalendarScreen({ navigation }: any) {
                                     styles.dayText,
                                     hasBookings && { color: '#fff', fontWeight: '600' },
                                     // Make available days text whiteish/greenish too
-                                    !hasBookings && day.date >= new Date().setHours(0, 0, 0, 0) && { color: '#4ade80' }
+                                    !hasBookings && day.date.getTime() >= new Date().setHours(0, 0, 0, 0) && { color: '#4ade80' }
                                 ]}>
                                     {format(day.date, 'd')}
                                 </Text>
@@ -563,6 +563,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#121212',
+    },
+    iconTextRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    modalCloseButton: {
+        padding: 4,
     },
     center: {
         justifyContent: 'center',

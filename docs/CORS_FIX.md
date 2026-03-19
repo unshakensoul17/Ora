@@ -1,7 +1,7 @@
 # CORS and Backend Connection Fix
 
 ## Problem
-The admin panel deployed to Vercel (`fashcycle-admin.vercel.app`) cannot connect to the backend deployed on Render (`fashcycle-backend-5608.onrender.com`) due to:
+The admin panel deployed to Vercel (`ora-admin.vercel.app`) cannot connect to the backend deployed on Render (`ora-backend-5608.onrender.com`) due to:
 
 1. **CORS blocking**: Missing `Access-Control-Allow-Origin` header
 2. **404 errors**: Backend not responding to API calls
@@ -12,8 +12,8 @@ The admin panel deployed to Vercel (`fashcycle-admin.vercel.app`) cannot connect
 The backend's CORS is only configured for localhost origins, not production URLs:
 - ❌ `http://localhost:3001` (development)
 - ❌ `http://localhost:3002` (development)
-- ✅ `https://fashcycle-admin.vercel.app` (MISSING)
-- ✅ `https://fashcycle.vercel.app` (user web - MISSING)
+- ✅ `https://ora-admin.vercel.app` (MISSING)
+- ✅ `https://ora.vercel.app` (user web - MISSING)
 
 ### Issue 2: Environment Variable Not Set
 The `CORS_ORIGINS` environment variable in Render needs to include production URLs.
@@ -27,12 +27,12 @@ The backend now dynamically loads CORS origins from the `CORS_ORIGINS` environme
 
 ### Step 2: Update Render Environment Variables
 
-1. Go to **Render Dashboard** → Your Backend Service (`fashcycle-backend-5608`)
+1. Go to **Render Dashboard** → Your Backend Service (`ora-backend-5608`)
 2. Navigate to **Environment** tab
 3. Find or add `CORS_ORIGINS` variable
 4. Set the value to:
    ```
-   https://fashcycle-admin.vercel.app,https://fashcycle.vercel.app,http://localhost:3001,http://localhost:3002
+   https://ora-admin.vercel.app,https://ora.vercel.app,http://localhost:3001,http://localhost:3002
    ```
 5. Click **Save Changes**
 6. The service will automatically redeploy
@@ -41,7 +41,7 @@ The backend now dynamically loads CORS origins from the `CORS_ORIGINS` environme
 
 1. Check if backend is accessible:
    ```bash
-   curl https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list
+   curl https://ora-backend-5608.onrender.com/api/v1/shops/admin/list
    ```
 
 2. You should see either:
@@ -51,22 +51,22 @@ The backend now dynamically loads CORS origins from the `CORS_ORIGINS` environme
 
 ### Step 4: Update Admin Panel Environment Variables
 
-1. Go to **Vercel Dashboard** → `fashcycle-admin` project
+1. Go to **Vercel Dashboard** → `ora-admin` project
 2. Navigate to **Settings** → **Environment Variables**
 3. Ensure `NEXT_PUBLIC_API_URL` is set to:
    ```
-   https://fashcycle-backend-5608.onrender.com/api/v1
+   https://ora-backend-5608.onrender.com/api/v1
    ```
 4. Click **Save**
 5. Trigger a new deployment (or it will redeploy automatically)
 
 ### Step 5: Update User Web Environment Variables
 
-1. Go to **Vercel Dashboard** → `fashcycle` (user-web) project
+1. Go to **Vercel Dashboard** → `ora` (user-web) project
 2. Navigate to **Settings** → **Environment Variables**
 3. Ensure `NEXT_PUBLIC_API_URL` is set to:
    ```
-   https://fashcycle-backend-5608.onrender.com/api/v1
+   https://ora-backend-5608.onrender.com/api/v1
    ```
 4. Click **Save**
 
@@ -78,8 +78,8 @@ The backend now dynamically loads CORS origins from the `CORS_ORIGINS` environme
 4. ✅ Console should show:
    ```
    🌐 CORS enabled for origins: [
-     'https://fashcycle-admin.vercel.app',
-     'https://fashcycle.vercel.app',
+     'https://ora-admin.vercel.app',
+     'https://ora.vercel.app',
      'http://localhost:3001',
      'http://localhost:3002'
    ]
@@ -115,7 +115,7 @@ echo $CORS_ORIGINS
 
 Should output:
 ```
-https://fashcycle-admin.vercel.app,https://fashcycle.vercel.app,http://localhost:3001,http://localhost:3002
+https://ora-admin.vercel.app,https://ora.vercel.app,http://localhost:3001,http://localhost:3002
 ```
 
 **Check 2: Check backend logs**
@@ -140,17 +140,17 @@ The admin endpoints might require authentication. Check if:
 
 ```bash
 # Test backend health
-curl https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list
+curl https://ora-backend-5608.onrender.com/api/v1/shops/admin/list
 
 # Test CORS with headers
-curl -H "Origin: https://fashcycle-admin.vercel.app" \
+curl -H "Origin: https://ora-admin.vercel.app" \
      -H "Access-Control-Request-Method: GET" \
      -H "Access-Control-Request-Headers: Content-Type" \
      -X OPTIONS \
-     https://fashcycle-backend-5608.onrender.com/api/v1/shops/admin/list
+     https://ora-backend-5608.onrender.com/api/v1/shops/admin/list
 
 # Expected response should include:
-# access-control-allow-origin: https://fashcycle-admin.vercel.app
+# access-control-allow-origin: https://ora-admin.vercel.app
 ```
 
 ## Next Steps
@@ -171,10 +171,10 @@ curl -H "Origin: https://fashcycle-admin.vercel.app" \
 
 | Service | URL | Purpose |
 |---------|-----|---------|
-| Backend | `https://fashcycle-backend-5608.onrender.com` | API Server |
-| Admin | `https://fashcycle-admin.vercel.app` | Admin Panel |
-| User Web | `https://fashcycle.vercel.app` | Customer Portal |
-| API Base | `https://fashcycle-backend-5608.onrender.com/api/v1` | API Endpoint |
+| Backend | `https://ora-backend-5608.onrender.com` | API Server |
+| Admin | `https://ora-admin.vercel.app` | Admin Panel |
+| User Web | `https://ora.vercel.app` | Customer Portal |
+| API Base | `https://ora-backend-5608.onrender.com/api/v1` | API Endpoint |
 
 ---
 

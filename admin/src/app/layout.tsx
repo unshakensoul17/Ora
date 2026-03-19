@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-    title: 'Fashcycle Admin',
-    description: 'Admin control panel for Fashcycle platform',
+    title: 'ORA Admin',
+    description: 'Admin control panel for ORA platform',
 };
 
 export default function RootLayout({

@@ -1,10 +1,10 @@
 ---
-description: Deploy Fashcycle to Production (GitHub + Vercel + Render)
+description: Deploy ORA to Production (GitHub + Vercel + Render)
 ---
 
-# Deploy Fashcycle to Production
+# Deploy ORA to Production
 
-This workflow guides you through deploying the complete Fashcycle platform:
+This workflow guides you through deploying the complete ORA platform:
 - **Backend** → Render
 - **User Web** → Vercel
 - **Admin Panel** → Vercel
@@ -27,7 +27,7 @@ Before starting, ensure you have:
 ### 1. Initialize Git Repository (If not already done)
 
 ```bash
-cd /home/unshakensoul/Antigarvity/fashcycle
+cd /home/unshakensoul/Antigarvity/ora
 git init
 git add .
 git commit -m "Initial commit"
@@ -36,7 +36,7 @@ git commit -m "Initial commit"
 ### 2. Create GitHub Repository
 
 1. Go to https://github.com/new
-2. Repository name: `fashcycle`
+2. Repository name: `ora`
 3. Keep it **Private**
 4. Click "Create repository"
 
@@ -44,7 +44,7 @@ git commit -m "Initial commit"
 
 ```bash
 # Replace YOUR_USERNAME with your GitHub username
-git remote add origin https://github.com/YOUR_USERNAME/fashcycle.git
+git remote add origin https://github.com/YOUR_USERNAME/ora.git
 git branch -M main
 git push -u origin main
 ```
@@ -60,7 +60,7 @@ Go to https://render.com and sign in with GitHub.
 ### 2. Create New Blueprint Instance
 
 1. Click "New +" button and select "Blueprint"
-2. Connect your `fashcycle` GitHub repository
+2. Connect your `ora` GitHub repository
 3. Render will detect the `render.yaml` file automatically
 
 ### 3. Configure Environment Variables
@@ -95,7 +95,7 @@ And the start command:
 ### 5. Get Backend URL
 
 Once deployed, Render will provide a URL like:
-`https://fashcycle-backend.onrender.com`
+`https://ora-backend.onrender.com`
 
 **Note**: The free tier on Render spins down after inactivity. The first request might take 50s+ to wake it up.
 
@@ -110,7 +110,7 @@ Go to https://vercel.com and sign in with GitHub.
 ### 2. Import Project
 
 1. Click "Add New..." → "Project"
-2. Import your `fashcycle` repository
+2. Import your `ora` repository
 3. Vercel will detect it's a monorepo
 
 ### 3. Configure User Web Deployment
@@ -132,14 +132,14 @@ NEXT_PUBLIC_SUPABASE_URL=https://[project-ref].supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-api-key
 NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxx
-NEXT_PUBLIC_APP_NAME=Fashcycle
+NEXT_PUBLIC_APP_NAME=ORA
 NEXT_PUBLIC_HOLD_DEPOSIT=99
 ```
 
 ### 5. Deploy
 
 Click "Deploy" and wait for completion.
-Vercel will provide a URL like: `https://fashcycle-user-web.vercel.app`
+Vercel will provide a URL like: `https://ora-user-web.vercel.app`
 
 ---
 
@@ -148,11 +148,11 @@ Vercel will provide a URL like: `https://fashcycle-user-web.vercel.app`
 ### 1. Import Project Again
 
 1. In Vercel, click "Add New..." → "Project"
-2. Import your `fashcycle` repository again
+2. Import your `ora` repository again
 
 ### 2. Configure Admin Deployment
 
-1. **Project Name**: `fashcycle-admin`
+1. **Project Name**: `ora-admin`
 2. Look for **Root Directory**.
 3. Click **Edit**.
 4. Select `admin` or manually type `admin`.
@@ -171,7 +171,7 @@ NEXT_PUBLIC_ADMIN_MODE=true
 ### 4. Deploy
 
 Click "Deploy" and wait for completion.
-Vercel will provide a URL like: `https://fashcycle-admin.vercel.app`
+Vercel will provide a URL like: `https://ora-admin.vercel.app`
 
 ---
 
@@ -179,11 +179,11 @@ Vercel will provide a URL like: `https://fashcycle-admin.vercel.app`
 
 ### 1. Update Render Environment Variables
 
-1. Go to Render Dashboard → fashcycle-backend → Environment
+1. Go to Render Dashboard → ora-backend → Environment
 2. Update `CORS_ORIGINS`:
 
 ```env
-CORS_ORIGINS=https://fashcycle-user-web.vercel.app,https://fashcycle-admin.vercel.app
+CORS_ORIGINS=https://ora-user-web.vercel.app,https://ora-admin.vercel.app
 ```
 
 3. Save Changes. Render will automatically redeploy.
@@ -217,6 +217,6 @@ CORS_ORIGINS=https://fashcycle-user-web.vercel.app,https://fashcycle-admin.verce
 ---
 
 **URLs to bookmark:**
-- User Web: https://fashcycle-user-web.vercel.app
-- Admin Panel: https://fashcycle-admin.vercel.app
-- Backend API: https://fashcycle-backend.onrender.com/api/docs
+- User Web: https://ora-user-web.vercel.app
+- Admin Panel: https://ora-admin.vercel.app
+- Backend API: https://ora-backend.onrender.com/api/docs

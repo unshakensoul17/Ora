@@ -4,11 +4,11 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:16-alpine
-    container_name: fashcycle-postgres
+    container_name: ora-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: fashcycle
+      POSTGRES_DB: ora
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
   # Redis for caching and locking
   redis:
     image: redis:7-alpine
-    container_name: fashcycle-redis
+    container_name: ora-redis
     ports:
       - "6379:6379"
     volumes:
@@ -37,9 +37,9 @@ services:
   # MeiliSearch for product search
   meilisearch:
     image: getmeili/meilisearch:v1.6
-    container_name: fashcycle-meilisearch
+    container_name: ora-meilisearch
     environment:
-      MEILI_MASTER_KEY: fashcycle-dev-key
+      MEILI_MASTER_KEY: ora-dev-key
       MEILI_NO_ANALYTICS: true
     ports:
       - "7700:7700"
@@ -56,17 +56,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: fashcycle-api
+    container_name: ora-api
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
       PORT: 3000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/fashcycle?schema=public
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ora?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
       MEILISEARCH_HOST: http://meilisearch:7700
-      MEILISEARCH_API_KEY: fashcycle-dev-key
+      MEILISEARCH_API_KEY: ora-dev-key
       JWT_SECRET: dev-jwt-secret-change-in-production
       JWT_EXPIRES_IN: 7d
     volumes:

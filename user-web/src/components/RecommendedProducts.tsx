@@ -48,7 +48,7 @@ export function RecommendedProducts({ itemId }: RecommendedProductsProps) {
     return (
         <div className="py-12 px-6 bg-charcoal">
             <div className="max-w-6xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-8">
+                <h2 className="text-2xl md:text-3xl font-heading font-bold text-neutral-900 mb-8">
                     You may also like
                 </h2>
 
@@ -94,7 +94,7 @@ export function RecommendedProducts({ itemId }: RecommendedProductsProps) {
                                     <div className="text-xs text-accent mb-1">
                                         📍 {product.shop.locality}
                                     </div>
-                                    <h3 className="text-white font-semibold mb-1 line-clamp-2 group-hover:text-accent transition-colors">
+                                    <h3 className="text-neutral-900 font-semibold mb-1 line-clamp-2 group-hover:text-accent transition-colors">
                                         {product.name}
                                     </h3>
                                     <div className="flex items-baseline gap-2">

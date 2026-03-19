@@ -98,7 +98,7 @@ export default function RegisterPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Name */}
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-neutral-900 mb-1">
+                            <label htmlFor="name" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 Full Name *
                             </label>
                             <input
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
+                                className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                 placeholder="Enter your full name"
                                 required
                             />
@@ -115,7 +115,7 @@ export default function RegisterPage() {
 
                         {/* Email */}
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 Email Address *
                             </label>
                             <input
@@ -124,7 +124,7 @@ export default function RegisterPage() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
+                                className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                 placeholder="you@example.com"
                                 required
                             />
@@ -132,7 +132,7 @@ export default function RegisterPage() {
 
                         {/* Phone */}
                         <div>
-                            <label htmlFor="phone" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 Phone Number *
                             </label>
                             <input
@@ -141,7 +141,7 @@ export default function RegisterPage() {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
+                                className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                 placeholder="+91 98765 43210"
                                 required
                             />
@@ -149,7 +149,7 @@ export default function RegisterPage() {
 
                         {/* City */}
                         <div>
-                            <label htmlFor="city" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="city" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 City
                             </label>
                             <input
@@ -158,14 +158,14 @@ export default function RegisterPage() {
                                 name="city"
                                 value={formData.city}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 glass-input rounded-lg text-neutral-900 placeholder-neutral-500"
+                                className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                 placeholder="Indore"
                             />
                         </div>
 
                         {/* Password */}
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="password" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 Password *
                             </label>
                             <div className="relative">
@@ -175,7 +175,7 @@ export default function RegisterPage() {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 pr-12 glass-input rounded-lg text-white placeholder-gray-400"
+                                    className="w-full px-4 py-3 pr-12 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                     placeholder="Create a strong password"
                                     required
                                 />
@@ -218,7 +218,7 @@ export default function RegisterPage() {
 
                         {/* Confirm Password */}
                         <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-200 mb-1">
+                            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                 Confirm Password *
                             </label>
                             <div className="relative">
@@ -228,7 +228,7 @@ export default function RegisterPage() {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 pr-12 glass-input rounded-lg text-white placeholder-gray-400"
+                                    className="w-full px-4 py-3 pr-12 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                     placeholder="Re-enter your password"
                                     required
                                 />
@@ -254,7 +254,8 @@ export default function RegisterPage() {
 
                         {/* Error Message */}
                         {error && (
-                            <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
+                            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium flex items-center gap-2">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 {error}
                             </div>
                         )}
@@ -263,7 +264,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-lg shadow-pink-lg hover:shadow-pink-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-xl shadow-pink-md hover:shadow-pink-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Creating Account...' : 'Create Account'}
                         </button>

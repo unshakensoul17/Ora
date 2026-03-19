@@ -52,10 +52,10 @@ export function Footer() {
                         <h3 className="text-neutral-900 font-semibold mb-4 text-sm uppercase tracking-wider">Browse</h3>
                         <ul className="space-y-3">
                             <li><Link href="/search?category=LEHENGA" className="text-neutral-600 hover:text-accent text-sm transition-colors">Bridal Lehengas</Link></li>
-                            <li><Link href="/search?category=SHERWANI" className="text-gray-400 hover:text-accent text-sm transition-colors">Sherwanis</Link></li>
-                            <li><Link href="/search?category=SAREE" className="text-gray-400 hover:text-accent text-sm transition-colors">Sarees</Link></li>
-                            <li><Link href="/search?category=ANARKALI" className="text-gray-400 hover:text-accent text-sm transition-colors">Anarkali Suits</Link></li>
-                            <li><Link href="/search?category=INDO_WESTERN" className="text-gray-400 hover:text-accent text-sm transition-colors">Indo-Western</Link></li>
+                            <li><Link href="/search?category=SHERWANI" className="text-neutral-600 hover:text-accent text-sm transition-colors">Sherwanis</Link></li>
+                            <li><Link href="/search?category=SAREE" className="text-neutral-600 hover:text-accent text-sm transition-colors">Sarees</Link></li>
+                            <li><Link href="/search?category=ANARKALI" className="text-neutral-600 hover:text-accent text-sm transition-colors">Anarkali Suits</Link></li>
+                            <li><Link href="/search?category=INDO_WESTERN" className="text-neutral-600 hover:text-accent text-sm transition-colors">Indo-Western</Link></li>
                         </ul>
                     </div>
 
@@ -63,11 +63,11 @@ export function Footer() {
                     <div>
                         <h3 className="text-neutral-900 font-semibold mb-4 text-sm uppercase tracking-wider">Support</h3>
                         <ul className="space-y-3">
-                            <li><Link href="/#how-it-works" className="text-gray-400 hover:text-accent text-sm transition-colors">How It Works</Link></li>
-                            <li><Link href="/size-guide" className="text-gray-400 hover:text-accent text-sm transition-colors">Size Guide</Link></li>
-                            <li><Link href="/faq" className="text-gray-400 hover:text-accent text-sm transition-colors">FAQs</Link></li>
-                            <li><Link href="/hygiene" className="text-gray-400 hover:text-accent text-sm transition-colors">Hygiene Process</Link></li>
-                            <li><Link href="/stores" className="text-gray-400 hover:text-accent text-sm transition-colors">Store Locations</Link></li>
+                            <li><Link href="/#how-it-works" className="text-neutral-600 hover:text-accent text-sm transition-colors">How It Works</Link></li>
+                            <li><Link href="/size-guide" className="text-neutral-600 hover:text-accent text-sm transition-colors">Size Guide</Link></li>
+                            <li><Link href="/faq" className="text-neutral-600 hover:text-accent text-sm transition-colors">FAQs</Link></li>
+                            <li><Link href="/hygiene" className="text-neutral-600 hover:text-accent text-sm transition-colors">Hygiene Process</Link></li>
+                            <li><Link href="/stores" className="text-neutral-600 hover:text-accent text-sm transition-colors">Store Locations</Link></li>
                         </ul>
                     </div>
 
@@ -75,10 +75,10 @@ export function Footer() {
                     <div>
                         <h3 className="text-neutral-900 font-semibold mb-4 text-sm uppercase tracking-wider">Policies</h3>
                         <ul className="space-y-3">
-                            <li><Link href="/refund-policy" className="text-gray-400 hover:text-accent text-sm transition-colors">Refund Policy</Link></li>
-                            <li><Link href="/cancellation-policy" className="text-gray-400 hover:text-accent text-sm transition-colors">Cancellation Policy</Link></li>
-                            <li><Link href="/terms" className="text-gray-400 hover:text-accent text-sm transition-colors">Terms of Service</Link></li>
-                            <li><Link href="/privacy" className="text-gray-400 hover:text-accent text-sm transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/refund-policy" className="text-neutral-600 hover:text-accent text-sm transition-colors">Refund Policy</Link></li>
+                            <li><Link href="/cancellation-policy" className="text-neutral-600 hover:text-accent text-sm transition-colors">Cancellation Policy</Link></li>
+                            <li><Link href="/terms" className="text-neutral-600 hover:text-accent text-sm transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/privacy" className="text-neutral-600 hover:text-accent text-sm transition-colors">Privacy Policy</Link></li>
                         </ul>
                     </div>
                 </div>

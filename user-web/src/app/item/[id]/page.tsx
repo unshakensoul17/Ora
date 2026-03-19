@@ -321,19 +321,19 @@ export default function ItemDetailPage() {
                                     <div className="flex gap-6 mt-6 text-sm justify-center flex-wrap">
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded border border-green-500/40" style={{ background: 'rgba(16, 185, 129, 0.08)' }}></div>
-                                            <span className="text-gray-300">Available</span>
+                                            <span className="text-neutral-600">Available</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded border border-yellow-500/40" style={{ background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.2) 100%)' }}></div>
-                                            <span className="text-gray-300">On Hold</span>
+                                            <span className="text-neutral-600">On hold</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded border border-red-500/40" style={{ background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.2) 100%)' }}></div>
-                                            <span className="text-gray-300">Booked</span>
+                                            <span className="text-neutral-600">Booked</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded border border-gray-500/40" style={{ background: 'linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(75, 85, 99, 0.2) 100%)' }}></div>
-                                            <span className="text-gray-300">Maintenance</span>
+                                            <span className="text-neutral-600">Maintenance</span>
                                         </div>
                                     </div>
                                 </div>
@@ -385,7 +385,7 @@ export default function ItemDetailPage() {
                                         Reserving...
                                     </span>
                                 ) : (
-                                    'Reserve for Trial (4-hour hold)'
+                                    'Reserve for Trial (24-hour hold)'
                                 )}
                             </button>
 

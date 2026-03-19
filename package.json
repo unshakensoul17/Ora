@@ -1,5 +1,5 @@
 {
-    "name": "fashcycle-monorepo",
+    "name": "ora-monorepo",
     "version": "1.0.0",
     "private": true,
     "workspaces": [

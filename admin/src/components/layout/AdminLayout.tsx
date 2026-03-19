@@ -40,7 +40,7 @@ export default function AdminLayout({ children, showFilter = false, title, subti
             {/* Top Bar */}
             <header className="fixed top-0 left-0 md:left-56 right-0 h-14 bg-[#0d1117] border-b border-gray-800 flex items-center justify-between px-6 z-30 transition-all duration-300">
                 <div className="flex flex-col justify-center">
-                    <span className="text-white text-sm font-medium">{title || 'Fashcycle Admin - Control Tower'}</span>
+                    <span className="text-white text-sm font-medium">{title || 'ORA Admin - Control Tower'}</span>
                     {subtitle && <span className="text-gray-500 text-xs">{subtitle}</span>}
                 </div>
                 <div className="flex items-center gap-4">

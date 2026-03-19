@@ -15,7 +15,7 @@ function HoldDetails() {
     const qrHash = 'fc' + Math.random().toString(36).substring(2, 10);
 
     // 4-hour countdown
-    const [timeLeft, setTimeLeft] = useState(4 * 60 * 60); // 4 hours in seconds
+    const [timeLeft, setTimeLeft] = useState(24 * 60 * 60); // 24 hours in seconds
 
     useEffect(() => {
         const timer = setInterval(() => {

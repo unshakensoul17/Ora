@@ -30,7 +30,7 @@ export function StickyBottomBar({ phoneNumber = '919876543210' }: StickyBottomBa
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
             {/* Blur backdrop */}
-            <div className="absolute inset-0 bg-charcoal/90 backdrop-blur-md border-t border-white/10" />
+            <div className="absolute inset-0 bg-white/90 backdrop-blur-md border-t border-accent/10" />
 
             {/* Content */}
             <div className="relative px-4 py-3 safe-area-bottom">
@@ -38,7 +38,7 @@ export function StickyBottomBar({ phoneNumber = '919876543210' }: StickyBottomBa
                     {/* Reserve Now - Primary */}
                     <Link
                         href="/search"
-                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold rounded-xl text-sm shadow-luxury"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-accent to-accent-hover text-white font-semibold rounded-xl text-sm shadow-luxury"
                     >
                         <Search size={18} />
                         Reserve Now
@@ -58,10 +58,10 @@ export function StickyBottomBar({ phoneNumber = '919876543210' }: StickyBottomBa
                     {/* Call */}
                     <a
                         href={`tel:+${phoneNumber}`}
-                        className="flex items-center justify-center w-12 h-12 bg-white/10 border border-white/20 rounded-xl"
+                        className="flex items-center justify-center w-12 h-12 bg-accent/10 border border-accent/20 rounded-xl"
                         aria-label="Call Boutique"
                     >
-                        <Phone size={20} className="text-white" />
+                        <Phone size={20} className="text-accent" />
                     </a>
                 </div>
             </div>

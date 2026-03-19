@@ -122,7 +122,7 @@ export default function HomePage() {
                             Reserve Online. Try In-Store.
                         </h2>
                         <p className="text-neutral-700 text-lg max-w-2xl mx-auto">
-                            No full payment online. Reserve your outfit for 4 hours, visit the boutique,
+                            No full payment online. Reserve your outfit for 24 hours, visit the boutique,
                             try it on, and pay only if you love it.
                         </p>
                     </div>
@@ -181,7 +181,7 @@ export default function HomePage() {
                     <div className="flex flex-wrap justify-center gap-8 mb-10 py-6 border-y border-accent-muted/20">
                         <div className="flex items-center gap-3">
                             <Clock size={20} className="text-accent" />
-                            <span className="text-neutral-700 text-sm">Reservation holds for <strong className="text-neutral-900">4 hours</strong></span>
+                            <span className="text-neutral-700 text-sm">Reservation holds for <strong className="text-neutral-900">24 hours</strong></span>
                         </div>
                         <div className="flex items-center gap-3">
                             <CheckCircle size={20} className="text-green-500" />

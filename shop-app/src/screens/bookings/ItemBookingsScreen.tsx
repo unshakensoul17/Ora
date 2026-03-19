@@ -114,7 +114,7 @@ export default function ItemBookingsScreen({ route, navigation }: any) {
 
             <View style={styles.cardFooter}>
                 <Text style={styles.bookingId}>ID: {item.id.slice(0, 8).toUpperCase()}</Text>
-                <Text style={styles.price}>₹{((item.totalPrice || 0) / 100).toLocaleString()}</Text>
+                <Text style={styles.price}>₹{((item.totalAmount || 0) / 100).toLocaleString()}</Text>
             </View>
         </View>
     );

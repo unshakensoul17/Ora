@@ -251,7 +251,7 @@ async loginWithSupabase(phone: string, supabaseToken: string) {
 
 ## ✅ Final Recommendation
 
-### For Fashcycle MVP:
+### For ORA MVP:
 
 **Keep Current Custom Implementation + MSG91**
 
@@ -324,7 +324,7 @@ This gives you:
 
 ## 🎯 Final Answer
 
-**For Fashcycle:**
+**For ORA:**
 - ✅ **Stick with custom auth + MSG91**
 - ✅ **Cost**: ₹400/month vs ₹1,200/month (3x savings)
 - ✅ **Already 95% built**

@@ -100,15 +100,15 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
             <div className="relative w-full max-w-md glass-panel rounded-2xl p-6 md:p-8 animate-slide-up max-h-[85vh] overflow-y-auto hide-scrollbar sm:custom-scrollbar">
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                    className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 bg-white/50 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center transition-all shadow-sm"
                 >
                     ✕
                 </button>
 
-                <h2 className="text-2xl font-heading font-bold text-white mb-2 text-center">
+                <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-2 text-center">
                     Rate Your Experience
                 </h2>
-                <p className="text-gray-300 text-center mb-6 text-sm">
+                <p className="text-neutral-500 text-center mb-6 text-sm">
                     How was your rental? Upload a photo to inspire others!
                 </p>
 
@@ -127,9 +127,9 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                                         onClick={() => setRating(ratingValue)}
                                     />
                                     <FaStar
-                                        className="transition-all duration-200"
+                                        className="transition-all duration-200 drop-shadow-sm"
                                         size={40}
-                                        color={ratingValue <= (hover || rating) ? "#D4AF37" : "#4b5563"}
+                                        color={ratingValue <= (hover || rating) ? "#FBBF24" : "#E5E7EB"}
                                         onMouseEnter={() => setHover(ratingValue)}
                                         onMouseLeave={() => setHover(0)}
                                     />
@@ -147,9 +147,9 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                                     <button
                                         type="button"
                                         onClick={() => removeImage(index)}
-                                        className="absolute top-1 right-1 bg-black/50 p-1 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="absolute top-1 right-1 bg-white/90 p-1.5 rounded-full text-neutral-800 shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:scale-110 hover:bg-white"
                                     >
-                                        <FaTimes size={10} />
+                                        <FaTimes size={12} />
                                     </button>
                                 </div>
                             ))}
@@ -159,7 +159,7 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={uploading}
-                                    className="w-20 h-20 rounded-lg border border-dashed border-white/30 flex flex-col items-center justify-center text-gray-400 hover:bg-white/5 hover:text-white transition-all disabled:opacity-50"
+                                    className="w-20 h-20 rounded-xl bg-neutral-50 border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-all disabled:opacity-50"
                                 >
                                     {uploading ? (
                                         <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
@@ -188,13 +188,13 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder="Tell us about the fit, quality, and service..."
-                            className="w-full h-32 p-4 glass-input rounded-xl text-white placeholder-gray-500 resize-none"
+                            className="w-full h-32 p-4 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all shadow-sm"
                         />
                     </div>
 
                     {/* Error Message */}
                     {error && (
-                        <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm text-center">
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center shadow-sm">
                             {error}
                         </div>
                     )}
@@ -203,7 +203,7 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                     <button
                         type="submit"
                         disabled={loading || uploading}
-                        className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-primary font-bold rounded-xl shadow-lg hover:shadow-accent/50 transition-all hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-4 bg-gradient-to-r from-accent to-accent-hover text-white font-bold rounded-xl shadow-pink-md hover:shadow-pink-lg transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? 'Submitting...' : 'Submit Review'}
                     </button>
@@ -212,7 +212,7 @@ export function ReviewModal({ bookingId, isOpen, onClose, onSuccess }: ReviewMod
                         <button
                             type="button"
                             onClick={onClose}
-                            className="text-gray-400 hover:text-white text-sm transition-colors"
+                            className="text-neutral-500 hover:text-neutral-900 font-medium text-sm transition-colors"
                         >
                             Maybe later
                         </button>

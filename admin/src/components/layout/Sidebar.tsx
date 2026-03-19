@@ -94,7 +94,7 @@ export default function Sidebar() {
                     <div className="w-7 h-7 bg-emerald-500 rounded flex items-center justify-center">
                         <span className="text-black font-bold text-xs">F</span>
                     </div>
-                    <span className="font-semibold text-white text-sm">Fashcycle</span>
+                    <span className="font-semibold text-white text-sm">ORA</span>
                 </Link>
             </div>
 

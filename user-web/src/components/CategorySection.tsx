@@ -11,6 +11,7 @@ export function CategorySection() {
             subtitle: 'Bridal & Groom Collections',
             icon: Heart,
             href: '/search?occasion=WEDDING',
+            image: '/images/categories/wedding.png',
             gradient: 'from-accent-muted/40 via-accent/30 to-accent-rose/40', // Soft pink
             accent: 'text-accent-hover'
         },
@@ -20,6 +21,7 @@ export function CategorySection() {
             subtitle: 'For the Modern Groom',
             icon: Crown,
             href: '/search?category=SHERWANI',
+            image: '/images/categories/sherwani.png',
             gradient: 'from-blush via-primary to-blush-peach', // Peachy blush
             accent: 'text-accent'
         },
@@ -29,6 +31,7 @@ export function CategorySection() {
             subtitle: 'Crafted for Elegance',
             icon: Sparkles,
             href: '/search?category=LEHENGA',
+            image: '/images/categories/lehenga.png',
             gradient: 'from-accent/30 via-accent-muted/40 to-primary', // Light pink/rose
             accent: 'text-accent-hover'
         },
@@ -38,6 +41,7 @@ export function CategorySection() {
             subtitle: 'Fresh for the Season',
             icon: Star,
             href: '/search',
+            image: '/images/categories/new_arrivals.png',
             gradient: 'from-blush-peach via-blush-pink to-primary-light', // Warm blush
             accent: 'text-accent'
         }
@@ -66,11 +70,18 @@ export function CategorySection() {
                             href={category.href}
                             className="group relative h-80 min-w-[280px] sm:min-w-0 rounded-2xl overflow-hidden shadow-pink-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-pink-lg snap-center"
                         >
-                            {/* Background Gradient */}
+                            {/* Background Image & Fallback Gradient */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} transition-transform duration-700 group-hover:scale-110`} />
+                            {category.image && (
+                                <img
+                                    src={category.image}
+                                    alt={category.title}
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                            )}
 
-                            {/* Texture Overlay (Noise/Grain optional, simplified here directly) */}
-                            <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
+                            {/* Dark Gradient Overlay for Text Readability */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 opacity-90 group-hover:opacity-100" />
 
                             {/* Content */}
                             <div className="absolute inset-0 p-6 flex flex-col justify-between z-10">
@@ -81,7 +92,7 @@ export function CategorySection() {
 
                                 {/* Bottom Info */}
                                 <div>
-                                    <h3 className="font-heading text-2xl font-bold text-neutral-900 mb-1 group-hover:translate-x-1 transition-transform duration-300">
+                                    <h3 className="font-heading text-2xl font-bold text-white mb-1 group-hover:translate-x-1 transition-transform duration-300">
                                         {category.title}
                                     </h3>
                                     <p className={`text-sm ${category.accent} font-medium mb-4 opacity-90 group-hover:opacity-100 transition-opacity`}>
@@ -89,7 +100,7 @@ export function CategorySection() {
                                     </p>
 
                                     <span className="inline-flex items-center gap-2 text-sm font-semibold text-white group-hover:gap-3 transition-all duration-300">
-                                        Explorer Collection
+                                        Explore Collection
                                         <div className="bg-white/20 rounded-full p-1">
                                             <ChevronRight size={14} />
                                         </div>

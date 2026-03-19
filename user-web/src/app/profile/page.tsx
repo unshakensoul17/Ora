@@ -70,7 +70,7 @@ export default function ProfilePage() {
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <Link href="/" className="text-accent hover:text-accent-hover text-sm transition inline-block mb-4">
+                    <Link href="/" className="text-neutral-600 hover:text-neutral-900 font-medium text-sm transition inline-block mb-4">
                         ← Back to Home
                     </Link>
                     <h1 className="text-3xl font-heading font-bold bg-gradient-to-r from-neutral-900 via-accent to-neutral-900 bg-clip-text text-transparent">My Profile</h1>
@@ -90,8 +90,9 @@ export default function ProfilePage() {
                                 <h2 className="text-xl font-semibold text-neutral-900">{user.name}</h2>
                                 <p className="text-neutral-600 text-sm mt-1">{user.email}</p>
                                 {user.emailVerified && (
-                                    <span className="mt-3 px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
-                                        ✓ Verified
+                                    <span className="mt-3 px-3 py-1 bg-green-50 border border-green-200 text-green-700 text-xs font-medium rounded-full flex items-center gap-1 shadow-sm">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                        Verified
                                     </span>
                                 )}
                             </div>
@@ -99,7 +100,7 @@ export default function ProfilePage() {
                             <div className="mt-6 pt-6 border-t border-accent-muted/20">
                                 <button
                                     onClick={logout}
-                                    className="w-full py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition text-sm font-medium"
+                                    className="w-full py-2.5 bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 hover:border-red-200 rounded-xl transition-all text-sm font-semibold shadow-sm"
                                 >
                                     Logout
                                 </button>
@@ -116,7 +117,7 @@ export default function ProfilePage() {
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 {/* Name */}
                                 <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="name" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                         Full Name
                                     </label>
                                     <input
@@ -125,14 +126,14 @@ export default function ProfilePage() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                         placeholder="Your full name"
                                     />
                                 </div>
 
                                 {/* Email (Read-only) */}
                                 <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                         Email Address
                                     </label>
                                     <input
@@ -140,14 +141,14 @@ export default function ProfilePage() {
                                         id="email"
                                         value={user.email}
                                         disabled
-                                        className="w-full px-4 py-2 bg-white/40 border border-accent-muted/30 rounded-lg text-neutral-600 cursor-not-allowed"
+                                        className="w-full px-4 py-3 bg-neutral-50/50 border border-neutral-200 rounded-xl text-neutral-500 cursor-not-allowed shadow-sm"
                                     />
-                                    <p className="text-xs text-neutral-500 mt-1">Email cannot be changed</p>
+                                    <p className="text-xs text-neutral-500 mt-1.5 ml-1">Email cannot be changed</p>
                                 </div>
 
                                 {/* Phone */}
                                 <div>
-                                    <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="phone" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                         Phone Number
                                     </label>
                                     <input
@@ -156,14 +157,14 @@ export default function ProfilePage() {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                         placeholder="+91 98765 43210"
                                     />
                                 </div>
 
                                 {/* City */}
                                 <div>
-                                    <label htmlFor="city" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="city" className="block text-sm font-semibold text-neutral-700 mb-1.5 ml-1">
                                         City
                                     </label>
                                     <input
@@ -172,21 +173,23 @@ export default function ProfilePage() {
                                         name="city"
                                         value={formData.city}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 bg-white/80 border border-accent-muted/40 rounded-lg text-neutral-900 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                                        className="w-full px-4 py-3 bg-white/60 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
                                         placeholder="Indore"
                                     />
                                 </div>
 
                                 {/* Success Message */}
                                 {success && (
-                                    <div className="p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-200 text-sm">
-                                        ✓ Profile updated successfully!
+                                    <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium flex items-center gap-2">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                        Profile updated successfully!
                                     </div>
                                 )}
 
                                 {/* Error Message */}
                                 {error && (
-                                    <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
+                                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium flex items-center gap-2">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         {error}
                                     </div>
                                 )}
@@ -206,25 +209,25 @@ export default function ProfilePage() {
                         <div className="glass-card rounded-xl p-6">
                             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Account Activity</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="text-center p-4 bg-white/60 rounded-lg">
+                                <div className="text-center p-4 bg-white/80 border border-neutral-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                                     <p className="text-2xl font-bold text-accent">0</p>
-                                    <p className="text-xs text-neutral-600 mt-1">Total Bookings</p>
+                                    <p className="text-xs text-neutral-600 font-medium mt-1">Total Bookings</p>
                                 </div>
-                                <div className="text-center p-4 bg-charcoal rounded-lg">
+                                <div className="text-center p-4 bg-white/80 border border-neutral-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                                     <p className="text-2xl font-bold text-accent">0</p>
-                                    <p className="text-xs text-gray-400 mt-1">Active Holds</p>
+                                    <p className="text-xs text-neutral-600 font-medium mt-1">Active Holds</p>
                                 </div>
                             </div>
                             <div className="space-y-2 mt-4">
                                 <Link
                                     href="/my-holds"
-                                    className="block text-center py-2 text-accent hover:bg-accent/10 rounded-lg transition text-sm font-medium"
+                                    className="block text-center py-2.5 text-neutral-700 bg-neutral-50 hover:bg-neutral-100 hover:text-neutral-900 border border-neutral-100 rounded-xl transition-all text-sm font-semibold"
                                 >
                                     View My Holds →
                                 </Link>
                                 <Link
                                     href="/my-orders"
-                                    className="block text-center py-2 text-accent hover:bg-accent/10 rounded-lg transition text-sm font-medium"
+                                    className="block text-center py-2.5 text-neutral-700 bg-neutral-50 hover:bg-neutral-100 hover:text-neutral-900 border border-neutral-100 rounded-xl transition-all text-sm font-semibold"
                                 >
                                     View My Orders →
                                 </Link>

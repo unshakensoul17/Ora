@@ -1,7 +1,7 @@
-# Fashcycle Deployment Guide
+# ORA Deployment Guide
 ## Free Stack (Supabase + Railway + Vercel)
 
-This guide walks you through deploying Fashcycle to production using the free stack.
+This guide walks you through deploying ORA to production using the free stack.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ This guide walks you through deploying Fashcycle to production using the free st
 
 1. **Create Project**
    ```
-   supabase.com → New Project → fashcycle-prod
+   supabase.com → New Project → ora-prod
    Region: ap-south-1 (Mumbai)
    ```
 
@@ -42,7 +42,7 @@ This guide walks you through deploying Fashcycle to production using the free st
 1. **Create Database**
    ```
    upstash.com → Redis → Create Database
-   Name: fashcycle-redis
+   Name: ora-redis
    Region: ap-south-1 (Mumbai)
    Type: Regional
    ```
@@ -55,7 +55,7 @@ This guide walks you through deploying Fashcycle to production using the free st
 1. **Connect Repository**
    ```
    railway.app → New Project → Deploy from GitHub
-   Select: fashcycle repository
+   Select: ora repository
    Root Directory: backend
    ```
 
@@ -95,7 +95,7 @@ Environment Variables: Copy from admin/.env.example
 
 Update backend CORS_ORIGINS in Render:
 ```
-CORS_ORIGINS=https://fashcycle-admin.vercel.app,https://fashcycle.vercel.app,http://localhost:3001,http://localhost:3002
+CORS_ORIGINS=https://ora-admin.vercel.app,https://ora.vercel.app,http://localhost:3001,http://localhost:3002
 ```
 
 **Important:** Make sure to:
@@ -107,8 +107,8 @@ CORS_ORIGINS=https://fashcycle-admin.vercel.app,https://fashcycle.vercel.app,htt
 ## Step 6: Verify Deployment
 
 1. Test API: `https://your-railway-url.railway.app/api/v1/health`
-2. Test User Web: `https://fashcycle.vercel.app`
-3. Test Admin: `https://admin-fashcycle.vercel.app`
+2. Test User Web: `https://ora.vercel.app`
+3. Test Admin: `https://admin-ora.vercel.app`
 
 ## Troubleshooting
 

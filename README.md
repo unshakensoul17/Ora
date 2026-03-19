@@ -1,49 +1,177 @@
-# Fashcycle
 
-> **Vertical SaaS + Hyper-Local O2O Marketplace** for fashion rental boutiques in Indore, India.
+# 🚀 ORA (Outfit Rental Assistant)
 
-A "Digital Munim" (digital accountant) that helps unorganized rental shops manage inventory, handle bookings, and convert online discovery into verified walk-ins using QR-based attribution.
+### The Digital OS for Fashion Rental Businesses
 
----
-
-## 🎯 What This Is
-
-- ✅ **Vertical SaaS OS** — Calendar & inventory control for rental shops
-- ✅ **O2O Marketplace** — Discover online → Reserve → Walk-in to try
-- ✅ **Closed-Loop Attribution** — QR scan verifies lead, triggers billing
-
-**NOT** an e-commerce checkout, delivery platform, or phone directory.
+> A **Vertical SaaS + Hyper-Local O2O Marketplace** transforming how unorganized rental boutiques manage operations and convert online discovery into real-world revenue.
 
 ---
 
-## 🏗️ Architecture
+## 🧠 Vision
 
+Local fashion rental shops operate like mini-enterprises—but without software.
+
+**ORA acts as their “Digital Munim”**, bringing:
+
+* Structured inventory management
+* Intelligent booking systems
+* Verified customer acquisition
+
+All while preserving the **offline trial experience**, which is critical in fashion.
+
+---
+
+## 🎯 What ORA Solves
+
+### 🔴 Problem
+
+* No inventory tracking → double bookings
+* No attribution → unclear marketing ROI
+* No digital presence → lost demand
+* Offline-only workflows → inefficiency
+
+### 🟢 Solution
+
+ORA creates a **closed-loop system**:
+
+```text
+Discover Online → Reserve → Visit Store → Scan QR → Verified Lead → Revenue
 ```
-fashcycle/
-├── backend/          # NestJS API (Node.js)
-├── shop-app/         # React Native (Android-first)
-├── user-web/         # Next.js (Consumer marketplace)
-├── admin/            # Next.js (Admin console)
-├── shared/           # Shared types
-├── seed/             # Indore seed data
-└── docs/             # Documentation
+
+---
+
+## 🏗️ Product Architecture
+
+ORA is built as a **modular, multi-client platform** powered by a shared backend.
+
+```text
+ora/
+├── backend/          # Core API (NestJS)
+├── shop-app/         # Mobile OS for shop owners
+├── user-web/         # Customer marketplace
+├── admin/            # Platform control dashboard
+├── shared/           # Types & utilities
+└── docs/             # Deployment + architecture docs
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🔄 Core User Flow
+
+```mermaid
+graph TD
+    A[Customer] -->|Browse & Reserve| B[ORA Backend]
+    B -->|Generate QR| A
+    A -->|Walk-in Store| C[Shop Owner App]
+    C -->|Scan QR| B
+    B -->|Verify & Attribute| C
+    C -->|Manage Booking Lifecycle| B
+```
+
+---
+
+## ⚡ Key Features
+
+### 📅 Smart Calendar Engine
+
+* Prevents **double-booking using Redis locks**
+* Auto-applies **D-1 / D+1 buffers** for cleaning & prep
+* Handles real-time availability at scale
+
+---
+
+### 🏪 Shop Masking System
+
+* Prevents platform bypass
+* Reveals shop details **only after reservation**
+* Protects marketplace integrity
+
+---
+
+### 🔗 QR-Based Attribution (Core Innovation)
+
+* Each reservation generates a **unique QR**
+* In-store scan = **verified lead**
+* Enables **pay-per-footfall monetization**
+
+---
+
+### 📦 Inventory OS (Shop App)
+
+* Add/manage items via mobile
+* Track availability visually
+* Mark items inactive (cleaning, repair, etc.)
+
+---
+
+### 🔍 Lightning-Fast Search
+
+* Powered by **Meilisearch**
+* Typo-tolerant + relevance-ranked
+* Designed for real-time product discovery
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Backend    | NestJS (Node.js)        |
+| Database   | PostgreSQL + Prisma ORM |
+| Caching    | Redis (locks + TTL)     |
+| Search     | Meilisearch             |
+| Mobile App | React Native (Expo)     |
+| Web Apps   | Next.js 14              |
+| Auth       | JWT + OTP               |
+| Payments   | Razorpay                |
+
+---
+
+## 🧩 Core Data Models
+
+| Entity              | Description                          |
+| ------------------- | ------------------------------------ |
+| `User`              | Customer accounts                    |
+| `Shop`              | SaaS tenants (boutiques)             |
+| `InventoryItem`     | Rental products                      |
+| `AvailabilityBlock` | Time-based booking locks             |
+| `Booking`           | Lifecycle (HOLD → RENTED → RETURNED) |
+| `AttributionEvent`  | Verified walk-in ledger              |
+
+---
+
+## 💰 Business Model
+
+| Tier         | Price      | Features                                |
+| ------------ | ---------- | --------------------------------------- |
+| Starter      | Free       | ≤50 items, basic features               |
+| Pro          | ₹299/month | Unlimited inventory, premium visibility |
+| Pay-per-lead | ₹50/scan   | Charged only on verified walk-ins       |
+
+> 💡 **No fake leads. No wasted spend. Only real foot traffic is billed.**
+
+---
+
+## 🚀 Getting Started (Local Setup)
 
 ### Prerequisites
-- Node.js 20+
-- Docker & Docker Compose
 
-### 1. Start Infrastructure
+* Node.js 20+
+* Docker & Docker Compose
+
+---
+
+### 1️⃣ Start Infrastructure
+
 ```bash
 cd backend
 docker-compose up -d postgres redis meilisearch
 ```
 
-### 2. Setup Backend
+---
+
+### 2️⃣ Backend Setup
+
 ```bash
 cd backend
 npm install
@@ -52,25 +180,39 @@ npx prisma migrate dev
 npm run seed
 npm run start:dev
 ```
-API available at http://localhost:3000/api/docs
 
-### 3. Start User Web
+📍 API Docs: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+
+---
+
+### 3️⃣ User Marketplace
+
 ```bash
 cd user-web
 npm install
+cp .env.example .env.local
 npm run dev
 ```
-Available at http://localhost:3001
 
-### 4. Start Admin Console
+📍 [http://localhost:3001](http://localhost:3001)
+
+---
+
+### 4️⃣ Admin Dashboard
+
 ```bash
 cd admin
 npm install
+cp .env.example .env.local
 npm run dev
 ```
-Available at http://localhost:3002
 
-### 5. Run Shop App
+📍 [http://localhost:3002](http://localhost:3002)
+
+---
+
+### 5️⃣ Shop App (Mobile)
+
 ```bash
 cd shop-app
 npm install
@@ -79,147 +221,49 @@ npx expo start
 
 ---
 
-## 📱 Core O2O Flow
-
-```
-1. User browses marketplace (shop identity masked)
-2. User clicks "Reserve for Trial" → 4-hour hold created
-3. User receives QR code + shop location
-4. User walks to shop
-5. Shop scans QR → Verified! Lead is billable.
-6. User tries outfit → pays if they like it
-```
-
----
-
-## 💰 Monetization
-
-| Tier | Price | Details |
-|------|-------|---------|
-| Starter | Free | ≤50 items, calendar + inventory |
-| Pro | ₹299/mo | Unlimited items |
-| Pay-Per-Lead | ₹50/scan | Per verified QR walk-in |
-
-**Rule**: No charge without verified offline value.
-
----
-
-## 🔑 Key Features
-
-### Backend (NestJS)
-- **Calendar Engine**: D-1 pickup / D+1 return buffer blocks
-- **Redis Locking**: Prevents double-booking (4hr TTL)
-- **QR Verification**: O2O handshake for attribution
-- **MeiliSearch**: Fast product search
-
-### Shop App (React Native)
-- OTP login
-- Inventory management
-- Visual calendar
-- QR scanner for verification
-- Hold management
-
-### User Web (Next.js)
-- Product-first search
-- Shop masking (identity hidden pre-hold)
-- Reserve for Trial flow
-- QR display with countdown
-
-### Admin Console (Next.js)
-- Shop approval/suspension
-- Lead tracking & billing
-- Revenue dashboards
-
----
-
-## 📊 Database Models
-
-| Model | Purpose |
-|-------|---------|
-| `User` | Consumer accounts |
-| `Shop` | Rental boutiques |
-| `InventoryItem` | Rental items (time-based, not quantity) |
-| `AvailabilityBlock` | Calendar blocks (if date exists → unavailable) |
-| `Booking` | Holds & rentals |
-| `AttributionEvent` | Verified walk-ins (billable leads) |
-
----
-
-## 🛠️ Tech Stack
-
-- **Backend**: Node.js, NestJS, Prisma
-- **Database**: PostgreSQL
-- **Cache/Locking**: Redis
-- **Search**: MeiliSearch
-- **Shop App**: React Native (Expo)
-- **Web Apps**: Next.js 14
-- **Payments**: Razorpay (integration ready)
-
----
-
-## 📁 API Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `POST /auth/user/send-otp` | Send OTP to user |
-| `GET /inventory/marketplace` | Browse items |
-| `POST /bookings/hold` | Create a hold |
-| `POST /bookings/verify-qr` | Verify QR (O2O handshake) |
-| `GET /calendar/item/:id` | Get item calendar |
-| `GET /attribution/shop/:id/stats` | Shop lead stats |
-
-Full API docs at `/api/docs` (Swagger)
-
----
-
-## 📍 Seed Data
-
-10 pre-approved shops in Indore localities:
-- Vijay Nagar, Sapna Sangeeta, Palasia, Rajwada
-- MG Road, South Tukoganj, New Palasia, Bhawarkuan, Ring Road
-
-Each shop has 5-10 inventory items.
-
----
-
-## 🚧 What's NOT Included
-
-- ❌ Delivery/logistics
-- ❌ Full online checkout
-- ❌ AI recommendations
-- ❌ Multi-city (Day 1)
-
----
-
 ## 🚀 Deployment
 
-### Production Deployment Documentation
+Full deployment guides available in `/docs`.
 
-Complete guides for deploying all Fashcycle applications to production:
-
-- **[Deployment Overview](docs/DEPLOYMENT_OVERVIEW.md)** - Start here for complete deployment roadmap
-- **[Backend + Web Apps Deployment](docs/DEPLOYMENT.md)** - Deploy backend, user web, and admin console
-- **[Shop App Deployment Guide](docs/SHOP_APP_DEPLOYMENT.md)** - Comprehensive guide for mobile app deployment
-- **[Shop App Deployment Checklist](docs/SHOP_APP_DEPLOYMENT_CHECKLIST.md)** - Task-by-task checklist
-
-### Quick Commands
+### Mobile (EAS)
 
 ```bash
-# Deploy Shop App (Android)
-cd shop-app
 eas build --platform android --profile production
-
-# Deploy Shop App (iOS)
 eas build --platform ios --profile production
-
-# OTA Update (after initial release)
-eas update --branch production --message "Bug fixes"
+eas update --branch production --message "Update"
 ```
 
-See `/deploy-shop-app` workflow for detailed steps.
+---
+
+## 🧠 Why ORA is Different
+
+| Traditional Platforms    | ORA                                 |
+| ------------------------ | ----------------------------------- |
+| Focus on online checkout | Focus on offline experience         |
+| No attribution           | QR-based verified attribution       |
+| Generic SaaS             | Vertical SaaS for rentals           |
+| Inventory = quantity     | Inventory = time-based availability |
+
+---
+
+## 🔮 Future Roadmap
+
+* 🤖 AI-based demand prediction
+* 📊 Shop analytics dashboard
+* 🌍 Hyperlocal expansion engine
+* 🧠 Smart pricing optimization
+* 🛍️ Multi-category rental support
 
 ---
 
 ## 📄 License
 
 Private / Proprietary
+
+---
+
+## 💡 Final Thought
+
+> ORA is not just software — it's **infrastructure for offline commerce in a digital-first world**.
+
+---

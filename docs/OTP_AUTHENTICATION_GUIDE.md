@@ -69,7 +69,7 @@ export class SmsService {
     async sendOTP(phone: string, otp: string) {
         try {
             await this.client.messages.create({
-                body: `Your Fashcycle OTP is: ${otp}. Valid for 5 minutes.`,
+                body: `Your ORA OTP is: ${otp}. Valid for 5 minutes.`,
                 from: process.env.TWILIO_PHONE_NUMBER,
                 to: `+91${phone}` // India format
             });
@@ -159,7 +159,7 @@ export class SmsService {
 
     async sendOTP(phone: string, otp: string) {
         const command = new PublishCommand({
-            Message: `Your Fashcycle OTP is: ${otp}. Valid for 5 minutes.`,
+            Message: `Your ORA OTP is: ${otp}. Valid for 5 minutes.`,
             PhoneNumber: `+91${phone}`,
         });
 

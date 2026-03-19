@@ -4,7 +4,7 @@ description: Deploy Shop App for Free and Test on Device
 
 # Free Production Deployment & Testing Guide
 
-This workflow guides you through deploying the Fashcycle Shop App using 100% free tools and testing it on physical devices.
+This workflow guides you through deploying the ORA Shop App using 100% free tools and testing it on physical devices.
 
 ## Option 1: Web App (PWA) - Recommended for Instant Access
 
@@ -24,7 +24,7 @@ npx vercel deploy --prod
 ```
 - Select `dist` as the build folder if asked.
 - **Cost:** Free (Hobby Tier).
-- **Result:** You get a `https://fashcycle-shop.vercel.app` URL.
+- **Result:** You get a `https://ora-shop.vercel.app` URL.
 
 ### 3. Install on Device
 - Open the URL in Chrome (Android) or Safari (iOS).

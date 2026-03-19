@@ -195,7 +195,7 @@ export default function RegisterScreen({ navigation }: any) {
         >
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Text style={styles.title}>Register Your Shop</Text>
-                <Text style={styles.subtitle}>Join Fashcycle and start renting</Text>
+                <Text style={styles.subtitle}>Join ORA and start renting</Text>
 
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>SHOP DETAILS</Text>

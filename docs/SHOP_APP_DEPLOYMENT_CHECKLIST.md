@@ -1,4 +1,4 @@
-# Fashcycle Shop App - Production Deployment Checklist
+# ORA Shop App - Production Deployment Checklist
 
 Use this checklist to ensure you don't miss any critical steps when deploying to production.
 
@@ -22,10 +22,10 @@ Use this checklist to ensure you don't miss any critical steps when deploying to
 
 ### App Configuration
 - [ ] `app.json` updated with production values
-- [ ] Bundle identifier set: `com.fashcycle.shop`
+- [ ] Bundle identifier set: `com.ora.shop`
 - [ ] Version number set: `1.0.0`
 - [ ] Version code set: `1` (Android) / Build number: `1` (iOS)
-- [ ] App name finalized: "Fashcycle Shop"
+- [ ] App name finalized: "ORA Shop"
 - [ ] API endpoint updated to production URL
 - [ ] Environment configuration created (`app.config.js`)
 
@@ -45,7 +45,7 @@ Use this checklist to ensure you don't miss any critical steps when deploying to
 - [ ] Privacy Policy created and published
 - [ ] Terms of Service created and published
 - [ ] Privacy Policy URL accessible
-- [ ] Support email setup (e.g., support@fashcycle.app)
+- [ ] Support email setup (e.g., support@ora.app)
 - [ ] Content rating questionnaire completed
 
 ### Testing
@@ -122,8 +122,8 @@ Use this checklist to ensure you don't miss any critical steps when deploying to
 ### App Store Connect Setup
 - [ ] App created in App Store Connect
 - [ ] App information completed:
-  - [ ] Name: Fashcycle Shop
-  - [ ] Bundle ID: com.fashcycle.shop
+  - [ ] Name: ORA Shop
+  - [ ] Bundle ID: com.ora.shop
   - [ ] Primary language: English (India)
   - [ ] Category: Business
   - [ ] Privacy policy URL
@@ -249,7 +249,7 @@ Track these metrics post-launch:
 - **Expo Support**: [expo.dev/discord](https://expo.dev/discord)
 - **Google Play Support**: [Play Console Help](https://support.google.com/googleplay/android-developer)
 - **Apple Support**: [App Store Connect Help](https://developer.apple.com/help/app-store-connect/)
-- **Fashcycle Team**: support@fashcycle.app
+- **ORA Team**: support@ora.app
 
 ---
 

@@ -4,7 +4,13 @@
     "slug": "ora-shop",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#022b1e"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -20,8 +26,13 @@
     "android": {
       "package": "com.ora.shop",
       "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#022b1e"
+      },
       "permissions": [
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -31,10 +42,15 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow Fashcycle Shop to access your camera for QR code scanning."
+          "cameraPermission": "Allow Ora Shop to access your camera for QR code scanning."
         }
       ],
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8485aa6e-a88f-408c-bbe8-1d11ecfce5ff"
+      }
+    }
   }
 }

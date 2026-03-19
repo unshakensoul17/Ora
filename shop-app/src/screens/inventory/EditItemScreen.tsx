@@ -102,7 +102,7 @@ export default function EditItemScreen({ route, navigation }: any) {
 
         setSaving(true);
         try {
-            const data = {
+            const data: any = {
                 name: name.trim(),
                 description: description.trim(),
                 category,

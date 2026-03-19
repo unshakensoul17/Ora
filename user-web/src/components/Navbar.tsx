@@ -61,7 +61,7 @@ export default function Navbar() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)} // Reusing dropdown state for mobile menu toggle simplicity
-                            className="text-gray-300 hover:text-white p-2"
+                            className="text-neutral-700 hover:text-accent p-2 transition-colors"
                         >
                             {dropdownOpen ? (
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

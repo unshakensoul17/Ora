@@ -2,7 +2,7 @@
 description: Deploy Shop App to Production
 ---
 
-# Deploy Fashcycle Shop App to Production
+# Deploy ORA Shop App to Production
 
 This workflow guides you through deploying the React Native Shop App to Google Play Store and Apple App Store.
 

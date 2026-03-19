@@ -153,7 +153,7 @@ function SearchResults() {
                     return (
                         <div
                             key={item.id}
-                            className="glass-card rounded-2xl overflow-hidden group hover:border-accent/40 transition-all duration-300 flex flex-col shadow-pink-soft hover:shadow-pink-md"
+                            className="glass-card relative z-20 rounded-2xl overflow-hidden group hover:border-accent/40 transition-all duration-300 flex flex-col shadow-pink-soft hover:shadow-pink-md"
                         >
                             {/* Image Container */}
                             <div className="aspect-[3/4] bg-neutral-100 relative overflow-hidden">
@@ -241,13 +241,13 @@ function SearchResults() {
                                 <div className="flex gap-2 mt-auto">
                                     <Link
                                         href={`/item/${item.id}`}
-                                        className="flex-1 py-2.5 bg-gradient-to-r from-accent to-accent-hover text-white text-center font-semibold rounded-lg text-sm hover:shadow-pink-md transition-all"
+                                        className="flex-1 py-2.5 bg-gradient-to-r from-accent to-accent-hover text-white text-center font-semibold rounded-xl text-sm shadow-pink-md hover:shadow-pink-lg hover:-translate-y-0.5 transition-all"
                                     >
                                         Reserve
                                     </Link>
                                     <Link
                                         href={`/item/${item.id}`}
-                                        className="px-4 py-2.5 border-2 border-accent-muted/40 text-neutral-700 rounded-lg text-sm font-medium hover:bg-accent/10 hover:border-accent/50 transition-all flex items-center gap-1.5"
+                                        className="px-4 py-2.5 border-2 border-accent-muted/30 text-neutral-700 rounded-xl text-sm font-medium hover:bg-accent/10 hover:border-accent/50 hover:-translate-y-0.5 transition-all flex items-center gap-1.5"
                                     >
                                         <Eye size={16} />
                                         <span className="hidden sm:inline">View</span>

@@ -14,7 +14,7 @@ import * as QRCode from 'qrcode';
 
 @Injectable()
 export class BookingsService {
-    private readonly HOLD_TTL_SECONDS = 4 * 60 * 60; // 4 hours
+    private readonly HOLD_TTL_SECONDS = 24 * 60 * 60; // 24 hours
 
     constructor(
         private prisma: PrismaService,
@@ -207,7 +207,7 @@ export class BookingsService {
         });
 
         // 7. Generate QR URL
-        const qrData = `fashcycle://booking/${booking.id}?hash=${qrCodeHash}`;
+        const qrData = `ora://booking/${booking.id}?hash=${qrCodeHash}`;
         const qrCodeUrl = await QRCode.toDataURL(qrData, { width: 300 });
 
         await this.prisma.booking.update({
@@ -294,7 +294,7 @@ export class BookingsService {
                     status: BookingStatus.HOLD,
                     qrCodeHash,
                     qrCodeUrl: null, // Will update after generating QR
-                    holdExpiresAt: addHours(new Date(), 4),
+                    holdExpiresAt: addHours(new Date(), 24),
                     platformPrice: this.calculateRentalPrice(
                         item.rentalPrice,
                         startDate,

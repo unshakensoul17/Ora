@@ -7,13 +7,13 @@ async function main() {
 
     // First, create a test shop if it doesn't exist
     const shop = await prisma.shop.upsert({
-        where: { email: 'testshop@fashcycle.com' },
+        where: { email: 'testshop@ora.com' },
         update: {},
         create: {
             name: 'Elegant Boutique',
             ownerName: 'Raj Sharma',
             ownerPhone: '+919876543210',
-            email: 'testshop@fashcycle.com',
+            email: 'testshop@ora.com',
             passwordHash: 'test-hash', // In real app, this would be bcrypt hashed
             address: '123 Fashion Street',
             locality: 'Vijay Nagar',

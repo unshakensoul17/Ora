@@ -1,4 +1,4 @@
-# Fashcycle Backend
+# ORA Backend
 
 Vertical SaaS + O2O Marketplace API for fashion rental boutiques.
 

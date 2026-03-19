@@ -314,6 +314,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#121212',
         padding: 16,
     },
+    iconTextRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    actionButtonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     center: {
         justifyContent: 'center',
         alignItems: 'center',

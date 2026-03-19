@@ -372,7 +372,7 @@ export default function ProfileScreen({ navigation }: any) {
             </View>
 
             {/* Version */}
-            <Text style={styles.version}>Fashcycle Shop App v1.0.0</Text>
+            <Text style={styles.version}>ORA Shop App v1.0.0</Text>
         </ScrollView>
     );
 }
@@ -656,5 +656,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 11,
         paddingVertical: SPACING.xl,
+    },
+    iconTextRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });

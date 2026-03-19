@@ -89,6 +89,13 @@ export interface User {
     email?: string;
 }
 
+export interface Customer {
+    id: string;
+    name: string;
+    phone: string;
+    isBlacklisted?: boolean;
+}
+
 // ============================================
 // API Response Types
 // ============================================
