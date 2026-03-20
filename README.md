@@ -4,7 +4,7 @@
 
 > A **Vertical SaaS + Hyper-Local O2O Marketplace** transforming how unorganized rental boutiques manage operations and convert online discovery into real-world revenue.
 
-![ORA Hero](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-hero.png)
+![ORA Hero](./docs/screenshots/web-hero.png)
 
 ---
 
@@ -13,13 +13,13 @@
 The customer-facing web platform allows users to discover designer outfits and reserve them for a 24-hour trial period.
 
 ````carousel
-![Homepage](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-home.png)
+![Homepage](./docs/screenshots/web-home.png)
 <!-- slide -->
-![Product Discovery](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-browse.png)
+![Product Discovery](./docs/screenshots/web-browse.png)
 <!-- slide -->
-![Item Details](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-details.png)
+![Item Details](./docs/screenshots/web-details.png)
 <!-- slide -->
-![Hold Confirmation](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-reservations.png)
+![Hold Confirmation](./docs/screenshots/web-reservations.png)
 ````
 
 ---
@@ -28,7 +28,7 @@ The customer-facing web platform allows users to discover designer outfits and r
 
 A central dashboard for platform administrators to monitor health, manage shop approvals, and track revenue.
 
-![Admin Dashboard](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/admin-dashboard.png)
+![Admin Dashboard](./docs/screenshots/admin-dashboard.png)
 
 ---
 
@@ -37,15 +37,15 @@ A central dashboard for platform administrators to monitor health, manage shop a
 The mobile engine that powers boutique operations—inventory tracking, QR scanning, and booking management.
 
 <div align="center">
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-home.png" width="180" />
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-inventory.png" width="180" />
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-scan.png" width="180" />
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-details.png" width="180" />
+  <img src="./docs/screenshots/mobile-home.png" width="180" />
+  <img src="./docs/screenshots/mobile-inventory.png" width="180" />
+  <img src="./docs/screenshots/mobile-scan.png" width="180" />
+  <img src="./docs/screenshots/mobile-details.png" width="180" />
 </div>
 <div align="center" style="margin-top: 10px;">
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-filter.png" width="180" />
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-analytics.png" width="180" />
-  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-settings.png" width="180" />
+  <img src="./docs/screenshots/mobile-filter.png" width="180" />
+  <img src="./docs/screenshots/mobile-analytics.png" width="180" />
+  <img src="./docs/screenshots/mobile-settings.png" width="180" />
 </div>
 
 ---
