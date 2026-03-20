@@ -1,39 +1,74 @@
-
 # 🚀 ORA (Outfit Rental Assistant)
 
 ### The Digital OS for Fashion Rental Businesses
 
 > A **Vertical SaaS + Hyper-Local O2O Marketplace** transforming how unorganized rental boutiques manage operations and convert online discovery into real-world revenue.
 
+![ORA Hero](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-hero.png)
+
+---
+
+## 🎨 User Experience (Marketplace)
+
+The customer-facing web platform allows users to discover designer outfits and reserve them for a 24-hour trial period.
+
+````carousel
+![Homepage](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-home.png)
+<!-- slide -->
+![Product Discovery](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-browse.png)
+<!-- slide -->
+![Item Details](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-details.png)
+<!-- slide -->
+![Hold Confirmation](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/web-reservations.png)
+````
+
+---
+
+## 🛡️ Admin Control Tower
+
+A central dashboard for platform administrators to monitor health, manage shop approvals, and track revenue.
+
+![Admin Dashboard](file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/admin-dashboard.png)
+
+---
+
+## 📱 Shop Owner OS (Mobile App)
+
+The mobile engine that powers boutique operations—inventory tracking, QR scanning, and booking management.
+
+<div align="center">
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-home.png" width="180" />
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-inventory.png" width="180" />
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-scan.png" width="180" />
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-details.png" width="180" />
+</div>
+<div align="center" style="margin-top: 10px;">
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-filter.png" width="180" />
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-analytics.png" width="180" />
+  <img src="file:///home/unshakensoul/Documents/Projects and Notes/Projects/fashcycle/docs/screenshots/mobile-settings.png" width="180" />
+</div>
+
 ---
 
 ## 🧠 Vision
 
-Local fashion rental shops operate like mini-enterprises—but without software.
+Local fashion rental shops operate like mini-enterprises—but without software. ORA acts as their **“Digital Munim”**, bringing:
 
-**ORA acts as their “Digital Munim”**, bringing:
-
-* Structured inventory management
-* Intelligent booking systems
-* Verified customer acquisition
-
-All while preserving the **offline trial experience**, which is critical in fashion.
+*   **Structured Inventory**: Real-time tracking of rental stock.
+*   **Intelligent Booking**: Prevention of double-bookings with automated cleaning buffers.
+*   **Verified Attribution**: QR-based walk-in verification (The O2O Bridge).
 
 ---
 
 ## 🎯 What ORA Solves
 
 ### 🔴 Problem
-
-* No inventory tracking → double bookings
-* No attribution → unclear marketing ROI
-* No digital presence → lost demand
-* Offline-only workflows → inefficiency
+*   **Chaos**: No inventory tracking → frequent double bookings.
+*   **Blind Spots**: No attribution → unclear marketing ROI for shop owners.
+*   **Leaking Revenue**: Offline-only workflows → lost digital demand.
 
 ### 🟢 Solution
-
 ORA creates a **closed-loop system**:
-
 ```text
 Discover Online → Reserve → Visit Store → Scan QR → Verified Lead → Revenue
 ```
@@ -42,17 +77,12 @@ Discover Online → Reserve → Visit Store → Scan QR → Verified Lead → Re
 
 ## 🏗️ Product Architecture
 
-ORA is built as a **modular, multi-client platform** powered by a shared backend.
+ORA is a modular platform powered by a centralized NestJS core.
 
-```text
-ora/
-├── backend/          # Core API (NestJS)
-├── shop-app/         # Mobile OS for shop owners
-├── user-web/         # Customer marketplace
-├── admin/            # Platform control dashboard
-├── shared/           # Types & utilities
-└── docs/             # Deployment + architecture docs
-```
+*   `backend/`: Core API (NestJS, Prisma, PostgreSQL)
+*   `user-web/`: Customer Marketplace (Next.js 14)
+*   `admin/`: Platform Control (Next.js 14, Dark Theme)
+*   `shop-app/`: Mobile OS (React Native/Expo)
 
 ---
 
@@ -70,45 +100,18 @@ graph TD
 
 ---
 
-## ⚡ Key Features
+## ⚡ Key Innovations
 
 ### 📅 Smart Calendar Engine
-
-* Prevents **double-booking using Redis locks**
-* Auto-applies **D-1 / D+1 buffers** for cleaning & prep
-* Handles real-time availability at scale
-
----
+*   **Redis-Powered Locking**: Prevents race conditions during simultaneous bookings.
+*   **Automated Buffers**: Integrated D-1 (prep) and D+1 (cleaning) windows.
 
 ### 🏪 Shop Masking System
+*   Protects marketplace integrity by revealing shop details **only after reservation**.
 
-* Prevents platform bypass
-* Reveals shop details **only after reservation**
-* Protects marketplace integrity
-
----
-
-### 🔗 QR-Based Attribution (Core Innovation)
-
-* Each reservation generates a **unique QR**
-* In-store scan = **verified lead**
-* Enables **pay-per-footfall monetization**
-
----
-
-### 📦 Inventory OS (Shop App)
-
-* Add/manage items via mobile
-* Track availability visually
-* Mark items inactive (cleaning, repair, etc.)
-
----
-
-### 🔍 Lightning-Fast Search
-
-* Powered by **Meilisearch**
-* Typo-tolerant + relevance-ranked
-* Designed for real-time product discovery
+### 🔗 QR-Based Attribution
+*   Unique QR for each hold → In-store scan = **Verified footfall**.
+*   Enables the **Pay-per-Footfall** monetization model.
 
 ---
 
@@ -116,154 +119,28 @@ graph TD
 
 | Layer      | Technology              |
 | ---------- | ----------------------- |
-| Backend    | NestJS (Node.js)        |
-| Database   | PostgreSQL + Prisma ORM |
-| Caching    | Redis (locks + TTL)     |
-| Search     | Meilisearch             |
-| Mobile App | React Native (Expo)     |
-| Web Apps   | Next.js 14              |
-| Auth       | JWT + OTP               |
-| Payments   | Razorpay                |
+| **Backend**| NestJS + Prisma ORM     |
+| **DB**     | PostgreSQL + Redis      |
+| **Search** | Meilisearch             |
+| **Mobile** | React Native (Expo)     |
+| **Web**    | Next.js 14 + Tailwind   |
+| **DevOps** | Render + Vercel + AWS   |
 
 ---
 
-## 🧩 Core Data Models
+## 🚀 Getting Started
 
-| Entity              | Description                          |
-| ------------------- | ------------------------------------ |
-| `User`              | Customer accounts                    |
-| `Shop`              | SaaS tenants (boutiques)             |
-| `InventoryItem`     | Rental products                      |
-| `AvailabilityBlock` | Time-based booking locks             |
-| `Booking`           | Lifecycle (HOLD → RENTED → RETURNED) |
-| `AttributionEvent`  | Verified walk-in ledger              |
+Quick start localized setup for developers:
 
----
-
-## 💰 Business Model
-
-| Tier         | Price      | Features                                |
-| ------------ | ---------- | --------------------------------------- |
-| Starter      | Free       | ≤50 items, basic features               |
-| Pro          | ₹299/month | Unlimited inventory, premium visibility |
-| Pay-per-lead | ₹50/scan   | Charged only on verified walk-ins       |
-
-> 💡 **No fake leads. No wasted spend. Only real foot traffic is billed.**
-
----
-
-## 🚀 Getting Started (Local Setup)
-
-### Prerequisites
-
-* Node.js 20+
-* Docker & Docker Compose
-
----
-
-### 1️⃣ Start Infrastructure
-
-```bash
-cd backend
-docker-compose up -d postgres redis meilisearch
-```
-
----
-
-### 2️⃣ Backend Setup
-
-```bash
-cd backend
-npm install
-cp .env.example .env
-npx prisma migrate dev
-npm run seed
-npm run start:dev
-```
-
-📍 API Docs: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-
----
-
-### 3️⃣ User Marketplace
-
-```bash
-cd user-web
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-📍 [http://localhost:3001](http://localhost:3001)
-
----
-
-### 4️⃣ Admin Dashboard
-
-```bash
-cd admin
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-📍 [http://localhost:3002](http://localhost:3002)
-
----
-
-### 5️⃣ Shop App (Mobile)
-
-```bash
-cd shop-app
-npm install
-npx expo start
-```
-
----
-
-## 🚀 Deployment
-
-Full deployment guides available in `/docs`.
-
-### Mobile (EAS)
-
-```bash
-eas build --platform android --profile production
-eas build --platform ios --profile production
-eas update --branch production --message "Update"
-```
-
----
-
-## 🧠 Why ORA is Different
-
-| Traditional Platforms    | ORA                                 |
-| ------------------------ | ----------------------------------- |
-| Focus on online checkout | Focus on offline experience         |
-| No attribution           | QR-based verified attribution       |
-| Generic SaaS             | Vertical SaaS for rentals           |
-| Inventory = quantity     | Inventory = time-based availability |
-
----
-
-## 🔮 Future Roadmap
-
-* 🤖 AI-based demand prediction
-* 📊 Shop analytics dashboard
-* 🌍 Hyperlocal expansion engine
-* 🧠 Smart pricing optimization
-* 🛍️ Multi-category rental support
-
----
-
-## 📄 License
-
-Private / Proprietary
+1.  **Infrastructure**: `docker-compose up -d postgres redis meilisearch`
+2.  **API**: `cd backend && npm install && npm run start:dev`
+3.  **Marketplace**: `cd user-web && npm run dev`
+4.  **Admin**: `cd admin && npm run dev`
 
 ---
 
 ## 💡 Final Thought
 
-> ORA is not just software — it's **infrastructure for offline commerce in a digital-first world**.
+> ORA is not just software—it's **infrastructure for offline commerce in a digital-first world**.
 
 ---
