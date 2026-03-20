@@ -11,7 +11,6 @@
 ## 🎨 User Experience (Marketplace)
 
 The customer-facing web platform allows users to discover designer outfits and reserve them for a 24-hour trial period.
-![Homepage](./docs/screenshots/admin-dashboard.png)
 
 ![ORA Hero](./docs/screenshots/web-hero.png)
 
