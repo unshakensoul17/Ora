@@ -44,6 +44,7 @@ The mobile engine that powers boutique operations—inventory tracking, QR scann
   <img src="./docs/screenshots/mobile-settings.png" width="180" />
 </div>
 
+You can downlaod the app from here :https://github.com/unshakensoul17/Ora/releases/download/App/Ora.shop.apk
 ---
 
 ## 🧠 Vision
