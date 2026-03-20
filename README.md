@@ -7,13 +7,7 @@
 ![ORA Hero](./docs/screenshots/web-hero.png)
 
 ---
-
-## 🎨 User Experience (Marketplace)
-
-The customer-facing web platform allows users to discover designer outfits and reserve them for a 24-hour trial period.
-
-````carousel
-![Homepage](./docs/screenshots/web-home.png)
+ng)
 <!-- slide -->
 ![Product Discovery](./docs/screenshots/web-browse.png)
 <!-- slide -->
