@@ -19,8 +19,6 @@ The customer-facing web platform allows users to discover designer outfits and r
 ![Product Discovery](./docs/screenshots/web-browse.png)
 <!-- slide -->
 ![Item Details](./docs/screenshots/web-details.png)
-<!-- slide -->
-![Hold Confirmation](./docs/screenshots/web-reservations.png)
 ----
 
 ## 🛡️ Admin Control Tower
