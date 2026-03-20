@@ -11,6 +11,7 @@
 ## 🎨 User Experience (Marketplace)
 
 The customer-facing web platform allows users to discover designer outfits and reserve them for a 24-hour trial period.
+![Homepage](./docs/screenshots/admin-dashboard.png)
 
 ![Homepage](./docs/screenshots/web-home.png)
 <!-- slide -->
@@ -25,8 +26,7 @@ The customer-facing web platform allows users to discover designer outfits and r
 
 A central dashboard for platform administrators to monitor health, manage shop approvals, and track revenue.
 
-![Admin Dashboard](./docs/screenshots/admin-dashboard.png)
-
+![Admin Dashboard](./docs/screenshots/web-home.png)
 ---
 
 ## 📱 Shop Owner OS (Mobile App)
