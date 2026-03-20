@@ -26,7 +26,7 @@ The customer-facing web platform allows users to discover designer outfits and r
 
 A central dashboard for platform administrators to monitor health, manage shop approvals, and track revenue.
 
-![Admin Dashboard](./docs/screenshots/web-home.png)
+![Admin Dashboard](./docs/screenshots/admin.png)
 ---
 
 ## 📱 Shop Owner OS (Mobile App)
