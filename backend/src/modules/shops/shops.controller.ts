@@ -97,6 +97,7 @@ export class ShopsController {
      * Admin: List all shops
      */
     @Get('admin/list')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: List all shops' })
     @ApiQuery({ name: 'status', required: false, enum: ShopStatus })
@@ -114,6 +115,7 @@ export class ShopsController {
      * Admin: Get pending shops
      */
     @Get('admin/pending')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Get pending shops' })
     async getPending() {
@@ -124,6 +126,7 @@ export class ShopsController {
      * Admin: Approve shop
      */
     @Patch('admin/:id/approve')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Approve shop' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })
@@ -135,6 +138,7 @@ export class ShopsController {
      * Admin: Suspend shop
      */
     @Patch('admin/:id/suspend')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Suspend shop' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })
@@ -149,6 +153,7 @@ export class ShopsController {
      * Admin: Reactivate suspended shop
      */
     @Patch('admin/:id/reactivate')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Reactivate suspended shop' })
     @ApiParam({ name: 'id', description: 'Shop UUID' })

@@ -3,6 +3,7 @@
 // Force rebuild
 import Sidebar from './Sidebar';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -13,6 +14,7 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children, showFilter = false, title, subtitle, onFilterChange }: AdminLayoutProps) {
+    const { isAuthenticated, loading, logout } = useAuth();
     const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
     const [performanceFilter, setPerformanceFilter] = useState<string>('All Rate');
 
@@ -61,11 +63,22 @@ export default function AdminLayout({ children, showFilter = false, title, subti
                         </svg>
                     </div>
                     {/* Admin Profile */}
-                    <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-medium text-black">A</span>
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-medium text-black">A</span>
+                            </div>
+                            <span className="text-xs text-gray-300 hidden sm:inline">Admin</span>
                         </div>
-                        <span className="text-xs text-gray-300 hidden sm:inline">Admin Profile</span>
+                        <button
+                            onClick={logout}
+                            className="p-1.5 hover:bg-red-500/10 text-gray-500 hover:text-red-400 rounded-lg transition-colors group"
+                            title="Sign out"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -73,7 +86,13 @@ export default function AdminLayout({ children, showFilter = false, title, subti
             {/* Main Content */}
             <main className="ml-0 md:ml-56 pt-14 min-h-screen transition-all duration-300">
                 <div className={`p-4 md:p-6 ${showFilter ? 'lg:mr-64' : ''}`}>
-                    {children}
+                    {loading ? (
+                        <div className="flex items-center justify-center h-64">
+                            <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
+                        </div>
+                    ) : !isAuthenticated ? null : (
+                        children
+                    )}
                 </div>
             </main>
 

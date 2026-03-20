@@ -135,8 +135,35 @@ export class AuthService {
                 where: { id: payload.sub },
             });
             return shop;
+        } else if (payload.type === 'admin') {
+            // Hardcoded admin identity for simple password system
+            return { id: 'admin', type: 'admin', role: 'ADMIN' };
         }
         return null;
+    }
+
+    /**
+     * Admin: Login with hardcoded password
+     */
+    async adminLogin(password: string) {
+        const adminPassword = process.env.ADMIN_PASSWORD || 'oraadmin2026';
+        if (password !== adminPassword) {
+            throw new UnauthorizedException('Invalid admin password');
+        }
+
+        const token = this.jwtService.sign({
+            sub: 'admin',
+            type: 'admin',
+        });
+
+        return {
+            token,
+            user: {
+                id: 'admin',
+                name: 'ORA Admin',
+                role: 'ADMIN',
+            },
+        };
     }
 
     /**

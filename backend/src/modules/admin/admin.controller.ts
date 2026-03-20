@@ -1,5 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @ApiTags('admin')
@@ -8,6 +9,7 @@ export class AdminController {
     constructor(private prisma: PrismaService) { }
 
     @Get('audit-logs')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get audit logs' })
     async getAuditLogs(

@@ -10,10 +10,28 @@ const apiClient: AxiosInstance = axios.create({
     timeout: 10000,
 });
 
-// Add request interceptor for logging
+// Add request interceptor
+apiClient.interceptors.request.use((config) => {
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('admin_token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+    }
+    return config;
+});
+
+// Add response interceptor for logging
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (error.response?.status === 401 && typeof window !== 'undefined') {
+            // Auto logout on 401
+            localStorage.removeItem('admin_token');
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
@@ -113,6 +131,12 @@ export interface BillingData {
     totalRevenue: number;
     pendingAmount: number;
     lastPaymentDate?: string;
+}
+
+
+export async function loginAdmin(password: string) {
+    const response = await apiClient.post('/auth/admin/login', { password });
+    return response.data;
 }
 
 

@@ -38,6 +38,12 @@ export class AuthController {
         return this.authService.verifyShopOTP(phone, otp);
     }
 
+    @Post('admin/login')
+    @ApiOperation({ summary: 'Admin: Login with password' })
+    async adminLogin(@Body('password') password: string) {
+        return this.authService.adminLogin(password);
+    }
+
     @Get('admin/users')
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: List all users' })

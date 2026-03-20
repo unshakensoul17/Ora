@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Param, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, BadRequestException, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { AttributionService } from './attribution.service';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -125,6 +126,7 @@ export class AttributionController {
 
     // Admin endpoints
     @Get('admin/events')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Get all attribution events' })
     async getAdminEvents(
@@ -135,6 +137,7 @@ export class AttributionController {
     }
 
     @Get('admin/stats')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Get platform attribution stats' })
     async getPlatformStats(
@@ -150,6 +153,7 @@ export class AttributionController {
     }
 
     @Post('admin/mark-billed')
+    @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Admin: Mark events as billed' })
     async markBilled(@Body('eventIds') eventIds: string[]) {
