@@ -14,7 +14,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return !!localStorage.getItem('admin_token');
+        }
+        return false;
+    });
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
     const pathname = usePathname();
@@ -23,11 +28,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const token = localStorage.getItem('admin_token');
         if (token) {
             setIsAuthenticated(true);
+        } else if (pathname !== '/login') {
+            setIsAuthenticated(false);
+            router.push('/login');
         } else {
             setIsAuthenticated(false);
-            if (pathname !== '/login') {
-                router.push('/login');
-            }
         }
         setLoading(false);
     }, [pathname, router]);

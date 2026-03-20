@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import AdminLayout from '@/components/layout/AdminLayout';
 import KPICard from '@/components/dashboard/KPICard';
 
@@ -102,13 +102,13 @@ export default function DashboardPage() {
         loadData();
     }, []);
 
-    const handleFilterChange = (newFilters: { regions: string[]; performance: string }) => {
+    const handleFilterChange = useCallback((newFilters: { regions: string[]; performance: string }) => {
         setFilters(newFilters);
-    };
+    }, []);
 
-    const handleWhatsApp = (phone: string) => {
+    const handleWhatsApp = useCallback((phone: string) => {
         window.open(`https://wa.me/91${phone.replace(/\D/g, '')}`, '_blank');
-    };
+    }, []);
 
     const handleFreeze = async (shopData: ShopData) => {
         if (!confirm(`Are you sure you want to ${shopData.status === 'SUSPENDED' ? 'reactivate' : 'freeze'} this shop?`)) return;
